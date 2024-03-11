@@ -1,0 +1,44 @@
+# LaTeX generated files to ignore
+*.aux
+*.bbl
+*.blg
+*.log
+*.lof
+*.lot
+*.fls
+*.out
+*.toc
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+*.nav
+*.snm
+*.vrb
+*.dvi
+# Intermediate files from other LaTeX tools
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.ist
+*.acn
+*.acr
+*.alg
+*.glg
+*.glsdefs
+*.xdy
+# Output directories often used
+/out/
+/build/
+# TeX auxiliary directories
+*.auxlock
+# Editor/IDE project files
+*.sublime-project
+*.sublime-workspace
+# Other common non-source files
+*.swp
+*~
+*.backup
+
