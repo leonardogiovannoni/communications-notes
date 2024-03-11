@@ -1,0 +1,201 @@
+\section*{Modulazioni numeriche in banda base}
+
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, minimum height=1cm, minimum width=2.5cm},
+    node distance=1cm and 2cm,
+    auto
+]
+    % Blocks
+    \node[block] (source) {Sorgente binaria};
+    \node[block, right=of source] (encoder) {Codificatore};
+    \node[block, right=of encoder] (interp) {Interpolatore};
+    \node[block, right=of interp] (channel) {Canale di comunicazione};
+    \node[block, below=of channel] (filter) {Filtro di ricezione};
+    \node[block, left=of filter] (sampler) {Campionatore};
+    \node[block, left=of sampler] (decisor) {Decisore};
+    \node[block, left=of decisor] (destination) {Destinazione binaria};
+
+    % Arrows
+    \draw[->] (source) -- (encoder) node[midway,above] {$b[n]$}  node[midway,below] {$T_b$};
+    \draw[->] (encoder) -- (interp) node[midway,above] {$x[n]$}  node[midway,below] {$T_s$};
+    \draw[->] (interp) -- (channel) node[midway,above] {$s(t)$};
+    \draw[->] (channel) -- (filter) node[midway,right] {$r(t)$};
+    %\draw[->] (filter) -- (sampler) node[midway,above] {$y(t)$};
+    \draw[->] (sampler) -- (decisor) node[midway,above] {$\hat{x}[n]$};
+    \draw[->] (decisor) -- (destination) node[midway,above] {$\hat{b}[n]$};
+    
+        % Draw the diagonal line
+    % Dashed Boxes
+    \draw ([xshift=0]filter.west) -- ([xshift=-0.75cm]filter.west) node[midway,above] {$y(t)$};
+    \draw ([xshift=-0.75cm]filter.west) -- ([xshift=-1.25cm,yshift=0.5cm]filter.west) node[midway,below] {$T_s$};
+
+    \draw[->] ([xshift=-1.25cm,yshift=0cm]filter.west) -- ++(sampler) node[midway,above] {$y[n]$};
+
+    \draw[dashed, red, thick] ([xshift=-0.5cm,yshift=0.5cm]sampler.north west) rectangle ([xshift=0.5cm,yshift=-0.5cm]filter.south east);
+
+     \node[align=center, red, above right= -1cm and -6cm of filter.south east] (channel-label) {Demodulatore numerico};
+
+  
+   
+
+\end{tikzpicture}
+
+La modulazione numerica è necessaria per poter trasmettere sequenze binarie attraverso un mezzo trasmissivo. In particolare, per adesso ci concentreremo su canali trasmissivi in banda base, come ad esempio il doppino telefonico o il cavo coassiale.
+
+\begin{tikzpicture}
+% Drawing the block diagram using TikZ package
+% Note: You will need to adjust the positions of the blocks (nodes) and the arrows (paths) to match your notes.
+\end{tikzpicture}
+
+% Here you should draw the block diagram as per your notes using the TikZ package.
+% Since the TikZ diagram could be quite complex, I will only outline the structure here.
+\begin{enumerate}
+    
+\item \textbf{Codificatore}: trasforma sequenze di bit in simboli \( M \)-ari appartenenti a un alfabeto \( A_s \).
+
+\item \textbf{Interpolatore}: modula impulsi tramite i simboli \( x[n] \) in ingresso per produrre una sequenza di impulsi \( s(t) \).
+\[
+s(t) = \sum_{k=-\infty}^{\infty} x[k] \cdot p(t - kT_s)
+\]
+
+\item \textbf{Canale di comunicazione}: sono assenti i trasduttori in quanto la propagazione nel mezzo trasmissivo è elettrica.
+
+\item \textbf{Filtro di ricezione}: filtra componenti di rumore generate nel canale e compensa eventuali distorsioni.
+
+\item \textbf{Campionatore}: preleva campioni dal segnale filtrato \( y(t) \).
+
+\item \textbf{Decisore}: associa un simbolo dell'alfabeto \( A_s \) ad ogni campione.
+
+\item \textbf{Decodificatore}: trasforma i simboli in sequenze binarie.
+ 
+\end{enumerate}
+\paragraph*{Codificatore}
+
+\begin{itemize}
+\item Deve essere sincrono con la sorgente
+\[
+T_s = T_b \log_2 M
+\]
+\[
+R_s = \frac{1}{T_s} = \frac{1}{T_b \log_2 M}
+\]
+
+
+\item La sequenza di simboli generati dal codificatore viene considerata come un processo stazionario. Spesso i simboli trasmessi sono considerati equiprobabili:
+\begin{equation*}
+    P\{x[n]=\alpha_i\} = \frac{1}{M} \quad \forall i
+\end{equation*}
+\end{itemize}
+
+\paragraph*{Interpolatore}
+
+In un sistema di comunicazione numerico in banda base, l'interpolatore da solo svolge il compito di modulatore numerico, in quanto effettua la sagomatura, mentre non è prevista nessuna traslazione in frequenza. Il filtro sagomatore è realizzato tramite la generazione dell'impulso \( p(t) \). Infatti, si può pensare a \( P(f) \) come allo spettro del singolo impulso.
+\begin{itemize}
+    \item \(B_p\): banda dell'impulso \( p(t) \):
+    \item \(E_p\): energia dell'impulso \( p(t) \):
+\begin{equation*}
+    E_p = \int_{-\infty}^{\infty} p(t)^2 \, dt = \int_{-\infty}^{\infty} |P(f)|^2 \, df
+\end{equation*}
+\end{itemize}
+
+
+
+
+
+Data l'aleatorietà della sequenza di simboli \( x[k] \), \( s(t) \) deve essere interpretato come la realizzazione di un processo aleatorio \( S(t) \) stazionario.
+
+Il processo \( S(t) \) ha una autocorrelazione \( R_s(\tau) \) ed una densità spettrale di potenza \( S_s(f) \).
+
+Per cui è definita una potenza \( P_s \) ed una banda \( B_T \).
+
+
+     L'energia media per bit può essere calcolata come:
+ \begin{equation*}
+    E_b = T_s P_b = \frac{E_s}{\log_2 M} = \frac{E_s}{B_t}
+\end{equation*}
+\begin{equation*}
+    E_s \text{— energia media per simbolo}
+\end{equation*}
+
+
+\paragraph*{Demodulatore numerico}
+
+
+Il demodulatore numerico produce una sequenza $\hat{x}[k]$ in modo tale da minimizzare la probabilità di errore. La probabilità di errore sul simbolo e sul bit sono:
+
+\begin{align*}
+    P_{E_s} &= P\{ \hat{x}[k] \neq x[k] \} \\
+    P_{E_b} &= P\{ \hat{b}[n] \neq b[n] \} \quad \text{BEP (bit error probability)}
+\end{align*}
+
+\paragraph*{Canale numerico e prestazioni}
+\begin{center}
+\begin{tikzpicture}
+\node (s) at (0,0) {\(x[k]\)};
+\node[block] (encoder) at (3,0) {Canale numerico};
+\node (r) at (6,0) {\(\hat{x}[k]\)};
+
+\draw[->] (s) -- (encoder);
+\draw[->] (encoder) -- (r);
+\end{tikzpicture}
+\end{center}
+
+
+
+
+\begin{align*}
+    x[k] &\in A_s & A_s &= \{\alpha_1, \alpha_2, \ldots, \alpha_M\}
+\end{align*}
+
+\begin{equation*}
+    P_E(M) \coloneqq P\{\hat{x}[k] \neq x[k]\} = \sum_{i=1}^{M} \sum_{\substack{j=1 \\ j \neq i}}^{M} P\{\hat{x} = \alpha_i, x = \alpha_j\} = \sum_{i=1}^{M} \sum_{\substack{j=1 \\ j \neq i}}^{M} P\{\hat{x} = \alpha_i \ |\ x = \alpha_j\}\cdot P\{x=\alpha_j\}
+\end{equation*}
+
+Nel caso di simboli equiprobabili:
+
+\begin{equation*}
+    P_E(M) = \frac{1}{M} \sum_{i=1}^{M} \sum_{\substack{j=1 \\ j \neq i}}^{M} P\{\hat{x} = \alpha_i \ | \ x = \alpha_j\}
+\end{equation*}
+
+\paragraph*{Formato di modulazione equienergia}
+
+\begin{equation*}
+    E_s(i) = \int_{-\infty}^{\infty} s_i(t)^2 dt \quad s_i(t) \text{ è il segnale trasmesso in corrispondenza del simbolo } \alpha_i
+\end{equation*}
+
+Il formato di modulazione è equienergetico se
+\begin{equation*}
+    E_{s}(i) = E_{s} \quad \forall i
+\end{equation*}
+
+\paragraph*{Ortogonalità}
+
+Il formato di modulazione è detto ortogonale se
+\begin{equation*}
+    \int_{-\infty}^{\infty} s_{i}(t) s_{j}(t) \, dt = 0 \quad \forall i \neq j
+\end{equation*}
+
+\paragraph*{Efficienza energetica}
+
+Fissata una \( P_{E_{b}} \), l'efficienza energetica è definita come il valore
+\begin{equation*}
+    \eta_{P} \coloneqq \frac{1}{SNR} , \quad SNR \coloneqq \frac{P_{s}}{P_{n}}
+\end{equation*}
+che permette di ottenere tale \( BEP \).
+
+Quando tanto maggiore è \( \eta_{P} \), tanto minore deve essere il \( SNR \) che garantisce una data \( BEP \).
+
+\paragraph*{Efficienza spettrale}
+
+L'efficienza spettrale è definita con il rapporto tra il tasso di erogazione binario e la banda di trasmissione
+\begin{equation*}
+    \eta_{b} \coloneqq \frac{R_{b}}{B_{T}} \quad \text{[bit/s/Hz]}
+\end{equation*}
+
+Quindi l'efficienza cresce quando a parità tasso di erogazione la banda utilizzata in trasmissione si riduce.
+
+In termini di \( T_{s} \) e \( M \):
+\begin{equation*}
+    \eta_{b} = \frac{\log_2 M}{B_{T} T_{s}}
+\end{equation*}
+

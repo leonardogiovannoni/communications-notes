@@ -1,0 +1,39 @@
+
+\section*{Modulation QAM}
+
+\begin{align*}
+x(t) &= x_c(t) + j \cdot x_s(t) \\
+x_c(t) &= \Re\{p(t)\} \quad x_s(t) = \Im\{p(t)\}
+\end{align*}
+
+% Qui viene rappresentato il diagramma di flusso della modulazione QAM
+\begin{tikzpicture}
+% Definire i nodi e i percorsi qui
+\end{tikzpicture}
+
+\[
+x(t) = x_c(t) \cos(2\pi f_ct) - x_s(t) \sin(2\pi f_ct)
+\]
+
+% Diagramma dei punti della costellazione QAM
+\begin{tikzpicture}
+\draw [<->] (0,2) node (yaxis) [above] {$\Im$}
+        |- (2,0) node (xaxis) [right] {$\Re$};
+\draw (-1,0) -- (1,0);
+\draw (0,-1) -- (0,1);
+\foreach \x/\y in {-1/1, 1/1, -1/-1, 1/-1}
+    \draw[fill=orange] (\x,\y) circle (2pt);
+\end{tikzpicture}
+
+\[
+\Gamma = \Gamma_c \cap \Gamma_s
+\]
+
+\begin{align*}
+A^\Gamma &= \{\alpha^\Gamma_c, \overline{\alpha^\Gamma_c}\} \\
+A^\Gamma &= \{\alpha^\Gamma_s, \overline{\alpha^\Gamma_s}\}
+\end{align*}
+
+\[
+A^c \rightarrow \alpha^c = 2c - 1 - \Gamma_c \quad A^s \rightarrow \alpha^s = 2c - 1 - \Gamma_s
+\]
