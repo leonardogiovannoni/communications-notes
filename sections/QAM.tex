@@ -1,5 +1,73 @@
 
-\section*{Modulation QAM}
+\section*{Modulazione QAM}
+
+
+
+\paragraph*{Modulazione QAM (Quadrature Amplitude Modulation)}
+
+
+\begin{equation*}
+    S_i(t) = A_{I_i} p(t) \cos(2\pi f_0 t) - A_{Q_i} p(t) \sin(2\pi f_0 t)
+\end{equation*}
+
+% TikZ Diagram in a row with QAM explanation
+\noindent
+\begin{minipage}[c]{0.3\linewidth}
+
+\end{minipage}%
+\begin{minipage}[c]{0.7\linewidth}
+    \begin{equation*}
+        \frac{A_{I_i}}{A_{Q_i}} \text{ -- verso e ampiezza della modulazione}
+    \end{equation*}
+    \begin{equation*}
+        i \text{ -- indice del simbolo } x(t)
+    \end{equation*}
+\end{minipage}
+
+
+
+
+% Start of the content
+\[
+    A^c_i = \text{componente in fase di } x(t)
+\]
+\[
+    A^s_i = \text{componente in quadratura di } x(t)
+\]
+
+\[
+    s^c_i(t) = (A^c_i + j A^s_i) p(t)
+\]
+
+\[
+    \Re\{s^c_i(t) e^{j2\pi f_0t}\} = \Re\{(A^c_i + A^s_i) p(t) e^{j2\pi f_0t}\}
+\]
+
+\[
+    = \Re\{A^c_i p(t) e^{j2\pi f_0t} + j A^s_i p(t) e^{j2\pi f_0t}\}
+\]
+
+\[
+    = \Re\{A^c_i p(t) \cos(2\pi f_0t) + j A^c_i p(t) \sin(2\pi f_0t) + A^s_i p(t) \cos(2\pi f_0t) - A^s_i p(t) \sin(2\pi f_0t)\}
+\]
+
+\[
+    = A^c_i p(t) \cos(2\pi f_0t) - A^s_i p(t) \sin(2\pi f_0t)
+\]
+
+\[
+    s(t) = \sum_{n=-\infty}^{+\infty} x_n p(t-nT_s) \cos(2\pi f_0t) - x_s p(t-nT_s) \sin(2\pi f_0t)
+\]
+
+\[
+    s(t) = \Re\{\sum_{n=-\infty}^{+\infty} x_n p(t-nT_s)e^{j2\pi f_0 t}\}
+\]
+
+\[
+    x[n] = x_c[n] + jx_s[n]
+\]
+
+
 
 \begin{align*}
     x(t)   & = x_c(t) + j \cdot x_s(t)                \\
