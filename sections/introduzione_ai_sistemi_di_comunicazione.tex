@@ -4,126 +4,126 @@ I sistemi di comunicazione sono sistemi che permettono di trasferire informazion
 
 
 \begin{figure}[ht]
-\centering
-\begin{adjustwidth*}{-2cm}{-2cm} % Regola questi valori a seconda delle necessità
-\centering
-% Here you start drawing the diagram with TikZ
-\begin{tikzpicture}[>=latex',font=\sffamily,semithick,scale=0.82, every node/.style={scale=0.82}]
-    % Define the style for the blocks
-    %\tikzstyle{block} = [draw, rectangle, minimum height=3em, minimum width=4em]
-    \tikzstyle{block} = [rectangle, draw, minimum height=3em, minimum width=4em, text centered, align=center]
+    \centering
+    \begin{adjustwidth*}{-2cm}{-2cm} % Regola questi valori a seconda delle necessità
+        \centering
+        % Here you start drawing the diagram with TikZ
+        \begin{tikzpicture}[>=latex',font=\sffamily,semithick,scale=0.82, every node/.style={scale=0.82}]
+            % Define the style for the blocks
+            %\tikzstyle{block} = [draw, rectangle, minimum height=3em, minimum width=4em]
+            \tikzstyle{block} = [rectangle, draw, minimum height=3em, minimum width=4em, text centered, align=center]
 
-    % Nodes position
-    \node [block] (source) {Sorgente};
-    \node [block, right=1cm of source] (strasducer) {Trasduttore \\ di sorgente};
-    \node [block, right=1cm of strasducer] (transmitter) {Modulatore};
-    \node [block, right=1cm of transmitter] (channel) {Canale};
-    \node [block, right=1cm of channel] (receiver) {Demodulatore};
-    \node [block, right=1cm of receiver] (dtrasducer) {Trasduttore \\ di destinazione};
-    \node [block, right=1cm of dtrasducer] (destination) {Destinazione};
+            % Nodes position
+            \node [block] (source) {Sorgente};
+            \node [block, right=1cm of source] (strasducer) {Trasduttore \\ di sorgente};
+            \node [block, right=1cm of strasducer] (transmitter) {Modulatore};
+            \node [block, right=1cm of transmitter] (channel) {Canale};
+            \node [block, right=1cm of channel] (receiver) {Demodulatore};
+            \node [block, right=1cm of receiver] (dtrasducer) {Trasduttore \\ di destinazione};
+            \node [block, right=1cm of dtrasducer] (destination) {Destinazione};
 
-    % Arrows
-    \draw[->] (source) --   (strasducer) node[midway,above] {$m_s(t)$};
-    \draw[->] (strasducer) --            (transmitter) node[midway,above] {$m(t)$};
-    \draw[->] (transmitter) -- (channel) node[midway,above] {$s(t)$};
-    \draw[->] (channel) -- (receiver) node[midway,above] {$r(t)$};
-    \draw[->] (receiver) --  (dtrasducer) node[midway,above] {$\hat{m}(t)$};
-     \draw[->] (dtrasducer) --               (destination) node[midway,above] {$\hat{m}_s(t)$};
+            % Arrows
+            \draw[->] (source) --   (strasducer) node[midway,above] {$m_s(t)$};
+            \draw[->] (strasducer) --            (transmitter) node[midway,above] {$m(t)$};
+            \draw[->] (transmitter) -- (channel) node[midway,above] {$s(t)$};
+            \draw[->] (channel) -- (receiver) node[midway,above] {$r(t)$};
+            \draw[->] (receiver) --  (dtrasducer) node[midway,above] {$\hat{m}(t)$};
+            \draw[->] (dtrasducer) --               (destination) node[midway,above] {$\hat{m}_s(t)$};
 
-    % Labels for modulation and demodulation
-    \node[below of=transmitter, node distance=1cm] (modulation) {Trasmettitore (TX)};
-    \node[below of=receiver, node distance=1cm] (demodulation) {Ricevitore (RX)};
+            % Labels for modulation and demodulation
+            \node[below of=transmitter, node distance=1cm] (modulation) {Trasmettitore (TX)};
+            \node[below of=receiver, node distance=1cm] (demodulation) {Ricevitore (RX)};
 
-    % Arrows for modulation and demodulation
-   %$ \draw[->] (source) |- (modulation);
-    %\draw[->] (modulation) -| (receiver);
-    %\draw[->] (destination) |- (demodulation);
-    %\draw[->] (demodulation) -| (transmitter);
-\end{tikzpicture}
-\end{adjustwidth*}
+            % Arrows for modulation and demodulation
+            %$ \draw[->] (source) |- (modulation);
+            %\draw[->] (modulation) -| (receiver);
+            %\draw[->] (destination) |- (demodulation);
+            %\draw[->] (demodulation) -| (transmitter);
+        \end{tikzpicture}
+    \end{adjustwidth*}
 \end{figure}
 % Now the explanation of the symbols in a table format
 \begin{tabular}{ll}
-    $m_s(t)$ & segnale fisico prodotto dalla sorgente (es. voce) \\
-    $m(t)$ & segnale elettrico ottenuto per trasduzione del segnale di sorgente (es. segnale audio) \\
-    $s(t)$ & segnale modulato (trasmesso) \\
-    $r(t)$ & segnale ricevuto \\
-    $\hat{m}(t)$ & segnale demodulato \\
-    $\hat{m}_s(t)$ & segnale trasdotto \\
+    $m_s(t)$       & segnale fisico prodotto dalla sorgente (es. voce)                                      \\
+    $m(t)$         & segnale elettrico ottenuto per trasduzione del segnale di sorgente (es. segnale audio) \\
+    $s(t)$         & segnale modulato (trasmesso)                                                           \\
+    $r(t)$         & segnale ricevuto                                                                       \\
+    $\hat{m}(t)$   & segnale demodulato                                                                     \\
+    $\hat{m}_s(t)$ & segnale trasdotto                                                                      \\
 \end{tabular}
 \\
 \begin{enumerate}
-\item \textbf{Nodo di sorgente}: genera il messaggio (informazione) da comunicare.
-\item \textbf{Nodo di destinazione}: riceve il messaggio trasmesso.
-\item \textbf{Trasduttore di sorgente}: può convertire, ove necessario, il supporto fisico del segnale $m_s(t)$ così da generare un segnale elettrico opportuno per la trasmissione.
+    \item \textbf{Nodo di sorgente}: genera il messaggio (informazione) da comunicare.
+    \item \textbf{Nodo di destinazione}: riceve il messaggio trasmesso.
+    \item \textbf{Trasduttore di sorgente}: può convertire, ove necessario, il supporto fisico del segnale $m_s(t)$ così da generare un segnale elettrico opportuno per la trasmissione.
 
 
 
-\item \textbf{Trasmettitore}: converte il segnale elettrico \( m(t) \) in un nuovo segnale elettrico adatto per la trasmissione attraverso il canale di comunicazione a disposizione. Effettua sostanzialmente le seguenti operazioni:
-\begin{enumerate}
-    \item Traslazione in frequenza (modulazione): fa sì che la occupazione di banda del segnale sia attorno a un opportuna frequenza centrale.
-    \item Sagomatura: garantisce che la occupazione di banda sia quella ottimale e che non disturbi eventuali altre comunicazioni presenti nello stesso canale di comunicazione.
-\end{enumerate}
+    \item \textbf{Trasmettitore}: converte il segnale elettrico \( m(t) \) in un nuovo segnale elettrico adatto per la trasmissione attraverso il canale di comunicazione a disposizione. Effettua sostanzialmente le seguenti operazioni:
+          \begin{enumerate}
+              \item Traslazione in frequenza (modulazione): fa sì che la occupazione di banda del segnale sia attorno a un opportuna frequenza centrale.
+              \item Sagomatura: garantisce che la occupazione di banda sia quella ottimale e che non disturbi eventuali altre comunicazioni presenti nello stesso canale di comunicazione.
+          \end{enumerate}
 
-\item \textbf{Canale di comunicazione}: permette il trasferimento del segnale \( s(t) \) dal nodo sorgente a quello di destinazione. Il canale di comunicazione prevede:
-\begin{enumerate}
-    \item Un trasduttore di ingresso: converte il segnale elettrico \( s(t) \) in un segnale con supporto fisico compatibile con il mezzo trasmissivo (es. onda elettromagnetica per la trasmissione in aria libera per la trasmissione su fibra ottica, ecc.).
-    \item Un mezzo trasmissivo: rappresenta il mezzo fisico su cui si propaga il segnale trasmesso (es. onda e vuoto per le onde elettromagnetiche o la fibra ottica per segnali luminosi).
-    \item Un trasduttore di uscita: converte il segnale ricevuto tramite il mezzo trasmissivo in un segnale elettrico \( r(t) \).
-\end{enumerate}
+    \item \textbf{Canale di comunicazione}: permette il trasferimento del segnale \( s(t) \) dal nodo sorgente a quello di destinazione. Il canale di comunicazione prevede:
+          \begin{enumerate}
+              \item Un trasduttore di ingresso: converte il segnale elettrico \( s(t) \) in un segnale con supporto fisico compatibile con il mezzo trasmissivo (es. onda elettromagnetica per la trasmissione in aria libera per la trasmissione su fibra ottica, ecc.).
+              \item Un mezzo trasmissivo: rappresenta il mezzo fisico su cui si propaga il segnale trasmesso (es. onda e vuoto per le onde elettromagnetiche o la fibra ottica per segnali luminosi).
+              \item Un trasduttore di uscita: converte il segnale ricevuto tramite il mezzo trasmissivo in un segnale elettrico \( r(t) \).
+          \end{enumerate}
 
-\item \textbf{Ricevitore}: trasforma il segnale \( r(t) \) in un segnale \( \hat{m}(t) \) traslando il segnale in frequenza (operazione di demodulazione) e operando un filtraggio. L'operazione di filtraggio si rende necessaria in quanto il segnale è generalmente una versione modificata del segnale \( s(t) \) per effetto della presenza di:
-\begin{itemize}
-    \item rumore introdotto dal canale di comunicazione e dai dispositivi elettronici che compongono il ricevitore;
-    \item distorsioni introdotte dal canale di comunicazione.
-\end{itemize}
-In ogni caso, il ricevitore deve effettuare una operazione di sagomatura inversa per ottenere il segnale \( \hat{m}(t) \) in modo che esso sia il più simile possibile al segnale \( m(t) \).
+    \item \textbf{Ricevitore}: trasforma il segnale \( r(t) \) in un segnale \( \hat{m}(t) \) traslando il segnale in frequenza (operazione di demodulazione) e operando un filtraggio. L'operazione di filtraggio si rende necessaria in quanto il segnale è generalmente una versione modificata del segnale \( s(t) \) per effetto della presenza di:
+          \begin{itemize}
+              \item rumore introdotto dal canale di comunicazione e dai dispositivi elettronici che compongono il ricevitore;
+              \item distorsioni introdotte dal canale di comunicazione.
+          \end{itemize}
+          In ogni caso, il ricevitore deve effettuare una operazione di sagomatura inversa per ottenere il segnale \( \hat{m}(t) \) in modo che esso sia il più simile possibile al segnale \( m(t) \).
 
-Una condizione necessaria sul ricevitore è la seguente:
-\[
-\text{Se } r(t) = s(t) \text{ allora } \hat{m}(t) = m(t)
-\]
+          Una condizione necessaria sul ricevitore è la seguente:
+          \[
+              \text{Se } r(t) = s(t) \text{ allora } \hat{m}(t) = m(t)
+          \]
 
-Questa condizione deve essere interpretata nel seguente modo: se il segnale ricevuto è identico a quello trasmesso (assenza di disturbi introdotti dal canale di comunicazione) allora il segnale demodulato \( \hat{m}(t) \) deve essere identico a \( m(t) \).
+          Questa condizione deve essere interpretata nel seguente modo: se il segnale ricevuto è identico a quello trasmesso (assenza di disturbi introdotti dal canale di comunicazione) allora il segnale demodulato \( \hat{m}(t) \) deve essere identico a \( m(t) \).
 
-\subsection*{Banda Passante e Larghezza di Banda di un Canale di Comunicazione}
-Si può applicare il concetto di banda di un filtro.
-\pgfmathdeclarefunction{gauss}{2}{%
-  \pgfmathparse{(1-exp(-((exp(-(abs((#1-x)/#2)*3-3)))^2)))}%
-}
+          \subsection*{Banda Passante e Larghezza di Banda di un Canale di Comunicazione}
+          Si può applicare il concetto di banda di un filtro.
+          \pgfmathdeclarefunction{gauss}{2}{%
+              \pgfmathparse{(1-exp(-((exp(-(abs((#1-x)/#2)*3-3)))^2)))}%
+          }
 
-\begin{center}
-    
-\begin{tikzpicture}
-    \begin{axis}[
-        title={Banda passante},
-        xlabel={Frequenza},
-        ylabel={Ampiezza},
-        xmin=0, xmax=30,
-        ymin=0, ymax=1,
-        xtick={10,15,20},
-        xticklabels={\( f_{\text{min}} \),\( f_0 \),\( f_{\text{max}} \)},
-        ytick={0.707,1},
-        yticklabels={-3dB,0dB},
-        legend pos=north east,
-        ymajorgrids=true,
-        grid style=dashed,
-    ]
-    
-    \addplot[
-        color=red,
-        domain=0:30,
-        samples=100,
-        smooth,
-        thick,
-    ]
-    {gauss(15, 5)};
-    
-    %\legend{Banda passante}
-    
-    \end{axis}
-\end{tikzpicture}
-\end{center}
+          \begin{center}
+
+              \begin{tikzpicture}
+                  \begin{axis}[
+                          title={Banda passante},
+                          xlabel={Frequenza},
+                          ylabel={Ampiezza},
+                          xmin=0, xmax=30,
+                          ymin=0, ymax=1,
+                          xtick={10,15,20},
+                          xticklabels={\( f_{\text{min}} \),\( f_0 \),\( f_{\text{max}} \)},
+                          ytick={0.707,1},
+                          yticklabels={-3dB,0dB},
+                          legend pos=north east,
+                          ymajorgrids=true,
+                          grid style=dashed,
+                      ]
+
+                      \addplot[
+                          color=red,
+                          domain=0:30,
+                          samples=100,
+                          smooth,
+                          thick,
+                      ]
+                      {gauss(15, 5)};
+
+                      %\legend{Banda passante}
+
+                  \end{axis}
+              \end{tikzpicture}
+          \end{center}
 
 \end{enumerate}
 \begin{itemize}
@@ -144,16 +144,16 @@ Il concetto di banda larga o stretta è relativo alla frequenza centrale
 
 Esempi:
 \begin{enumerate}
-  \item Doppino telefonico (banda larga): 
-\begin{itemize}
-    \item $f_0 = 2.45 KHz$
-    \item $B = 3.7 KHz$
-\end{itemize}
-    \item Canale radio (DVB-T, banda stretta) 
-    \begin{itemize}
-        \item $f_0 = 400 MHz$ 
-        \item $B = 8 MHz$
-    \end{itemize}
+    \item Doppino telefonico (banda larga):
+          \begin{itemize}
+              \item $f_0 = 2.45 KHz$
+              \item $B = 3.7 KHz$
+          \end{itemize}
+    \item Canale radio (DVB-T, banda stretta)
+          \begin{itemize}
+              \item $f_0 = 400 MHz$
+              \item $B = 8 MHz$
+          \end{itemize}
 \end{enumerate}
 
 NB: Nonostante la larghezza di banda nel secondo caso sia maggiore che nel primo caso si ha che nel primo caso la banda è larga e nel secondo caso è stretta.
@@ -173,23 +173,23 @@ Le caratteristiche principali di un canale radio sono:
 
 % The formula provided in the notes
 \[
-\lambda = \frac{c}{f}
+    \lambda = \frac{c}{f}
 \]
 
 % Radio channel frequency bands
 \begin{tabular}{lll}
-LF (Low Frequency) & 30 - 300 kHz & Radiolocalizzazione marittima \\
- & (1 - 10 km) & e aeronautica \\
-MF (Medium Frequency) & 300 - 3000 kHz & Radionavigazione e \\
- & (100 - 1000 m) & radiodiffusione \\
-HF (High Frequency) & 3 - 30 MHz & Collegamenti a lunga distanza \\
- & (10 - 100 m) & (riflessione ionosferica) \\
-VHF (Very High Freq.) & 30 - 300 MHz & Radiodiffusione \\
- & (1 - 10 m) & \\
-UHF (Ultra High Freq.) & 300 - 3000 MHz & Servizi TV, telefonia mobile \\
- & (0.1 - 1 m) & \\
-SHF (Super High Freq.) & 3 - 30 GHz & TV satellitare, ponti radio \\
- & (1 - 10 cm) & \\
+    LF (Low Frequency)     & 30 - 300 kHz   & Radiolocalizzazione marittima \\
+                           & (1 - 10 km)    & e aeronautica                 \\
+    MF (Medium Frequency)  & 300 - 3000 kHz & Radionavigazione e            \\
+                           & (100 - 1000 m) & radiodiffusione               \\
+    HF (High Frequency)    & 3 - 30 MHz     & Collegamenti a lunga distanza \\
+                           & (10 - 100 m)   & (riflessione ionosferica)     \\
+    VHF (Very High Freq.)  & 30 - 300 MHz   & Radiodiffusione               \\
+                           & (1 - 10 m)     &                               \\
+    UHF (Ultra High Freq.) & 300 - 3000 MHz & Servizi TV, telefonia mobile  \\
+                           & (0.1 - 1 m)    &                               \\
+    SHF (Super High Freq.) & 3 - 30 GHz     & TV satellitare, ponti radio   \\
+                           & (1 - 10 cm)    &                               \\
 \end{tabular}
 
 % Notes on disturbances introduced in the communication channel
@@ -202,8 +202,8 @@ Il canale di comunicazione introduce distorsioni sul segnale trasmesso che posso
 
 Quindi, sotto questa ipotesi, il canale di comunicazione può essere visto come un filtro lineare e stazionario, che può introdurre quindi distorsioni lineari. La sua modellizzazione può essere a questo punto definita come segue:
 \tikzset{
-    block/.style = {draw, fill=white, rectangle, 
-        minimum height=3em, minimum width=3em},
+    block/.style = {draw, fill=white, rectangle,
+            minimum height=3em, minimum width=3em},
     input/.style = {coordinate},
     output/.style = {coordinate},
     sum/.style = {draw, fill=white, circle, node distance=1cm}
@@ -211,14 +211,14 @@ Quindi, sotto questa ipotesi, il canale di comunicazione può essere visto come 
 % Block diagram for communication channel
 \begin{center}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
-    \node [input, name=input] {};
-    \node [block, right of=input] (channel) {c(t)};
-    \node [output, right of=channel] (output) {};
- 
-    \draw [->] (input) -- node {s(t)} (channel);
-    \draw [->] (channel) -- node {r(t)} (output);
-         node [near end] {} (output);
-\end{tikzpicture}
+        \node [input, name=input] {};
+        \node [block, right of=input] (channel) {c(t)};
+        \node [output, right of=channel] (output) {};
+
+        \draw [->] (input) -- node {s(t)} (channel);
+        \draw [->] (channel) -- node {r(t)} (output);
+        node [near end] {} (output);
+    \end{tikzpicture}
 \end{center}
 
 
@@ -231,30 +231,30 @@ Quindi la modellizzazione completa di un canale di comunicazione può essere, in
 % Complete block diagram with noise
 \begin{center}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
-    \node [input, name=input] {};
-    \node [block, right of=input] (channel) {c(t)};
-    \node [draw, circle, right of=channel] (sum) {\(+\)};
-    \node [output, right of=sum] (output) {};
-    \node [block, below of=sum] (noise) {n(t)};
+        \node [input, name=input] {};
+        \node [block, right of=input] (channel) {c(t)};
+        \node [draw, circle, right of=channel] (sum) {\(+\)};
+        \node [output, right of=sum] (output) {};
+        \node [block, below of=sum] (noise) {n(t)};
 
-    \draw [->] (input) -- node {s(t)} (channel);
-    \draw [->] (channel) -- node {} (sum);
-    \draw [->] (noise) -- node {} (sum);
-    \draw [->] (sum) -- node {r(t)} (output);
-\end{tikzpicture}
+        \draw [->] (input) -- node {s(t)} (channel);
+        \draw [->] (channel) -- node {} (sum);
+        \draw [->] (noise) -- node {} (sum);
+        \draw [->] (sum) -- node {r(t)} (output);
+    \end{tikzpicture}
 \end{center}
 
 dove
 
 \[
-r(t) = s(t) \circledast c(t) + n(t)
+    r(t) = s(t) \circledast c(t) + n(t)
 \]
 
 % Ideal channel conditions
 \textbf{Canale ideale}
 \begin{align*}
-    & c(t) = \delta(t) \\
-    & n(t) = 0 \\
+                     & c(t) = \delta(t) \\
+                     & n(t) = 0         \\
     \therefore \quad & r(t) = s(t)
 \end{align*}
 

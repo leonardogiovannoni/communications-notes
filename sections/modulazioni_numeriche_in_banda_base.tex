@@ -1,10 +1,10 @@
 \section*{Modulazioni numeriche in banda base}
 
 \begin{tikzpicture}[
-    block/.style={rectangle, draw, minimum height=1cm, minimum width=2.5cm},
-    node distance=1cm and 2cm,
-    auto
-]
+        block/.style={rectangle, draw, minimum height=1cm, minimum width=2.5cm},
+        node distance=1cm and 2cm,
+        auto
+    ]
     % Blocks
     \node[block] (source) {Sorgente binaria};
     \node[block, right=of source] (encoder) {Codificatore};
@@ -23,8 +23,8 @@
     %\draw[->] (filter) -- (sampler) node[midway,above] {$y(t)$};
     \draw[->] (sampler) -- (decisor) node[midway,above] {$\hat{x}[n]$};
     \draw[->] (decisor) -- (destination) node[midway,above] {$\hat{b}[n]$};
-    
-        % Draw the diagonal line
+
+    % Draw the diagonal line
     % Dashed Boxes
     \draw ([xshift=0]filter.west) -- ([xshift=-0.75cm]filter.west) node[midway,above] {$y(t)$};
     \draw ([xshift=-0.75cm]filter.west) -- ([xshift=-1.25cm,yshift=0.5cm]filter.west) node[midway,below] {$T_s$};
@@ -33,58 +33,58 @@
 
     \draw[dashed, red, thick] ([xshift=-0.5cm,yshift=0.5cm]sampler.north west) rectangle ([xshift=0.5cm,yshift=-0.5cm]filter.south east);
 
-     \node[align=center, red, above right= -1cm and -6cm of filter.south east] (channel-label) {Demodulatore numerico};
+    \node[align=center, red, above right= -1cm and -6cm of filter.south east] (channel-label) {Demodulatore numerico};
 
-  
-   
+
+
 
 \end{tikzpicture}
 
 La modulazione numerica è necessaria per poter trasmettere sequenze binarie attraverso un mezzo trasmissivo. In particolare, per adesso ci concentreremo su canali trasmissivi in banda base, come ad esempio il doppino telefonico o il cavo coassiale.
 
 \begin{tikzpicture}
-% Drawing the block diagram using TikZ package
-% Note: You will need to adjust the positions of the blocks (nodes) and the arrows (paths) to match your notes.
+    % Drawing the block diagram using TikZ package
+    % Note: You will need to adjust the positions of the blocks (nodes) and the arrows (paths) to match your notes.
 \end{tikzpicture}
 
 % Here you should draw the block diagram as per your notes using the TikZ package.
 % Since the TikZ diagram could be quite complex, I will only outline the structure here.
 \begin{enumerate}
-    
-\item \textbf{Codificatore}: trasforma sequenze di bit in simboli \( M \)-ari appartenenti a un alfabeto \( A_s \).
 
-\item \textbf{Interpolatore}: modula impulsi tramite i simboli \( x[n] \) in ingresso per produrre una sequenza di impulsi \( s(t) \).
-\[
-s(t) = \sum_{k=-\infty}^{\infty} x[k] \cdot p(t - kT_s)
-\]
+    \item \textbf{Codificatore}: trasforma sequenze di bit in simboli \( M \)-ari appartenenti a un alfabeto \( A_s \).
 
-\item \textbf{Canale di comunicazione}: sono assenti i trasduttori in quanto la propagazione nel mezzo trasmissivo è elettrica.
+    \item \textbf{Interpolatore}: modula impulsi tramite i simboli \( x[n] \) in ingresso per produrre una sequenza di impulsi \( s(t) \).
+          \[
+              s(t) = \sum_{k=-\infty}^{\infty} x[k] \cdot p(t - kT_s)
+          \]
 
-\item \textbf{Filtro di ricezione}: filtra componenti di rumore generate nel canale e compensa eventuali distorsioni.
+    \item \textbf{Canale di comunicazione}: sono assenti i trasduttori in quanto la propagazione nel mezzo trasmissivo è elettrica.
 
-\item \textbf{Campionatore}: preleva campioni dal segnale filtrato \( y(t) \).
+    \item \textbf{Filtro di ricezione}: filtra componenti di rumore generate nel canale e compensa eventuali distorsioni.
 
-\item \textbf{Decisore}: associa un simbolo dell'alfabeto \( A_s \) ad ogni campione.
+    \item \textbf{Campionatore}: preleva campioni dal segnale filtrato \( y(t) \).
 
-\item \textbf{Decodificatore}: trasforma i simboli in sequenze binarie.
- 
+    \item \textbf{Decisore}: associa un simbolo dell'alfabeto \( A_s \) ad ogni campione.
+
+    \item \textbf{Decodificatore}: trasforma i simboli in sequenze binarie.
+
 \end{enumerate}
 \paragraph*{Codificatore}
 
 \begin{itemize}
-\item Deve essere sincrono con la sorgente
-\[
-T_s = T_b \log_2 M
-\]
-\[
-R_s = \frac{1}{T_s} = \frac{1}{T_b \log_2 M}
-\]
+    \item Deve essere sincrono con la sorgente
+          \[
+              T_s = T_b \log_2 M
+          \]
+          \[
+              R_s = \frac{1}{T_s} = \frac{1}{T_b \log_2 M}
+          \]
 
 
-\item La sequenza di simboli generati dal codificatore viene considerata come un processo stazionario. Spesso i simboli trasmessi sono considerati equiprobabili:
-\begin{equation*}
-    P\{x[n]=\alpha_i\} = \frac{1}{M} \quad \forall i
-\end{equation*}
+    \item La sequenza di simboli generati dal codificatore viene considerata come un processo stazionario. Spesso i simboli trasmessi sono considerati equiprobabili:
+          \begin{equation*}
+              P\{x[n]=\alpha_i\} = \frac{1}{M} \quad \forall i
+          \end{equation*}
 \end{itemize}
 
 \paragraph*{Interpolatore}
@@ -93,9 +93,9 @@ In un sistema di comunicazione numerico in banda base, l'interpolatore da solo s
 \begin{itemize}
     \item \(B_p\): banda dell'impulso \( p(t) \):
     \item \(E_p\): energia dell'impulso \( p(t) \):
-\begin{equation*}
-    E_p = \int_{-\infty}^{\infty} p(t)^2 \, dt = \int_{-\infty}^{\infty} |P(f)|^2 \, df
-\end{equation*}
+          \begin{equation*}
+              E_p = \int_{-\infty}^{\infty} p(t)^2 \, dt = \int_{-\infty}^{\infty} |P(f)|^2 \, df
+          \end{equation*}
 \end{itemize}
 
 
@@ -109,8 +109,8 @@ Il processo \( S(t) \) ha una autocorrelazione \( R_s(\tau) \) ed una densità s
 Per cui è definita una potenza \( P_s \) ed una banda \( B_T \).
 
 
-     L'energia media per bit può essere calcolata come:
- \begin{equation*}
+L'energia media per bit può essere calcolata come:
+\begin{equation*}
     E_b = T_s P_b = \frac{E_s}{\log_2 M} = \frac{E_s}{B_t}
 \end{equation*}
 \begin{equation*}
@@ -124,27 +124,27 @@ Per cui è definita una potenza \( P_s \) ed una banda \( B_T \).
 Il demodulatore numerico produce una sequenza $\hat{x}[k]$ in modo tale da minimizzare la probabilità di errore. La probabilità di errore sul simbolo e sul bit sono:
 
 \begin{align*}
-    P_{E_s} &= P\{ \hat{x}[k] \neq x[k] \} \\
-    P_{E_b} &= P\{ \hat{b}[n] \neq b[n] \} \quad \text{BEP (bit error probability)}
+    P_{E_s} & = P\{ \hat{x}[k] \neq x[k] \}                                          \\
+    P_{E_b} & = P\{ \hat{b}[n] \neq b[n] \} \quad \text{BEP (bit error probability)}
 \end{align*}
 
 \paragraph*{Canale numerico e prestazioni}
 \begin{center}
-\begin{tikzpicture}
-\node (s) at (0,0) {\(x[k]\)};
-\node[block] (encoder) at (3,0) {Canale numerico};
-\node (r) at (6,0) {\(\hat{x}[k]\)};
+    \begin{tikzpicture}
+        \node (s) at (0,0) {\(x[k]\)};
+        \node[block] (encoder) at (3,0) {Canale numerico};
+        \node (r) at (6,0) {\(\hat{x}[k]\)};
 
-\draw[->] (s) -- (encoder);
-\draw[->] (encoder) -- (r);
-\end{tikzpicture}
+        \draw[->] (s) -- (encoder);
+        \draw[->] (encoder) -- (r);
+    \end{tikzpicture}
 \end{center}
 
 
 
 
 \begin{align*}
-    x[k] &\in A_s & A_s &= \{\alpha_1, \alpha_2, \ldots, \alpha_M\}
+    x[k] & \in A_s & A_s & = \{\alpha_1, \alpha_2, \ldots, \alpha_M\}
 \end{align*}
 
 \begin{equation*}

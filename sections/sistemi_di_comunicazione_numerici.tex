@@ -5,14 +5,14 @@ Per definizione un sistema di comunicazione numerico è tale quando \( m_s(t) \)
 N.B. \( s(t) \) e \( r(t) \) continuano ad essere segnali analogici.
 
 \begin{center}
-\begin{tikzpicture}[auto, node distance=2cm,>=latex']
-    \node [input, name=input] {};
-    \node [block, right of=input] (modulator) {\( p(t) \)};
-    \node [output, right of=modulator] (output) {};
+    \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+        \node [input, name=input] {};
+        \node [block, right of=input] (modulator) {\( p(t) \)};
+        \node [output, right of=modulator] (output) {};
 
-    \draw [->] (input) -- node {\( m_s[n] \)} (modulator);
-    \draw [->] (modulator) -- node {\( m(t) \)} (output);
-\end{tikzpicture}
+        \draw [->] (input) -- node {\( m_s[n] \)} (modulator);
+        \draw [->] (modulator) -- node {\( m(t) \)} (output);
+    \end{tikzpicture}
 \end{center}
 Dove
 \( T_s \) è il periodo di segnalazione della sorgente e
@@ -43,43 +43,43 @@ che è il rate con cui escono i simboli apparentemente dall'alfabeto \( A_s \).
 Se è presente una codifica binaria per rappresentare un simbolo dell'alfabeto \( A_s \) occorrono \( \log_2 M \) simboli binari,
 per cui si definisce il tasso di errore binario come:
 \[
-R_b \coloneqq \frac{\log_2 M}{T_s}
+    R_b \coloneqq \frac{\log_2 M}{T_s}
 \]
 
 \subsection*{Schema funzionale di un sistema di comunicazione numerico}
 \begin{adjustwidth*}{-2.3cm}{-2cm}
-\begin{center}
-\begin{tikzpicture}[>=Stealth, block/.style={draw, rectangle}, scale=0.85]
-    % Blocks
-    \tikzstyle{block} = [rectangle, draw, text centered, minimum height=4em, align=center]
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, block/.style={draw, rectangle}, scale=0.85]
+            % Blocks
+            \tikzstyle{block} = [rectangle, draw, text centered, minimum height=4em, align=center]
 
-    \node[block] (mod) {Modulatore \\ numerico};
-    \node[block, right=1cm of mod] (channel) {Canale di \\ comunicazione};
-    \node[block, right=1cm of channel] (demod) {Demodulatore \\ numerico};
+            \node[block] (mod) {Modulatore \\ numerico};
+            \node[block, right=1cm of mod] (channel) {Canale di \\ comunicazione};
+            \node[block, right=1cm of channel] (demod) {Demodulatore \\ numerico};
 
-    % Nodes for connecting lines
-    \coordinate[left=2cm of mod] (input);
-    \coordinate[right=2cm of demod] (output);
-   
-    % Lines
-    \draw[->] (input) -- node[above] {$m_s[n]$} (mod);
-    \draw[->] (mod) -- node[above] {$s(t)$} (channel);
-    \draw[->] (channel) -- node[above] {$r(t)$} (demod);
-    \draw[->] (demod) -- node[above] {$\hat{m}_s[n]$} (output);
+            % Nodes for connecting lines
+            \coordinate[left=2cm of mod] (input);
+            \coordinate[right=2cm of demod] (output);
 
-    % Dashed box
-    \begin{scope}
-        \draw[dashed, red] ($(mod.north west)+(-0.5,0.5)$) rectangle ($(demod.south east)+(0.5,-0.5)$);
-    \end{scope}
+            % Lines
+            \draw[->] (input) -- node[above] {$m_s[n]$} (mod);
+            \draw[->] (mod) -- node[above] {$s(t)$} (channel);
+            \draw[->] (channel) -- node[above] {$r(t)$} (demod);
+            \draw[->] (demod) -- node[above] {$\hat{m}_s[n]$} (output);
 
-    % Annotations
-    \node[align=center, red, above right= -1cm and -6cm of demod.south east] (channel-label) {Canale numerico};
+            % Dashed box
+            \begin{scope}
+                \draw[dashed, red] ($(mod.north west)+(-0.5,0.5)$) rectangle ($(demod.south east)+(0.5,-0.5)$);
+            \end{scope}
 
-    % Circles
-    \draw (input) ++(-0.5cm,0) circle (0.5cm) node {$S$};
-    \draw (output) ++(0.5cm,0) circle (0.5cm) node {$D$};
-\end{tikzpicture}
-\end{center}
+            % Annotations
+            \node[align=center, red, above right= -1cm and -6cm of demod.south east] (channel-label) {Canale numerico};
+
+            % Circles
+            \draw (input) ++(-0.5cm,0) circle (0.5cm) node {$S$};
+            \draw (output) ++(0.5cm,0) circle (0.5cm) node {$D$};
+        \end{tikzpicture}
+    \end{center}
 \end{adjustwidth*}
 \begin{itemize}
     \item La coppia modulatore/demodulatore numerico può essere interpretata come un livello di trasduzione. Questo ci permette di vedere il sistema di comunicazione come un canale numerico tra \( S \) e \( D \).
@@ -89,7 +89,7 @@ R_b \coloneqq \frac{\log_2 M}{T_s}
 
 
 
-\item Il demodulatore numerico può essere visto come l'insieme del demodulatore e del trasformatore di destinazione. Esso produce la sequenza $\hat{m}_s[n]$ dal segnale $v(t)$.
+    \item Il demodulatore numerico può essere visto come l'insieme del demodulatore e del trasformatore di destinazione. Esso produce la sequenza $\hat{m}_s[n]$ dal segnale $v(t)$.
 
 \end{itemize}
 
@@ -102,8 +102,8 @@ In casi pratici un canale numerico non è mai ideale e per cui ha senso definire
 
 \subsection*{Probabilità di transizione}
 \begin{equation}
-    P\{i|j\} \coloneqq P\{\hat{m}_s[n]=\alpha_i 
- \ |\  m_s[n]=\alpha_j\}
+    P\{i|j\} \coloneqq P\{\hat{m}_s[n]=\alpha_i
+    \ |\  m_s[n]=\alpha_j\}
 \end{equation}
 
 Un canale numerico è statisticamente caratterizzato quando sono note le $P\{i|j\}$ $\forall i,j$
@@ -114,8 +114,8 @@ L'insieme delle $P\{i|j\}$ è parte di $M^2$ dove $M$ è la cardinalità dell'al
 
 Per un canale ideale quindi:
 \begin{align}
-    P\{i|j\} &= 1 \quad \text{se } i=j \\
-    P\{i|j\} &= 0 \quad \text{se } i \neq j
+    P\{i|j\} & = 1 \quad \text{se } i=j      \\
+    P\{i|j\} & = 0 \quad \text{se } i \neq j
 \end{align}
 
 N.B. Le $P\{i|j\}$ non dipendono solo dai disturbi introdotti dal canale di comunicazione, ma anche dalla modulazione impiegata, per cui esse legano contro delle prestazioni di tutto il sistema numerico.
@@ -126,7 +126,7 @@ N.B. Le $P\{i|j\}$ non dipendono solo dai disturbi introdotti dal canale di comu
 Le prestazioni di un sistema di comunicazione numerico sono associabili alla probabilità di errore di simbolo \(M\)-ario
 
 \[
-P_E(M) \coloneqq P\{\hat{m}_s[n] \neq m_s[n]\}
+    P_E(M) \coloneqq P\{\hat{m}_s[n] \neq m_s[n]\}
 \]
 
 Se la \(P_E(M)\) non dipende da \(n\), allora il sistema di comunicazione è stazionario.
@@ -136,7 +136,7 @@ Se la \(P_E(M)\) non dipende da \(n\), allora il sistema di comunicazione è sta
 La qualità del servizio per un sistema di comunicazione numerico è associabile alla probabilità di errore \(P_E(M)\). È ragionevole quindi pensare che si debba fissare una \(P_E(M)\) massima al di là della quale la QoS non è accettabile.
 
 \[
-P_E(M) \leq P_{\text{max}}
+    P_E(M) \leq P_{\text{max}}
 \]
 
 Esempio: per i servizi voce \(P_{\text{max}} = 10^{-3}\), mentre per i servizi dati \(P_{\text{max}} = 10^{-7}\).
@@ -152,23 +152,23 @@ Lo stesso si può dire per la banda, si può dimostrare che all'aumentare della 
 
 Una modulazione si dice:
 \begin{itemize}
-\item \textbf{efficiente in potenza}: quando la potenza trasmessa è bassa a fronte di un certo livello di prestazioni;
-\item \textbf{efficiente spettralmente}: quando la banda utilizzata è piccola a fronte di un certo livello di prestazioni.
+    \item \textbf{efficiente in potenza}: quando la potenza trasmessa è bassa a fronte di un certo livello di prestazioni;
+    \item \textbf{efficiente spettralmente}: quando la banda utilizzata è piccola a fronte di un certo livello di prestazioni.
 \end{itemize}
 
 Sfortunatamente i sistemi efficienti spettralmente non sono anche efficienti in potenza.
 
 Vantaggi di un sistema di comunicazione rispetto ad un altro:
 \begin{enumerate}
-\item Basso costo
-\item Sicurezza nella trasmissione di un messaggio
-\item Trasferimento aggregato di messaggi di natura diversa (multiplazione, audio, video, dati)
-\item Possibilità di utilizzare modulazioni e codifiche che rendono il sistema efficiente in potenza e/o spettralmente.
+    \item Basso costo
+    \item Sicurezza nella trasmissione di un messaggio
+    \item Trasferimento aggregato di messaggi di natura diversa (multiplazione, audio, video, dati)
+    \item Possibilità di utilizzare modulazioni e codifiche che rendono il sistema efficiente in potenza e/o spettralmente.
 \end{enumerate}
 
 Svantaggi:
 \begin{enumerate}
-\item Generalmente la banda occupata da un segnale numerico è maggiore del corrispondente analogico
-\item Complessità, soprattutto per la sincronizzazione
+    \item Generalmente la banda occupata da un segnale numerico è maggiore del corrispondente analogico
+    \item Complessità, soprattutto per la sincronizzazione
 \end{enumerate}
 
