@@ -502,8 +502,8 @@ La \( h_{RC}(t) \) \`e calcolabile in forma chiusa:
 \subsection*{Eccesso di banda e efficienza spettrale dei sistemi \( M-PAM \) con coseno rialzato}
 
 Dato:
-\[ p(t) \otimes c(t) \otimes h_R(t) = h_{RC}(t) \]
-dove \( \otimes \) indica la convoluzione, $p(t)$ il sagomatore in trasmissione, $c(t)$ la risposta impulsiva del canale , $h_R(t)$ il filtro in ricezione e \( h_{RC}(t) \) la risposta impulsiva del filtro a coseno rialzato, l'efficienza spettrale del canale di comunicazione numerico è:
+\[ p(t) \ast c(t) \ast h_R(t) = h_{RC}(t) \]
+dove $p(t)$ indica il sagomatore in trasmissione, $c(t)$ la risposta impulsiva del canale, $h_R(t)$ il filtro in ricezione e \( h_{RC}(t) \) la risposta impulsiva del filtro a coseno rialzato, l'efficienza spettrale del canale di comunicazione numerico è:
 \[ \eta_{B} = \frac{\log_2M}{B_T T_s} = \frac{\log_2M}{B_H T_s} = \frac{\log_2M}{ T_s} \frac{2T_s}{1+\alpha} = \frac{2\log_2M}{1+\alpha}\]
 
 Considerazioni:
@@ -962,10 +962,10 @@ Il SNR per bit è un parametro utile per determinare le prestazioni di una ricev
     SNR_b = \frac{E_b}{N_0}
 \]
 \[
-    E_b \coloneqq P_s T_b = E\left[x^2[k]\right]T_b \quad \text{Energia per bit} \]
+    E_b \coloneqq P_s T_b = \mathbb{E}\left[x^2[k]\right]T_b \quad \text{Energia per bit} \]
 \[
     \frac{N_0}{2} = S_n(f)
-    \Rightarrow SNR_b = \frac{E\left[ x[k]\right]}{N_0 R_b}, \quad R_b = \frac{1}{T_b}
+    \Rightarrow SNR_b = \frac{\mathbb{E}\left[ x[k]\right]}{N_0 R_b}, \quad R_b = \frac{1}{T_b}
 \]
 
 \paragraph{Decisore ottimo e criterio della massimo verosimiglianza}

@@ -60,7 +60,6 @@ Per \( M \) pari si ha \( A_s = \{ \pm 1, \pm 3, \ldots, \pm (M-1) \} \)
 
 Per \( M \) dispari si ha \( A_s = \{ 0, \pm 2, \pm 4, \ldots, \pm (M-1) \} \)
 
-
 I formati M-PAM di pi\`u largo impiego sono quelli dove $M$ è una potenza di 2.
 
 Esempio:
@@ -134,13 +133,13 @@ $p(t) = \text{rect}\left(\frac{t - T_s/2}{T_s}\right)$
 \end{enumerate}
 
 \[
-    R_s(t,\tau) = \mathbb{E}\{s(t) \ s^*(t-\tau)\}
+    R_s(t,\tau) = \mathbb{E}[s(t) \ s^*(t-\tau)]
 \]
 \[
-    = \mathbb{E} \left\{ \sum_{n=-\infty}^{+\infty} x\left[n\right] p(t - nT_s) \sum_{k=-\infty}^{+\infty} x^*\left[k\right] p^*(t - \tau - kT_s) \right\}
+    = \mathbb{E} \left[ \sum_{n=-\infty}^{+\infty} x\left[n\right] p(t - nT_s) \sum_{k=-\infty}^{+\infty} x^*\left[k\right] p^*(t - \tau - kT_s) \right]
 \]
 \[
-    = \sum_{n=-\infty}^{+\infty} \sum_{k=-\infty}^{+\infty} E\{x\left[n\right] x^*\left[k\right]\} \cdot p(t - nT_s) \cdot p^*(t - \tau - kT_s)
+    = \sum_{n=-\infty}^{+\infty} \sum_{k=-\infty}^{+\infty} \mathbb{E}[x\left[n\right] x^*\left[k\right]] \cdot p(t - nT_s) \cdot p^*(t - \tau - kT_s)
 \]
 \[
     = \sum_{n=-\infty}^{+\infty} \sum_{k=-\infty}^{+\infty} R_x\left[n-k\right] \cdot p(t - nT_s) \cdot p^*(t - \tau - kT_s)
@@ -176,7 +175,7 @@ La funzione di autocorrelazione media \( \overline{R}_s(\tau) \) è:
 
 Nel caso in cui:
 \begin{enumerate}
-    \item $\mathbb{E} \{ x[n] \} = 0$
+    \item $\mathbb{E} [ x[n] ] = 0$
     \item $R_x[m] = \sigma_x^2 \delta[m]$
 \end{enumerate}
 
@@ -295,7 +294,7 @@ Il PAM Binario è un formato equiprobabile
 
 
 \begin{enumerate}
-    \item $E\left[s(t)\right] = \dfrac{1}{2} \sum_{k=-\infty}^{+\infty} E[x_k] p(t-kT_s)
+    \item $\mathbb{E}\left[s(t)\right] = \dfrac{1}{2} \sum_{k=-\infty}^{+\infty} \mathbb{E}[x_k] p(t-kT_s)
               = \sum_{k=-\infty}^{+\infty} \left(\dfrac{1}{2} (+1) + \dfrac{1}{2} (-1)\right) p(t-kT_s) = 0 \quad \text{se i simboli sono equiprobabili}$
 
     \item $S_s(t) = \dfrac{1}{T_b} |P(f)|^2 \quad \text{Densità spettrale di potenza}$
@@ -327,7 +326,7 @@ e impulsi rettangolari  $p(t) = \text{rect}\left(\dfrac{t-T_b/2}{T_b}\right)$
 
 \begin{itemize}
     \item $
-              E[S(t)] = \sum_{k=-\infty}^{+\infty} E[x[k]] p(t-kT_b) = \dfrac{1}{2}$
+              \mathbb{E}[S(t)] = \sum_{k=-\infty}^{+\infty} \mathbb{E}[x[k]] p(t-kT_b) = \dfrac{1}{2}$
     \item $
               E_s = \dfrac{1}{2}E_{S_1} + \dfrac{1}{2}E_{S_2} = \dfrac{T_b}{2}
           $
