@@ -166,3 +166,64 @@ dove
     \end{tikzpicture}
 
 \end{center}
+
+\paragraph*{Modulazione QAM (Quadrature Amplitude Modulation)}
+
+
+\begin{equation*}
+    S_i(t) = A_i^c p(t) \cos(2\pi f_0 t) - A_i^s p(t) \sin(2\pi f_0 t)
+\end{equation*}
+
+$A_i^c$ e $A_i^s$ vengono scelti dal modulatore in base al simbolo $x[n]$
+\begin{itemize}
+    \item $A_i^c$ componente in fase di $x[n]$
+    \item $A_i^s$ componente in quadratura di $x[n]$
+\end{itemize}
+
+
+\[
+    \tilde{s}_i(t) = (A_i^c + j A_i^s) p(t)   
+\]
+
+\[
+    \Re\{s_i(t) e^{j2\pi f_0 t}\} = \Re\{(A_i^c + j A_i^s) p(t) e^{j2\pi f_0 t}\} =
+\]
+\[
+    \phantom{TODO} = \Re\{A_i^c p(t) \cos(2\pi f_0 t) + j A_i^c p(t) \sin(2\pi f_0 t) + j A_i^s p(t) \cos(2\pi f_0 t) - A_i^s p(t) \sin(2\pi f_0 t)\} =
+\]
+\[
+    \phantom{TODO} = A_i^c p(t) \cos(2\pi f_0 t) - A_i^s p(t) \sin(2\pi f_0 t)    
+\]
+
+\[
+    s(t) = \sum_{n=-\infty}^{+\infty} (x_c[n] \cdot p(t-nT_s) \cdot \cos(2\pi f_0t) - x_s[n] \cdot p(t-nT_s) \cdot \sin(2\pi f_0t))
+\]
+
+\[
+    s(t) = \Re\left\{\sum_{n=-\infty}^{+\infty} x[n] \cdot p(t-nT_s) \cdot e^{j2\pi f_0 t}\right\}
+\]
+
+Dove l'argomento dentro la parentesi graffa è $\tilde{s}(t)$
+\[
+x[n] = x_c[n] + jx_s[n]
+\]
+
+
+\begin{center}
+    \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+        \tikzstyle{block} = [draw, rectangle, minimum height=2.5em, minimum width=4em]
+        \node [input, name=input] {};
+        \node [block, right of=input] (channel) {$p(t)$};
+        \node [draw, circle, right of=channel] (sum) {\(\times\)};
+        \node [output, right of=sum] (output) {};
+        \node [below of=sum] (noise) {$e^{j2\pi f_0 t}$};
+
+        \draw [->] (input) -- node {$x[n]$} (channel);
+        \draw [->] (channel) -- node {} (sum);
+        \draw [->] (noise) -- node {} (sum);
+        \draw [->] (sum) -- node {$\tilde{s}(t)$} (output);
+    \end{tikzpicture}
+\end{center}
+
+
+
