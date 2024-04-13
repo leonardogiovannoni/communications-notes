@@ -5,15 +5,19 @@
 \usepackage{amssymb}
 \usepackage{caption}
 \usepackage{changepage}
-\usepackage{graphicx}
 \usepackage[italian]{babel}
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
 \usepackage{mathtools} 
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{array}
 \usepackage{pgfplots}
 \usepackage{tikz}
 \usepackage{tikz} 
 \usepackage[utf8]{inputenc}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{fillbetween}
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
 \usetikzlibrary{arrows,positioning,shapes.geometric}
 \pgfplotsset{compat=newest}
@@ -25,15 +29,22 @@
 \maketitle
 
 
-\include{sections/introduzione_ai_sistemi_di_comunicazione}
-\include{sections/sistemi_di_comunicazione_numerici}
-\include{sections/modulazioni_numeriche_in_banda_base}
-\include{sections/PAM}
-\include{sections/prestazioni}
-\include{sections/modulazione_numerica_in_banda_passante}
-\include{sections/QAM}
-
-
+%\include{sections/introduzione_ai_sistemi_di_comunicazione}
+%\include{sections/sistemi_di_comunicazione_numerici}
+%\include{sections/modulazioni_numeriche_in_banda_base}
+%\include{sections/PAM}
+%\include{sections/prestazioni}
+%\include{sections/inviluppo_complesso}
+%\include{sections/modulazione_numerica_in_banda_passante}
+%\include{sections/QAM}
+\include{sections/communications_introduction}
+\include{sections/analog_communications}
+\include{sections/radio_matlab}
+\include{sections/digital_communications} 
+\include{sections/wireless_propagation_channel}
+\include{sections/multicarrier_technology}
+\include{sections/diversity}
+\include{sections/lte}
 \end{document}
 
 

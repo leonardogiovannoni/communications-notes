@@ -108,14 +108,14 @@
 
 
         \foreach \point in {
-        (-3, 1),
-        (-3, -1),
-        (3, 1),
-        (3, -1),   
-        (-1, 1),
-        (1, 1),
-        (-1, -1),
-        (1, -1)}{
+                (-3, 1),
+                (-3, -1),
+                (3, 1),
+                (3, -1),
+                (-1, 1),
+                (1, 1),
+                (-1, -1),
+                (1, -1)}{
                 \draw[fill=orange] \point circle (1.5pt);
             }
 
@@ -138,14 +138,14 @@
 
 
         \foreach \point in {
-        (1, -3),
-        (-1, -3),
-        (1, 3),
-        (-1, 3),   
-        (-1, 1),
-        (1, 1),
-        (-1, -1),
-        (1, -1)}{
+                (1, -3),
+                (-1, -3),
+                (1, 3),
+                (-1, 3),
+                (-1, 1),
+                (1, 1),
+                (-1, -1),
+                (1, -1)}{
                 \draw[fill=orange] \point circle (1.5pt);
             }
 
@@ -221,12 +221,7 @@
         \node[below=0.5cm of p2] (sin) {$-2\sin(2\pi f_0 t)$};
         \draw[->] (sin) -- (p2);
 
-      %  \node[right=2cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
         \node[right=2cm of m2, inner sep=0pt, minimum size=0pt] (dummy4) {};
-
-
-        %\draw[-] (m1) -- (dummy3);
-        %\draw[-] (m2) -- (dummy4);
 
         \node[right=of dummy3] (phant) {};
         \draw[->] (dummy3) -- node[midway, above] {$\tilde{x}[n]$}(phant);
@@ -242,3 +237,14 @@
 
     \end{tikzpicture}
 \end{center}
+
+\[
+  r(t) = s(t) \ast c(t) + n(t)  
+\]
+\paragraph*{Componente utile}
+Chiamiamo $\hat{r}(t)$ la componente utile del segnale ricevuto $r(t)$
+\begin{align*}
+    \hat{r}(t) &= s(t) \ast c(t) \\
+    \phantom{ciao} &= \left(\sum_{n = -\infty}^{\infty} \left(x_c[n]p(t - nT_s)\cos(2\pi f_0t) - x_s[n]p(t - nT_s)\sin(2\pi f_0t)\right) \right) \ast c(t) \\
+    \phantom{ciao} &= \left(\sum_{n = -\infty}^{\infty} \left(x_c[n]p(t - nT_s)\cos(2\pi f_0t)\right) \right) \ast c(t) - \left(\sum_{n = -\infty}^{\infty} x_s[n]p(t - nT_s)\sin(2\pi f_0t) \right) \ast c(t) \\
+\end{align*}

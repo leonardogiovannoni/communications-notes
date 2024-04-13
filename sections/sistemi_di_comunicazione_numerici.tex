@@ -89,7 +89,7 @@ per cui si definisce il tasso di errore binario come:
 
 
 
-    \item Il demodulatore numerico può essere visto come l'insieme del demodulatore e del trasformatore di destinazione. Esso produce la sequenza $\hat{m}_s[n]$ dal segnale $v(t)$.
+    \item Il demodulatore numerico può essere visto come l'insieme del demodulatore e del trasformatore di destinazione. Esso produce la sequenza $\hat{m}_s[n]$ dal segnale $r(t)$.
 
 \end{itemize}
 
@@ -110,7 +110,7 @@ Un canale numerico è statisticamente caratterizzato quando sono note le $P\{i|j
 
 Se le $P\{i|j\}$ non dipendono da $n$ allora il canale numerico si dice \textbf{stazionario}.
 
-L'insieme delle $P\{i|j\}$ è parte di $M^2$ dove $M$ è la cardinalità dell'alfabeto $A_s$.
+L'insieme delle $P\{i|j\}$ è pari a $M^2$ dove $M$ è la cardinalità dell'alfabeto $A_s$.
 
 Per un canale ideale quindi:
 \begin{align}
@@ -118,7 +118,7 @@ Per un canale ideale quindi:
     P\{i|j\} & = 0 \quad \text{se } i \neq j
 \end{align}
 
-N.B. Le $P\{i|j\}$ non dipendono solo dai disturbi introdotti dal canale di comunicazione, ma anche dalla modulazione impiegata, per cui esse legano contro delle prestazioni di tutto il sistema numerico.
+N.B. Le $P\{i|j\}$ non dipendono solo dai disturbi introdotti dal canale di comunicazione, ma anche dalla modulazione impiegata, per cui esse tengono conto delle prestazioni di tutto il sistema numerico.
 
 % Qui potresti includere il disegno utilizzando l'ambiente tikzpicture se necessario
 \subsection*{Misure delle prestazioni di un sistema di comunicazione numerico}

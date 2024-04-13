@@ -622,7 +622,10 @@ efficienza in potenza)
 
 
 \subsection*{Ricezione ottima in presenza di rumore bianco}
-
+È possibile, almeno in linea di principio, annullare il disturbo prodotto dall'ISI, 
+adesso proviamo a capire se sia possibile agire congiutamente sui filtri in trasmissione
+ e ricezione, ovviamente in relazione anche alla risposta del canale,
+  in modo che, pur risultando ancora nulla l'ISI, sia al contempo minimo l'effetto del rumore. 
 Per il momento consideriamo solo gli effetti relativi al rumore.
 
 \begin{center}
@@ -695,7 +698,7 @@ Dove:
 
 E quindi per la potenza del rumore:
 \[
-    S_{n_u}(f) = S_n(f) \left| H_r(f) \right|^2 = \frac{N_0}{2} \left| H_R(f) \right|^2
+    S_{n_u}(f) = S_n(f) \left| H_R(f) \right|^2 = \frac{N_0}{2} \left| H_R(f) \right|^2
 \]
 
 \[

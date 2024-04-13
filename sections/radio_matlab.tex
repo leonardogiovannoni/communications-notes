@@ -1,0 +1,208 @@
+\section*{Classes and Objects in MATLAB}
+
+% Explanation of OOP in MATLAB
+Object-Oriented Programming (OOP) in MATLAB allows for the creation of classes, which are blueprints for objects that encapsulate both data structure and behavior. A class defines properties (data fields) and methods (functions) for the objects created from the class.
+
+% Definition of an object in MATLAB
+In MATLAB, an object is an instance of a class. To use an object effectively, one must understand the properties and methods of its class. Operations performed on objects are limited to the methods defined in their respective classes.
+
+% The 'step' method in MATLAB classes
+MATLAB provides the \texttt{step} method for many of its system objects, which executes the primary algorithm of the object it is called upon. The behavior of \texttt{step} varies with each class and is designed to work on the data stored within the object.
+
+\subsection*{Example: Creating a Spectrum Analyzer in MATLAB}
+
+% Example of creating a spectrum analyzer object
+A spectrum analyzer object in MATLAB can be created using the \texttt{dsp.SpectrumAnalyzer} class:
+\begin{verbatim}
+    obj = dsp.SpectrumAnalyzer;
+\end{verbatim}
+This command initializes a new object of the \texttt{dsp.SpectrumAnalyzer} class.
+
+% Setting properties of an object
+Properties of the object can be defined during creation or by direct assignment:
+\begin{verbatim}
+    obj = dsp.SpectrumAnalyzer('Name', 'Spectrum Analyzer');
+    % or
+    obj.Name = 'Spectrum Analyzer';
+\end{verbatim}
+In this example, the \texttt{'Name'} property of the spectrum analyzer object is set to \texttt{'Spectrum Analyzer'}.
+
+
+\subsection*{Example: Creating a Spectrum Analyzer in MATLAB (Continued)}
+
+% Continued example of creating a spectrum analyzer with property settings
+To create a spectrum analyzer with specific properties, use the following syntax:
+\begin{verbatim}
+    scope = dsp.SpectrumAnalyzer(...
+        'Name', 'Spectrum Analyzer', ...
+        'Title', 'Spectrum', ...
+        'SpectrumType', 'Power', ...
+        'FrequencySpan', 'Span and center frequency', ...
+        'CenterFrequency', 0, ...
+        'Span', 600, ...
+        'ShowLegend', true, ...
+        'SampleRate', Fs);
+\end{verbatim}
+This code snippet sets various properties of the spectrum analyzer object, such as the display name, title, type of spectrum, frequency span, and sampling rate.
+
+% Using the step method to display the spectrum
+The \texttt{step} function is used to display the frequency spectrum of the input signal:
+\begin{verbatim}
+    step(obj, X)
+\end{verbatim}
+Here, \( X \) represents the input signal to the spectrum analyzer, and it can be a matrix where each column is treated as an independent channel.
+
+\section*{Before Starting with RTL-SDR in MATLAB}
+
+% Preparatory steps for using RTL-SDR with MATLAB
+Before working with RTL-SDR in MATLAB, the following preparatory steps should be taken:
+
+\begin{enumerate}
+    \item Install the support package for RTL-SDR Radio by navigating to the MATLAB Home tab, then clicking on \texttt{Add-Ons} > \texttt{Get Hardware Support Packages}.
+    \item In the Add-On Explorer, search for the \texttt{Communications Toolbox Support Package for RTL-SDR Radio}.
+    \item Select the support package and click \texttt{Install}. Follow the prompts to install the necessary drivers for the RTL-SDR radio software.
+\end{enumerate}
+This setup ensures that MATLAB is properly configured to interface with RTL-SDR hardware and perform signal analysis tasks.
+
+\section*{How to Install Drivers for RTL-SDR in MATLAB}
+
+% Steps to install the RTL-SDR drivers after the MATLAB support package installation
+After installing the Communications Toolbox Support Package for RTL-SDR Radio:
+
+\begin{enumerate}
+    \item Use File Explorer on your PC and navigate to the following path:
+    \begin{verbatim}
+    C:\ProgramData\MATLAB\SupportPackages\<version>\3P.instrset\zadig.instrset\zadig-XX.exe
+    \end{verbatim}
+    Here, \( <version> \) is the version of your MATLAB, and \( XX \) is the Zadig version number.
+    
+    \item Connect the RTL-SDR device to your PC.
+    
+    \item Run the Zadig application, select the RTL device from the list, and install the driver.
+\end{enumerate}
+
+\section*{Hardware Setup}
+
+% Instructions for setting up the RTL-SDR hardware
+To set up the RTL-SDR hardware:
+
+\begin{enumerate}
+    \item Connect the RTL-SDR into your computer's USB port.
+    
+    \item Start MATLAB and at the MATLAB command prompt, initiate the hardware setup by executing:
+    \begin{verbatim}
+    sdrsetup
+    \end{verbatim}
+    
+    \item To obtain information about all radios connected to your computer, use the \texttt{sdrinfo} command:
+    \begin{verbatim}
+    hwinfo = sdrinfo
+    \end{verbatim}
+    This command provides details about the connected RTL-SDR radios, such as radio name, address, tuner name, manufacturer, and gain values.
+\end{enumerate}
+
+These steps are crucial for ensuring that the RTL-SDR hardware is properly recognized by MATLAB and is ready for signal processing tasks.
+
+\section*{Load RTL-SDR Driver}
+
+% Constructing the RTL-SDR System object
+To interface with the RTL-SDR hardware, create a System object in MATLAB:
+\begin{verbatim}
+    obj_rtlsdr = comm.SDRRTLReceiver
+\end{verbatim}
+which results in an object with properties such as center frequency, sample rate, and samples per frame:
+\begin{verbatim}
+    obj_rtlsdr = 
+        comm.SDRRTLReceiver with properties:
+        RadioAddress: '0'
+        CenterFrequency: 102500000
+        EnableTunerAGC: true
+        SampleRate: 2500000
+        OutputDataType: 'int16'
+        SamplesPerFrame: 1024
+        FrequencyCorrection: 0
+        EnableBurstMode: false
+\end{verbatim}
+These properties configure the RTL-SDR receiver to properly receive and process the RF signals.
+
+\section*{FM Receiver — Practical Implementation}
+
+% Block diagram description of an FM receiver using RTL-SDR
+The practical implementation of an FM receiver using RTL-SDR follows a specific signal processing flow:
+\begin{itemize}
+    \item The analog RF signal \( S_{FM}(t) \) is first received by the SDR hardware.
+    \item It is then digitally demodulated into \( \tilde{v}(k) \) at a sample rate of 228 kS/s.
+    \item The demodulated signal is filtered through a low-pass filter (LPF) and then subjected to rate conversion to reduce the sample rate to 48 kS/s.
+    \item Finally, the processed digital signal is analyzed using a spectrum analyzer.
+\end{itemize}
+This process outlines the steps from receiving the analog signal to the digital analysis, detailing the journey of the signal through the FM receiver system.
+
+\subsection*{Example MATLAB Code}
+\begin{verbatim}
+    % Define System object for RTL-SDR Receiver with specified properties
+    obj_rtlsdr = comm.SDRRTLReceiver('RadioAddress', '0', ...
+                                     'CenterFrequency', 102500000, ...
+                                     'EnableTunerAGC', true, ...
+                                     'SampleRate', 2500000, ...
+                                     'OutputDataType', 'int16', ...
+                                     'SamplesPerFrame', 1024, ...
+                                     'FrequencyCorrection', 0, ...
+                                     'EnableBurstMode', false);
+\end{verbatim}
+This MATLAB code snippet sets up the RTL-SDR receiver with predefined settings to start receiving signals.
+
+
+\section*{FM Receiver}
+
+% Description of FM signal reception and demodulation
+The complex envelope of the received FM signal is given by:
+\[
+\tilde{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
+\]
+Ignoring noise and channel effects, the modulating signal \( m(t) \) can be recovered by differentiating the phase of \( \tilde{v}(t) \):
+\[
+\hat{m}(t) = \frac{1}{2\pi k_f} \frac{d}{dt} \arg(\tilde{v}(t))
+\]
+where \( \arg(\tilde{v}(t)) \) denotes the phase of \( \tilde{v}(t) \).
+
+% Conceptual diagram of an FM baseband receiver
+The conceptual diagram of an FM baseband receiver includes the differentiator \( \frac{d}{dt} \) followed by a division by \( 2\pi k_f \) to retrieve the original modulating signal \( m(t) \).
+
+\section*{FM Receiver — Practical Implementation}
+
+% Practical implementation steps for FM signal demodulation
+In the practical implementation of an FM receiver using SDR:
+
+\begin{itemize}
+    \item The SDR output provides the complex envelope of the signal sampled at frequency \( f_s = \frac{1}{T_s} \).
+    \item The signal \( \tilde{v}(k) \) at discrete times \( kT_s \) can be expressed as:
+    \[
+    \tilde{v}(k) = \tilde{v}(t)|_{t=kT_s} \approx A_c e^{j2\pi k_f \sum_{\ell=-\infty}^{k} m(\ell T_s) T_s}
+    \]
+    \item The product of two consecutive baseband samples is:
+    \[
+    \tilde{v}(k) \tilde{v}^*(k - 1) \approx A_c^2 e^{j2\pi k_f m(k) T_s}
+    \]
+    \item An estimate of \( m(k) \), the \( k \)-th sample of \( m(t) \), is then given by:
+    \[
+    \hat{m}(k) = \frac{1}{T_s 2\pi \Delta f} \arg(\tilde{v}(k) \tilde{v}^*(k - 1))
+    \]
+\end{itemize}
+
+% Explanation of the signal processing terms and operations
+These equations represent the discrete-time processing of an FM signal, demonstrating how the original modulating signal is extracted from the received waveform in a digital domain.
+
+\section*{FM Mono}
+
+% Information on the first FM mono transmissions
+The initial FM transmissions from 1945 to 1960 were mono, meaning they consisted of a single audio channel. The modulating signal \( m(t) \) for mono transmissions was the sum of the left (\( L(t) \)) and right (\( R(t) \)) audio channels:
+\[ m(t) = L(t) + R(t) \]
+
+% Normalization and frequency deviation for FM mono
+This signal was then normalized to a maximum value of 1, with a frequency sensitivity \( k_f \) of 75 kHz/V. This resulted in a maximum frequency deviation \( \Delta f \) for the FM signal given by:
+\[ \Delta f = k_f \max|m(t)| = 75 \text{ kHz} \]
+
+% Power spectrum of FM mono transmissions
+The power spectrum of these mono FM transmissions would be a single peak, representing the audio content, spanning up to 15 kHz in frequency:
+Here, the figure illustrates the frequency range allocated for mono FM audio transmissions.
+

@@ -11,8 +11,8 @@
     \node[block, right=of encoder] (interp) {Interpolatore};
     \node[block, right=of interp] (channel) {Canale di comunicazione};
     \node[block, below=of channel] (filter) {Filtro di ricezione};
-    \node[block, left=of filter] (sampler) {Campionatore};
-    \node[block, left=of sampler] (decisor) {Decisore};
+    \node[block, left=of filter] (sampler) {Decisore};
+    \node[block, left=of sampler] (decisor) {Decodificatore};
     \node[block, left=of decisor] (destination) {Destinazione binaria};
 
     % Arrows

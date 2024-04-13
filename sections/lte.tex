@@ -1,0 +1,106 @@
+\section*{LTE Overview}
+
+\textbf{Long Term Evolution (LTE)} represents the fourth generation (\textbf{4G}) of wireless communication standards, preceded by:
+\begin{itemize}
+    \item \textbf{1G}: Analog FDMA-based systems
+    \item \textbf{2G}: GSM, the first digital standard supporting data rates up to 9.6 kb/s
+    \item \textbf{3G}: UMTS (CDMA)
+    \item \textbf{5G}: NR, currently being deployed
+\end{itemize}
+LTE is primarily utilized for data transmission due to its flexibility and high capacity.
+
+\section*{Physical Layer LTE Numerology}
+
+\begin{itemize}
+    \item LTE employs \textbf{Orthogonal Frequency-Division Multiplexing (OFDM)} as its core technology, similar to Wi-Fi systems.
+    \item \textbf{Sampling time} (\(f_s\)) is 30.72 MHz, which is a critical factor in determining the FFT size and subcarrier bandwidth.
+    \item \textbf{FFT size} (\(N\)) is 2048, playing a role in the frequency resolution of the system.
+    \item \textbf{Subcarrier bandwidth} (\(\Delta f\)) is defined as \(\frac{30.72 \text{ MHz}}{2048} = 15 \text{ kHz}\), dictating the spacing between individual OFDM subcarriers.
+    \item An \textbf{LTE slot} consists of 7 OFDM symbols, with a total duration of 0.5 ms, thus determining the time-domain structure of LTE transmission.
+\end{itemize}
+
+The figure below illustrates a \textbf{resource block} in LTE, showing the subcarrier spacing and the time-frequency structure of the LTE slot and resource blocks.
+
+% Insert image of LTE numerology
+
+\section*{Key Mathematical Relationships}
+
+Given the LTE numerology, we can define some key relationships:
+\begin{align*}
+    \text{Subcarrier spacing} (\Delta f) &= \frac{f_s}{N} \\
+    \text{Slot duration} &= 0.5 \text{ ms (for 7 OFDM symbols)} \\
+    \text{Resource block width} &= 180 \text{ kHz} = 12 \text{ subcarriers} \times 15 \text{ kHz}
+\end{align*}
+
+These relationships are crucial for understanding LTE's capacity to handle various data rates and modulations, balancing the need for speed with the practical limitations of the wireless medium.
+
+
+
+\section*{Physical Layer LTE Numerology and Peak Data Rate}
+
+LTE employs \textbf{Orthogonal Frequency-Division Multiple Access (OFDMA)} for its multiple access technique. This involves allocating groups of subcarriers to different users, which enables efficient spectrum utilization.
+
+The \textbf{minimum allocation unit} in LTE is a \textbf{resource block (RB)}. Each RB:
+\begin{itemize}
+    \item Contains \(12\) subcarriers
+    \item Spans \(180\) kHz in frequency for the duration of a slot (\(0.5\) ms)
+\end{itemize}
+
+Regarding the peak data rate for high-end mobile phones:
+\begin{itemize}
+    \item These often fall in the category list that supports very high data rates (e.g., 19-20 category).
+    \item The \textbf{raw bandwidth} calculation is as follows:
+          \begin{align*}
+              B_{\text{raw}} &= \text{Number of RBs} \times \text{Subcarrier Spacing} \\
+                             &= 100 \times 180\text{ kHz} \\
+                             &= 18\text{ MHz}
+          \end{align*}
+    \item Considering control and synchronization overheads, the \textbf{available bandwidth} \(B_{av}\) is:
+          \begin{align*}
+              B_{av} &= B_{\text{raw}} - 4\text{ MHz for control and synchronization} \\
+                     &= 14\text{ MHz}
+          \end{align*}
+\end{itemize}
+
+\subsection*{Additional Notes}
+
+\begin{itemize}
+    \item In practice, \(1200\) of the \(2048\) available subcarriers are used, which accounts for the data rate calculations.
+    \item A total of \(848\) are left as guard subcarriers, which are not used for transmission to avoid interference.
+    \item The effective channel utilization and data rate can be significantly influenced by the actual number of subcarriers allocated for user data.
+\end{itemize}
+
+% An illustration or table showing LTE numerology and data rate could be included here
+% \includegraphics{path_to_image}
+
+
+
+
+
+
+
+\section*{5G New Radio (NR) and Latest Chipsets}
+
+\subsection*{5G New Radio (NR)}
+5G NR is the latest global wireless standard after 1G, 2G, 3G, and 4G networks, enabling a new kind of network designed to connect virtually everyone and everything together including machines, objects, and devices.
+
+\begin{itemize}
+    \item It is characterized by \textbf{Enhanced Mobile Broadband (eMBB)} that aims to deliver peak data rates in the range of gigabytes per second.
+    \item It supports a variety of services from high-quality video streaming and virtual reality to reliable low latency communications required for autonomous vehicles.
+    \item \textbf{Massive Machine-Type Communications (mMTC)} and \textbf{Ultra-Reliable Low Latency Communications (URLLC)} are central to 5G capabilities, supporting the wide-scale IoT and mission-critical applications, respectively.
+\end{itemize}
+
+\subsection*{Most Recent 5G Chip}
+The \textbf{Qualcomm\textsuperscript{\textregistered} Snapdragon X65} is the latest 5G chipset that includes:
+\begin{itemize}
+    \item Support for 5G mmWave and sub-6 GHz frequencies with a peak download speed of 10 Gbps.
+    \item 3GPP Release 16 support and a 5G mmWave-sub6 aggregation for expanded range and bandwidth.
+    \item Advanced features such as Qualcomm\textsuperscript{\textregistered} Smart Transmit technology, Qualcomm\textsuperscript{\textregistered} 545 mmWave Antenna Module for enhanced signal quality, and AI-based signal boost functionalities.
+\end{itemize}
+
+\subsection*{Chipset Specifications}
+\begin{itemize}
+    \item The modem supports dynamic spectrum sharing (DSS), SA (standalone), NSA (non-standalone) modes, and global multi-SIM.
+    \item Designed for compatibility across various technologies such as GSM, CDMA, WCDMA, and others to ensure broad spectrum usage and coverage.
+\end{itemize}
+
