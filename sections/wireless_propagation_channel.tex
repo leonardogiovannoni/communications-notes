@@ -20,6 +20,108 @@ Super high frequency & SHF & 3 GHz - 30 GHz & Space wave \\
 \end{tabular}
 \end{table}
 
+
+Le onde sono classificabili in base alla loro frequenza, da cui dipende la modalità di propagazione attraverso il canale. In particolare si indentificano i seguenti meccanismi di propagazione:
+
+\begin{itemize}
+    \item \textbf{Ground wave} (fino a 2MhZ): le onde si propagano seguendo la curvatura terrestree riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza.
+    \item \textbf{Sky wave} (1-10MhZ): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri.
+    \item \textbf{Space wave} (da 30MhZ): le onde richiedono un line-of-sight per poter essere ricevute correttamente, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso.
+\end{itemize}
+
+
+
+Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione ne fa affidamento. Le space wave sono soggette a diversi fenomeni di propagazione:
+\begin{itemize}
+    \item \textbf{Riflessione}: quando il segnale impatta con un oggetto molto grande rispetto alla lunghezza d'onda può essere riflesso, ovvero rimbalza e prosegue con angolo differente, oppure passa attraverso.
+    \item \textbf{Diffrazione}: quando il segnale è ostruito da oggetti con superfici taglienti, parte del segnale può modificare l'angolo con cui si propaga. Questo fenomeno permette in certe condizioni di ricevere un segnale anche in assenza di un line-of-sight a causa di un oggetto che crea una zona d'ombra, ovviamente l'energia ricevuta sarà minore rispetto a quella originaria del segnale.
+    \item \textbf{Scattering}: quando il segnale impatta con oggetti di piccola dimensione rispetto alla lunghezza d'onda si ha una propagazione in più direzioni del segnale.
+    \item \textbf{Assorbimento e rifrazione}: si tratta di fenomeni meno importanti, ma che comunque possono modificare la propagazione del segnale. 
+\end{itemize}
+
+Gli effetti generati da questi fenomeni possono essere riassunti in due diversi tipi di attenuazione del segnale:
+\begin{itemize}
+    \item \textbf{Small-scale fading}: modella fluttazioni rapide della potenza del segnale su lunghezze paragonabili a quella dell'onda.
+    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze.
+\end{itemize}
+
+
+\subsection*{Large-scale fading}
+Il LSF modella la variazione della potenza del segnale in base alla fistanza fra trasmettitore e ricevitore, tipicamente variando per distanze nell'ordine del metro. Gli effetti sono modellati attraverso la combinazione di path loss e shadowing:
+Il path loss rappresenza un'approssimazione delle equazioni di Maxwell.
+\begin{equation}
+    P_{RX} \approx P_{TX} \cdot \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n \quad \text{for } d > d_0
+\end{equation}
+
+dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda}{4 \pi d_0} \right)^2 \) rappresenta il termine di campo vicino, \( P_{TX} \) è la potenza trasmessa, \( d_0 \) è la distanza di riferimento e \( n \) è l'esponente del path loss. Quest'ultimo dipende dall'ambiente in cui ci si trova, ad esempio in un ambiente urbano il valore di \( n \) varia tra 2.7 e 3.5.
+
+
+
+La formula, deterministica, che fornisce il valore di attenuazione dato dal path loss è:
+\[
+    A_{PL} = \frac{P_{TX}}{P_{RX}} = \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n
+    A_{PL}^{dB} = 10 \cdot \log_{10}(A_{PL}) = \Gamma(f_0, d_0)_{dB} + n \cdot 10 \cdot \log_{10}(d_0) - n \cdot 10 \cdot \log_{10}(d)
+\]
+
+
+Nel vuoto l'attenuazione del segnale in base alla distanza è data dalla relazione
+\[
+    P_{RX} = P_{TX} \cdot \frac{A}{4\pi d^2}  
+\]
+dove \( A \) è l'area dell'antenna in ricezione, che tipicamente è \( A = \lambda^2 \) dove \( \lambda \) è la lunghezza d'onda del segnale.
+
+
+Per frequenze inferiori ai 6GhZ l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
+
+Nella progettazione di sistemi di comunicazione wireless è essenziale tenere in considerazione il rapportarto tra frequenza utilizzata e distanza copribile da una singola antenna.
+
+\subsection*{Shadowing}
+
+Dati due punti alla stessa distanza dal trasmettitore se si considerasse unicamente il path loss avrebbe la stessa attenuazione, tuttavia nella realtà vi è una componente aleatoria da dover considerare, modellabile tramite shadowing. La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto. La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri espressi in dB.
+\begin{equation}
+    p(A_S) = \frac{1}{\sqrt{2\pi \sigma_S}} e^{-\frac{A_S^2}{2\sigma_S^2}}
+\end{equation}
+
+
+
+
+Gli effetti del path loss e dello shadowing sono sommati per ottenere le variazioni dovute al large scale fading. 
+\[
+    A_{LS} = A_{PL} \cdot A_S \quad \text{scala lineare}
+\]
+
+\[
+    A_{LS}^{dB} = A_{PL}^{dB} + A_S^{dB} \quad \text{scala logaritmica}
+\]
+
+
+PL è deterministico e dipende dall'esponente scelto in base all'ambiente circostante e dalla distanza tra trasmettitore e ricevitore, mentre shadowing aleatorio e distribuito come una log-normale. Entrambi gli eggetti contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
+
+
+
+\section*{Small scale fading}
+
+SSF modella le variazioni aleatorie della potenza istantanea su sistanze nell'ordine della lunghezza d'onda, dovute ai vari fenomeni di propagazione delle onde che determinano la ricezione di repliche del segnale, ognuno con un certo ritardo, fase ed attenuazione. Il canale di tramissione è modellato come un filtro LTI, la cui risposta impulsiva dipende dagli effetti SSF.
+
+\[
+    h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} \delta(t - \tau_{\ell})
+\]
+
+Dove \( A_{LS} \) è l'attenuazione dovuta al large scale fading, \( \alpha_{\ell} \) e \( \phi_{\ell} \) sono rispettivamente ampiezza e fase del segnale \(\ell\)-esimo, e \( \tau_{\ell} \) è il ritardo temporale. La risposta impulsiva del canale è la somma delle risposte impulsiva di ogni singolo percorso.
+
+Per quanto riguarda i parametri delle varie repliche:
+\begin{itemize}
+    \item \textbf{Attenuazione} ($\alpha_\ell$): sono modellati come variabili aleatorie, tipicamente con distribuzione di Rayleigh, derivante dal fatto che le componenti in gase e quadratura hanno una distribuzione normale.
+    \[
+        \alpha e^{j\phi_i} = x_i + j y_i \quad \text{con } x_i, y_i \sim \mathcal{N}(0, \sigma^2)
+    \]
+    \[
+        \|\alpha e^{j\phi_i}\| = \sqrt{x_i^2 + y_i^2} \sim \text{Rayleigh}(\sigma)
+    \]
+    \item \textbf{Fase} ($\phi_\ell$): sono modellati come variabili distribuite uniformemente nell'intervallo $[0, 2\pi]$.
+\end{itemize}
+
+
 \subsection*{Ground Wave Propagation}
 Ground wave propagation is a mode of radio wave propagation that enables radio signals to travel across the Earth's surface. Illustrations show how ground waves bend following the curvature of the Earth, allowing the reception of signals over the horizon.
 
