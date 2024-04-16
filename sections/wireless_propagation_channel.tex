@@ -121,6 +121,76 @@ Per quanto riguarda i parametri delle varie repliche:
     \item \textbf{Fase} ($\phi_\ell$): sono modellati come variabili distribuite uniformemente nell'intervallo $[0, 2\pi]$.
 \end{itemize}
 
+La ricezione di più repliche, soprattutto se notevolemnte distanziate tra loro, genera ISI.
+\[
+    x(t) = \sum_{i} c_i g(t - iT) \quad \text{uscita filtro in ricezione (senza rumore)}
+\]
+\[
+    g(t) = g_T(t) \ast h(t) \ ast g_R(t) = g_H(t) \ast h(t) = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_H(t - \tau_{\ell})
+\]
+
+\[
+  x(m) = \sum_{k}  C_{m-k}g(k) = c_m g(0) + \underbrace{\sum_{k \neq 0} c_{m-k} g(k)}_{\text{ISI}}
+\]
+
+\[
+    g(k) = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_H(k - \tau_{\ell})
+\]
+
+Sebbene quindi si scelga un filtro che rispetti la condizione di Nyquist, gli effetti del canale non permettono di rimuovere completamente l'ISI, generata dal fatto che g(k) non si annulla.
+
+
+Il delay spread permette di misurare la dispersione temporale introdotta dal canale:
+\begin{itemize}
+    \item $\sigma_\tau \ll T$: delay spread inferiore al symbol time, il canale è detto \textbf{flat fading}  e l'effetto dell'ISI è trascurabile in quanto le varie repliche ricevute fanno tutte riferimento allo stesso simbolo.
+    \item $\sigma_\tau > T$: delay spread maggiore del symbol time, il canale è detto \textbf{multipath} e l'effetto dell'ISI non è più trascurabile in quanto le varie repliche, appartenti a simboli differenti, interferiscono tra loro.
+\end{itemize}
+
+In entrambi i casi il canale è detto \textbf{multipath} in quanto la ricezione del segnale avviene attraverso più replichem poi si aggiunge una classificazione ulteriore dovuta al delay spread.
+flat fading. La coerenza temporale è il tempo entro il quale il canale è circa costante.
+\[
+    B_c \approx \frac{1}{5\sigma_\tau}
+\]
+Se $B_c > B_S \approx \frac{1}{T}$, ovvero la banda del segnale trasmesso, non si avrà alcune distorsione, il canale risulta \textbf{flat fading}. In caso contrario, se $B_c < B_S$ il canale è detto \textbf{frequency selective}. 
+
+La coherence bandwidth può essere determinata considerando la densità spettrale di potenza.
+I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere proprietà statistiche si possono applicare le operazioni standard per il calcolo del valor medio e della varianza, tuttavia ciò risulta particolarmente complesso e serve dunque approssimare tramite un procedimento approssimativo.
+
+
+\[
+   \overline{\tau} = \mathbb{E} \left[\tau\right] = \int_{0}^{+\infty} \tau f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2 \tau_{\ell}}{\sum_{m=0}^{N_c-1} \alpha_{m}^2}
+\]
+
+Per quanto riguarda la varianza:
+\[  
+    \sigma_\tau = \sqrt{\mathbb{E}\left[({\tau - \overline{\tau}})^2\right]}
+\]
+
+Per modellare gli effetti di small scale fading si utilizza il parametro $\sigma_\tau$, ovvero il delay spread che dipende dall'ambiente in cui avviene la trasmissione. Il modello ottenuto risulta piuttosto semplice da utilizzare e secgliendo accuratamente i parametri può essere utilizzato per modellare diversi scenari di trasmissione. L'accuratezza ottenuta non è sempre fedele al caso reale, ma nella maggior parte dei casi non è richiesto, considerando anche che il canale è soggetto a cambiamenti repentini.
+
+Il ber a parità di rumore dipende fortemente dalla distorsione introdotta nel canale:
+\begin{itemize}
+    \item \textbf{No fading}: aumentando il rapporto SNR è possibile ridurre drasticamente il BER con una potenza di trasmission contenuta.
+    \item \textbf{Flat fading}: aumentando il rapporto SNR è ancora possibile ridurre il BER, ma sarà necessaria una potenza di trasmissione maggiore.
+    \item \textbf{Frequency selective}: il BER non è riducibile oltre una certa soglia nonostante l'increment del SNR, principalemnte a causa delle interferenze generate dall'ISI.
+\end{itemize}
+
+Per quanto riguarda le decision variables:
+\[
+    x(m) = c_m + n(m) \quad \text{no fading} \quad Pe = Q(\sqrt{\text{SNR}})
+\]
+
+\[
+    x(m) = \alpha c_m + n(m) \quad \text{flat fading} \quad Pe = \frac{1}{\text{SNR}}
+\]
+
+\[
+    x(m) = g(0) c_m + \sum_{k \neq 0} g(k) c_{m-k} + n(m) \quad \text{frequency selective}  
+\]
+
+Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la potenza di rasmissione si ottengono miglioramente nel BER, tuttavia così facendo si incrementa anche l'energia dei simboli finendo in una zona in cui è l'ISI a dominare.
+Il trend delle nuove generazioni radio è quello di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
+
 
 \subsection*{Ground Wave Propagation}
 Ground wave propagation is a mode of radio wave propagation that enables radio signals to travel across the Earth's surface. Illustrations show how ground waves bend following the curvature of the Earth, allowing the reception of signals over the horizon.
