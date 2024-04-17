@@ -192,6 +192,96 @@ Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la 
 Il trend delle nuove generazioni radio è quello di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
 
 
+
+
+
+\section*{Time varying channel}
+Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai gains e fasi alle varie repliche. Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente panche per distanze paragonabili alla lunghezza d'onda, ke quali possono essere nell'ordine del centimetro. Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsive, tuttavia nel caso di ricevitore mobile vi è una dipendenza dal tempo. Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida. 
+
+\[
+    h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
+\]
+
+
+Per il ritardo non si aggiunge dipendenza dal tempo in quanto rispetto ai gains e alla fase varia molto più lentamente dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
+
+\subsection*{Effeto doppler}
+L'effetto doppler, considerando un qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso. In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allonta sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore. Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come doppler shift ($f_d$). Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
+\[
+    d = vt \quad \text{distanza tra $x$ e $y$}
+\]  
+
+\[
+    \Delta \tau = \frac{d}{c} = \frac{vt}{c} \quad \text{tempo impiegato dal segnale a percorrere $d$}
+\]
+
+\[
+    y_x(t) = s(t) = \sin(2\pi f_c t) \quad \text{segnale ricevuto in $x$ al tempo $t$}
+\]
+
+\[
+    y_y(t) = s(t-\Delta \tau) = \sin(2\pi f_c (t-\Delta \tau)) \quad \text{segnale ricevuto in $y$ al tempo $t$}
+\]
+
+\[
+    = \sin\left(2\pi f_c \left(t - \frac{vt}{c}\right)\right) = \sin\left(2\pi \left(f_c - \frac{f_c v}{c}\right) t\right) = \sin\left(2\pi \left(f_c - f_d \right) t \right) \quad \boxed{f_d = -\frac{f_c v}{c}}
+\]
+Il segnale ricevuto in $y$ risulta aver una frequenza a quello in $x$. Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce. In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
+In generale il doppler shift di ciascuna replica dipende dall'angolo $f_c \frac{v \cos(\theta)}{c}$, 
+
+Esistono vari modelli per descrivere lo spreading in frequenza generato dalle varie repliche aggregate lato ricevitore, fra cui Jakes' doppler spectrum il quale assume che le repliche arrivino in maniera uniformemente distribuita da ogni direzione, ciascuna con stessa quantità di energia. L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomaeno introdotto dal canale.
+
+
+
+\[
+  \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f}{f_d}\right)^2}}
+\]
+Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effetto prodotto è l'allargamento dello spettro occupato, derivante dal fatto che il segnale stocastico ricevuto assume la forma:
+
+\[
+    y(t) = s(t) a(t)
+\]
+dove $s(t)$ è il segnale trasmesso e $a(t)$ è il Jokes' doppler spectrum. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
+
+\[
+    S_y(f) = S_s(f) \ast S_a(f) 
+\]
+
+Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jokes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
+
+\[
+    \rho (t) = J_0(2\pi f_d t) \approx 0 \quad \text{funzione di autocorrelazione time varying channel}
+\]
+
+\[
+    \Rightarrow f_d \tau = 
+\]
+
+
+dove $J_0$ è la funzione di bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
+
+
+\[
+    f_d T_c = \frac{1}{2} \quad \Rightarrow \quad  T_c = \frac{1}{2 f_d} = \frac{1}{2} \frac{c}{f_c v} \quad \text{coherence time}
+\]
+
+Lo stesso concetto può essere espresso anche in termini di distanza, molto importante per l'utilizzo di antenne direzionali.
+\[
+    d_c = v T_c = \frac{1}{2} v \frac{c}{f_c v} = \frac{\lambda}{2}
+\]
+Questo implica che segnali ricevuti a distanze nell'ordine di metà lunghezza d'onda possono essere considerati incorrelati (?).
+Se $T < T_c$ si può asssumere che il canale sia modellabile come LTI in quanto la risposta risulta costante nel tempo per almeno $T_c$, inferiore al tempo dei simboli.
+Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare il canale come LTI, tuttavia si rischia di incorrere in un canale frequency selective per cui sono necessarie contromisure per contrastare l'ISI generato.  
+
+\begin{itemize}
+    \item \textbf{Slow fading}: l'effetto doppler è trascurabile ($B_S \gg f_d, T_c > T$)
+    \item \textbf{Fast fading}: l'effetto doppler distorce notevolemnte il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
+\end{itemize}
+Se la banda del segnale è maggiore del doopler shift la convoluzione genera un comportamento non molto significativo.
+
+In generale gli effeti LSF determinano la dimensione della cella di copertura, considerando anche la frequenza di trasmission.
+
+
 \subsection*{Ground Wave Propagation}
 Ground wave propagation is a mode of radio wave propagation that enables radio signals to travel across the Earth's surface. Illustrations show how ground waves bend following the curvature of the Earth, allowing the reception of signals over the horizon.
 
