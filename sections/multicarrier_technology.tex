@@ -1,5 +1,191 @@
 \subsection*{Multi-Carrier and OFDM Technologies}
 
+p
+
+
+
+
+
+La tecnologia multi-carrier è impiegata da tutte le modulazioni più recenti e rappresenta la base del livello fisico per trasmissioni LTE, 5G e Wi-Fi. 
+L'ampio utilizzo di questa tiplogia di modulazione deriva dalla capacità di ridurre i problemi derivanti dall'utilizzo di un canale frequency selective, i cui problemi sono sempre più evidenti all'aumentare del rate di trasmissione. Inoltre presenta dei benefici anche nell'occupazione spetrale e nella flessibilità di allocazione delle risorse radio ai vari utenti del sistema.
+\begin{itemize}
+    \item Robustezza contro canali frequecy-selective
+    \item Efficienza spettrale
+    \item Allocazione flessibile di risorse
+\end{itemize}
+
+L'idea base consiste nel suddividere il segnale originale da trasmettere, caratterizzato da una banda ben superiore rispetto alla coherence bandwidth del canale in tanti segnali, ciascuno avente una banda tale da evitare i problemi del canale frequency selective, oveero inferiori alla coherence bandwidth.
+
+
+
+\begin{tikzpicture}
+    \begin{axis}[
+      axis lines=middle,
+      ymin=0,
+      ymax=5,
+      xmin=0,
+      xmax=15,
+      xtick=\empty,
+      ytick=\empty,
+      xlabel={frequency},
+      every axis x label/.style={at={(ticklabel* cs:1.05)},anchor=west,},
+      x label style={at={(axis description cs:1.05,0)},anchor=north},
+      ]
+  
+      % Main plot
+      \addplot [
+          smooth,
+          domain=0:15,
+          samples=100,
+          draw=black
+      ] {4*exp(-((x-4.5)^2)/10) + 3*exp(-((x-10)^2)/10)} \closedcycle;
+      \addplot [
+          smooth,
+          domain=3:12,
+          samples=100,
+          fill=blue!40,
+          draw=black
+      ]  {4*exp(-((x-4.5)^2)/10) + 3*exp(-((x-10)^2)/10)} \closedcycle;
+  
+      % Subchannel bandwidth markers
+      \draw [<->, red, thick] (axis cs:3,2.5) -- node [above, text=black] {Subchannel channel bandwidth $B_s/N < B_c$} (axis cs:12,2.5);
+  
+      % Arrows on top of bars
+      \foreach \x in {3,3.75,...,12} {
+        \edef\temp{
+          \noexpand\draw [->] (axis cs:\x,0) -- (axis cs:\x, {4*exp(-((\x-4.5)^2)/10) + 3*exp(-((\x-10)^2)/10)});
+        }
+        \temp
+      }
+      % create an arrow  like this one <-> from 3 point on x-axis to 4 and name it \Delta B (so unitary len)
+        \draw [<->, blue, thick] (axis cs:3,0.125) -- node [above, text=black] {$\Delta B$} (axis cs:3.75,0.125);
+    \end{axis}
+  \end{tikzpicture}
+
+\[
+  B_s > B_c \Rightarrow \text{frequency selective channel}  
+\]
+
+\[
+    \Delta B = \frac{B_s}{N} < B_c \Rightarrow \text{flat fading channel}
+\]
+I segnali in cui è stato suddiviso l'originale non saranno affetti da ISI.
+
+Per effettuare una trasmissione parallela dei veri segnali si potrebbe utilizzare filtri passa banda in parallelo, tuttavia nella pratica cioè non è possibile a causa della mancanza di un filtro ideale, la cui rappresentazione in frequenza sarebbe una perfetta rect. Inoltre l'utilizzo di molti filtri sarebbe molto costoso.
+Per poter analizzare una modulazione multi-carrier è necessaria una rappresentazione alternativa, ma equivalente, del canale di trasmissione, ottenuto campionando il segnale con frequenza $\frac{1}{T}$. La rappresentazione ottenuta risulta valida solo nella banda del segnale trasmesso, ma non è un problema dato che non si ha interesse nell'analizzare il canali in altri punti.
+
+Considerando l'inviluppo complesso risulta chiaro che il teorme di Nyquist per il campionamento è rispettato con frequenza di campionamente $\frac{1}{T}$.
+
+\[
+    f_s \geq 2 \frac{1}{2T} = \frac{1}{T} \quad \text{frequenza di campionamento} 
+\]
+\[
+    h_{eq}(t) = \sum_{\ell=0}^{L-1} h(\ell) \delta(t - \ell T) \quad \text{rappresentazione equivalente del canale}
+\]
+
+\[
+    y(t) = h_{eq}(t) \ast s(t) = \sum_{\ell=0}^{L-1} h(\ell) s(t - \ell T) \quad \text{inviluppo complesso del segnale ricevuto}
+\]
+
+Il segnale ricevuto è identico al segnale ottenuto utilizzando la rappresentazione fisica del canale, ma la forma permette un'analisi più semplice.
+
+
+\subsection*{Modulazione OFDM}
+
+La modulazione OFDM risulta essere una delle più utilizzate per trasmissioni digitali ed è del tipo multi-carrier, ereditando quindi i vantaggi di tale tipo di modulazione.
+Si consideri un blocco $S$ composto da $N$ campioni da trasmettere:
+\[
+  S = \left[S(0), S(1), \ldots, S(N-1)\right]
+\]
+
+L'effetto introdotto dal canale genera una componente ISI lato ricevitore:
+\[
+  y(k) = \sum_{\ell=0}^{L-1} h(\ell) s(k - \ell) = h(0)s(k) + \sum_{\ell=1}^{L-1} h(\ell) s(k - \ell)
+\]
+Tipicamente quando si studia una modulazione si considera una sequenza infinita di simboli, ma in questo caso se ne considera $N$, quindi gli indici negativi vengono considerati come 0 dato che non esistono.
+
+% create a system of equations
+\[
+  \begin{cases}
+    y(0) = h(0)s(0) \\
+    y(1) = h(0)s(1) + h(1)s(0) \\
+    \vdots \\
+    y(N-1) = h(0)s(N-1) + h(1)s(N-2) + \ldots + h(L-1)s(N-L)
+  \end{cases}
+\]
+
+L'espressione può essere riscritta in forma matriciale: $\mathbf{y} = \mathbf{H} \mathbf{s}$, con $\mathbf{H} \in \mathbb{C}^{N \times N}$ 
+
+\[ 
+\begin{bmatrix} y(0) \\ y(1) \\ \vdots \\ y(N-1) \end{bmatrix} 
+= 
+\begin{bmatrix}
+    h(0) & 0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 \\
+    h(1) & h(0) & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    h(L-1) & h(L-2) & \cdots & h(0) & 0 & \cdots & \cdots & 0 \\
+    0 & h(L-1) & \cdots & h(1) & h(0) & 0 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots & \vdots \\
+    0 & 0 & \cdots & h(L-1) & h(L-2) & \cdots & h(1) & h(0)
+    \end{bmatrix}    
+\begin{bmatrix} s(0) \\ s(1) \\ \vdots \\ s(N-1) \end{bmatrix}
+\]
+
+La matrice $\mathbf{H}$ è detta \textbf{matrice di Toeplitz} e la sua proprietà caratteristica è la presenza del solito elemento lungo le diagonali. Copiando gli ultimi $N_{CP} > L$ campioni del blocco $S$ e appendendoli in testa si ottiene un nuovo blocco con struttura circolare, cioè i primi $N_{CP}$ campioni sono identici agli ultimi $N_{CP}$.
+\[
+    \overline{S} = [s(N - N_{CP} - 1), \ldots, s(N - 1), s(0), \ldots, s(N - 1)] \quad \text{blocco cliclico}
+\]
+
+Il prefisso appeso in testa può essere utilizzato come elementi con indice negativo nella convuluzione con il canale.
+
+\[
+    \overline{S}(-1) = S(N - 1)
+\]
+\[
+    \overline{S}(-2) = S(N - 2)
+\]
+\[
+    \vdots
+\]
+\[
+    \overline{S}(-N_{CP}) = S(N - N_{CP})
+\]
+Calcolando nuovamente la convoluzione, adesso ogni campione avrà anche alcune componenti con indice negativo.
+Introducendo il prefisso nel blocco tramesso in uscita dal canale si ottiene un vettore $\mathbf{y}$ i cui elementi sono costituiti dalla somma di $L$ termini.
+\[
+    y(k) = \sum_{\ell=0}^{L-1} h(\ell) \overline{s}(k-\ell)
+\]
+\[
+    \mathbf{y} = \mathbf{\overline{H}} \mathbf{s}
+\]
+Invece di aggiungere elementi al vettore $\mathbf{s}$, ottentendo un vettore $\mathbf{\overline{s}}$, si modifica la matrice $\mathbf{H}$.
+
+La nuova matrice risulta ancora essere del tipo Toeplitz, ma in aggiunta è anche \textbf{circolante}, dato che ogni riga è ottenuta tramite uno shift circolare verso destra della riga precedente (vale anche per le colonne, shiftando verso il basso).
+
+Una matrice circolante può essere diagonalizzata, cioè può essere espressa come:
+\[
+    \overline{\mathbf{H}} = \mathbf{F}^H \mathbf{H} \mathbf{F}
+\]
+\[
+    \begin{cases*}
+        \mathbf{F}: f_{k, n} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi kn}{N}} \quad \text{fourier trasform matrix normalizzata} \\
+        \mathbf{H}: h_{n, n} = H(n) = \sum_{\ell=0}^{L-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} 
+    \end{cases*}
+\]
+L'elemento $n$-esimo sulla diagonale risulta avere la trasformata di fourier discreta di fourier del canale (manca solo il termine $\frac{1}{\sqrt{N}}$)
+
+
+La matrice $\mathbf{F}$ è unitaria, ovvero gode delle proprietà:
+\begin{itemize}
+    \item $\mathbf{F}^H \mathbf{F} = \mathbf{F} \mathbf{F}^H = \mathbf{I}_N$
+    \item $\| \mathbf{F} \| = 1$ 
+\end{itemize}
+
+Considerando $\mathbf{Y} = \mathbf{F} \mathbf{y}$ e $\mathbf{S} = \mathbf{F} \mathbf{s}$, ovvero le DFT dei due vettori si ottiene la seguente espresione:
+\[
+    \mathbf{Y} = \mathbf{F} \mathbf{y} = \mathbf{F} \mathbf{\overline{H}} \mathbf{s} = \mathbf{F} \left(\mathbf{F}^H \mathbf{H} \mathbf{F}\right)\mathbf{S} =  \mathbf{H} \mathbf{F} \mathbf{s} = \mathbf{H} \mathbf{S}
+\]
+
 Multi-carrier modulation techniques, which are foundational in LTE and 5G technologies, offer several advantages:
 
 \begin{itemize}
