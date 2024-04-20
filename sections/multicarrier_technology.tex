@@ -185,6 +185,152 @@ Considerando $\mathbf{Y} = \mathbf{F} \mathbf{y}$ e $\mathbf{S} = \mathbf{F} \ma
 \[
     \mathbf{Y} = \mathbf{F} \mathbf{y} = \mathbf{F} \mathbf{\overline{H}} \mathbf{s} = \mathbf{F} \left(\mathbf{F}^H \mathbf{H} \mathbf{F}\right)\mathbf{S} =  \mathbf{H} \mathbf{F} \mathbf{s} = \mathbf{H} \mathbf{S}
 \]
+\[
+    \Rightarrow Y(n) = H(n) S(n) \quad \text{per } n = 0, 1, \ldots, N-1
+\]
+
+Trattandosi di una matrice diagonale non si ha più alcun problema di ISI.
+
+
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, minimum height=15mm, minimum width=20mm, align=center},
+    arrow/.style={->,>=stealth}
+]
+
+% Transmitter Blocks
+\node[block] (bitsource) {Bit source};
+\node[block, right=of bitsource] (symbolmapping) {Symbol\\mapping};
+\node[block, right=of symbolmapping] (s2p) {Serial to\\parallel\\converter};
+\node[block, right=of s2p] (idft) {Inverse\\DFT};
+\node[block, right=of idft] (cpinsertion) {CP\\insertion};
+
+% Receiver Blocks
+\node[block, below=3cm of s2p] (cpremoval) {CP\\removal};
+\node[block, left=of cpremoval] (dft) {DFT};
+\node[block, left=of dft] (p2s) {Serial to\\parallel\\converter};
+\node[block, left=of p2s] (symboldecision) {Symbol\\decision};
+
+% Channel
+%\node[block, right=of cpremoval, minimum width=30mm] (channel) {Multipath\\channel};
+\node[block, below=1.5cm of cpinsertion, minimum width=30mm] (channel) {Multipath\\channel};
+% Arrows Transmitter
+\draw[arrow] (bitsource) -- (symbolmapping);
+\draw[arrow] (symbolmapping) -- (s2p);
+\draw[arrow] (s2p) -- (idft);
+\draw[arrow] (idft) -- (cpinsertion);
+
+% Arrows Receiver
+\draw[arrow] (cpinsertion) -| ([xshift=5mm]channel.north);
+\draw[arrow] ([xshift=-5mm]channel.south) |- (cpremoval);
+\draw[arrow] (cpremoval) -- (dft);
+\draw[arrow] (dft) -- (p2s);
+\draw[arrow] (p2s) -- (symboldecision);
+
+\end{tikzpicture}
+
+
+I simboli trasmessi sono idealmente generati in frequenze, ovvero sono convoluti prima della trasmissione tramite DFT inversa, quindi per essere recuperati è necessario effettuare la DFT. L'uso del prefisso risulta comunque essenziale affinché le proprietà algebriche sfruttate siano verificate. 
+La DFT può essere calcolata tramite FFT, un'operazione molto semplice dato che è costituita da una moltiplicazione matriciale, quindi il costo per la rimozione dell'ISI è molto contenuto. In questo modo è vicino il limite del rate di tramissione raggiungibile, a patto che vi sia una banda sufficientemente ampia.
+Il costo da pagare è l'utilizzo aggiuntivo di energia e banda per la trasmissione del prefisso, il quale non contiene alcuna informazione utile.
+La denominazione OFDM deriva dal fatto che si tratta di una sorta di modulazione in frequenza, in cui le varie sub-carrier sono ortogonali, ovvero non interferiscono tra di loro. La banda occupata è data dalla somma delle bande occupate dalle varie sub-carrieri, dunque è necessario determinare quali sono tali contributi.
+
+\[
+    s(k) = \frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} S(n) e^{\frac{j2\pi nk}{N}}, \quad k = 0, \ldots, N-1
+\]
+
+Dove $s(k)$ è il segnale trasmesso $s$ nel dominio del tempo. Si può notare che in ogni istante ci sono informazioni di ogni simbolo del blocco, questo deriva dal fatto che vi è stata l'operazione di DFT inversa. OFDM tramette i simboli in parallelo sulle varie sub-carrier. 
+
+
+\[
+    S(n) e^{\frac{j2\pi nk}{N}} = S(n) e^{\frac{j2\pi BTnk}{N}} = \underbrace{S(n) e^{j2\pi n\Delta f k T_s}}_{\text{Frequency tone con frequenza $\Delta f$}} = \underbrace{S(n) e^{j 2 \pi n \Delta f t}}_{\text{segnale analogico campionato}} \bigg|_{t=kT}
+\]
+
+
+La somma di frequency tone genera uno spettro a righe, ogni frequenza genera una delta. In realtà trattandosi di un segnale finito, visto come sinusoide infinita moltiplicato per una rect, lo spettro sarà composto dalla convoluzione fra una delta e una sinc.
+Un simbolo OFMD corrisponde alla sovrapposizione di $N$ segnali nell'intervallo $[0, NT_s]$
+\[
+    s_n(t) = \frac{1}{\sqrt{N}} S(n) e^{j2\pi n \Delta f t}, \quad n = 0, \ldots, N-1 \quad \text{segnali analogici sovrapposti}
+\]
+\[
+    S_{s_n}(f) = \frac{A}{N} \text{sinc}^2 ((f-n\Delta f)N T_s) \quad \text{PSD segnale sull'$n$-esima subcarrier}
+\]
+Quindi si ottiene che la banda occupata da OFDM è la somma di N funzioni sinc, ciascuna centrata in una sub-carrier differente. In teoria ciò implica che l'occupazione di banda risulti essere infinita, tuttavia la sinc tende a 0 molto velocemente, quindi il contributo può considerarsi limitato ad una certa banda. Inoltre ciò che si può notare è che le varie sinc non interferiscono tra loro nelle sub-carrier, infatti in corrispondenza di tali valori solo una sinc risulterà non essere nulla. Per contenere la banda le sub-carrier agli estremi non sono utilizzate, in modo che al di fuori della banda a disposizione non vi sia un contributo energetico significativo.
+\[
+    B_{OFDM} \approx N \cdot \frac{1}{NT_s} = \frac{1}{T_s}
+\]
+Tale relazione vale solo se si impongono virtual carriers per minimizzare il fenomeno indicato come \textbf{out of band radiation} da parte della sinc.
+La banda risulta particolarmente ristretta in quanto non ci sono fattori a moltiplicare $\frac{1}{T_s}$, come avviene utilizzando un RRC. Tuttavia parte della banda risulta non sfruttata in quanto è necessario trasmettere sia il prefisso, sia non utilizzare alcune subcarrier agli estremi, dette \textbf{virtual subcarrier}.
+
+
+Per quanto riguarda il symbol time, in OFDM si ha la relazione:
+\[
+    T_{OFDM} = T_s(N+N_{CP}), \quad N_{CP} > L
+\]  
+Dove $L$ non è noto a priori (?).
+Da questo valore si ottiene:
+\[
+    T_s < \sigma_{\tau} \ll T_{OFDM}, \quad B_s > B_c \gg \Delta f
+\]
+Ogni sub-carrier può considerare il canale \textbf{flat-fading}. Il canale per poter ricevere correttamente il segnale deve essere stimato, e ciò avviene su speciali sub-carrier detti \textbf{pilot sub-carrier}. Su tali frequenze avviene la trasmissione di simboli noti in modo da ricostruire la risposta del canale. Inoltre per poter ridurre la presenza di rumore la tramissione su tali frequenze avviene con una potenza superiore. In realtà la stima del canale è valida solo sulle frequenze pilotate, per quelle intermedie si effettua un'interpolazione e si ottiene un'approssimazione.
+L'efficienza spettrale è ridotta dell'utilizzo di virtual sub-carriers, pilot-subcarriers e cyclic prefix:
+\[
+    R = \left[N - (N_v + N_p) \right]\frac{1}{(N+N_{CP})T_s} = \frac{N - (N_v + N_p)}{(N+N_{CP})} \frac{1}{T_s}
+\]
+
+\paragraph*{OFDM error rate}
+Considerando la presenza del rumore il segnale ricevuto avrà una componente aggiuntiva di disturbo
+\[
+    r(k) = y(k) + n(k)  
+\]
+Applicando la DFT si ottiene:
+\[
+    \mathbf{R} = \mathbf{F}\mathbf{r} = \mathbf{F}\mathbf{y} + \mathbf{F}\mathbf{n} = \mathbf{H}\mathbf{S} + \mathbf{N}
+\]
+
+\[
+    \mathbf{R}(m) = \mathbf{H}(m)\mathbf{S}(m) + \mathbf{N}(m)
+\]
+Per poter dare un valore all'errore della modulazione è necessario analizzare le statistiche di $N(m)$, ovvero il rumore dopo la DFT.
+Data l'unitarietà della matrice $\mathbf{F}$ si ha che, le statistiche del rumore dopo la trasformazione rimangono inalterate.
+\[
+    \mathbb{E}[\mathbf{N}] = \mathbb{E}[\mathbf{F}\mathbf{n}] = \mathbf{F} \mathbb{E}[\mathbf{n}] = 0
+\]  
+\[
+    \mathbf{R}_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}\mathbf{R}_{n,n}\mathbf{F}^H
+\]
+
+Dove $\mathbf{R}_{n,n}$ è l'autocorrelazione del tempo.
+Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}(m)$, il canale è stimato:
+\[
+    \mathbf{H}(n) = x(n) e^{j\phi(n)}
+\]
+
+Se il canale fosse stimato alla perfezione si otterrebbe:
+\[
+    X(n) = \frac{R(n)}{N(n)} = S(n) + \frac{N(n)e^(-j\phi(n))}{\alpha(n)}
+\]
+
+
+Se il canale è molto attenuato, ovvero $\alpha(n) \approx 0$, il rumore viene amplificato a seguito della divisione, richiedere un SNR superiore.
+La fase non ha alcuna implicazione sul rumore, durante i calcoli di $\sigma ^2=2N_0$ infatti sparisce per via del complesso coniugato.
+L'espressione della variabile decisionale è confrontabile con quella di un sistema tradizionale
+\[
+    x(m) = x_m + n(m) \quad \text{variabile tradizionale}
+\]
+
+\[
+    X(m) = S(m) + N'(m) \quad \text{variabile OFDM}
+\]
+Questo permette di applicare le solite considerazioni per la probabilità di errore:
+
+\[
+    P(e|H(m)) = 2 Q\left( \sqrt{\frac{1}{\sigma^2(m)}}  \right) =  2 Q\left( \sqrt{\frac{\alpha^2(m)}{N_0}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
+\]
+\[
+    P(e) = \sum_{m=0}^{N-1} P(e|H(m))P(H(m)) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
+\]
+    
+
 
 Multi-carrier modulation techniques, which are foundational in LTE and 5G technologies, offer several advantages:
 
