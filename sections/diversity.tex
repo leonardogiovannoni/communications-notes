@@ -1,3 +1,153 @@
+\section*{Diversity Techniques in Wireless Communications}
+
+Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene modulazioni come OFDM siano in grado di ridurre l'effetto del multipath fading, tuttavia lo \textbf{slow flat Rayleigh fading} non può essere contrastato nello stesso modo.
+
+\begin{itemize}
+    \item \textbf{Slow fading}: coherence time $>$ symbol period (doppler spread)
+    \item \textbf{Flat fading}: delay spread $<$ symbol period (multipath time delay spread)
+    \item \textbf{Rayleigh fading}: l'attenuazione delle repliche ha una distribuzione di Rayleigh.
+\end{itemize}
+
+I metodo principali per ridurre gli effetti di un fading di tali tipologie sono le diversity techniques, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
+Le principali tecniche di diversity sono:
+\begin{itemize}
+    \item \textbf{Time diversity}: relative al coherence time. Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. Slow fading channels potrebbero non garantire una diversity sufficiente. Il canale deve variare sufficientemente in maniera veloce.
+    \item \textbf{Frequency diversity}: relative alla coherence bandwidth. Sfruttano tramissioni su bande differenti. I flat fading channels potrebbero non garantire una diversity sufficiente.
+    \item \textbf{Spatial diversity}: relative alla coherence distance. Sfruttano path di propagazione differenti, as esempio antenne differenti.
+\end{itemize}
+
+\subsection*{Time diversity: interleaving and coding}
+Il channel coding consiste nell'introdurre dei bit ridondanti insieme a quelli trasmessi per rilevare eventuali errori al ricevitore e migliorare la bit error probability.
+La ridondanza è misurata come:
+\[
+    R = \frac{k}{n} < 1, \quad \begin{cases}
+        k \text{ bit contenenti informazione} \\
+        n \text{ bit in uscita dall'encoder, contenenti informazione più ridondanza} \\
+        n - k \text{ bit di ridondanza}
+    \end{cases}
+\]
+
+Le operazioni effettuate sfruttano le proprietà matematiche del Galois Field GF(2), su cui sono definite somma (xor) e moltiplicazione (and) per due elementi $\{0, 1\}$.
+
+Sorgente e destinazione introducono \textbf{encoder} e \textbf{decoder} per la gestione dei bit di ridondanza, si può utilizzare lo schema:
+
+
+\begin{tikzpicture}
+    
+\end{tikzpicture}
+In questo schema l'intero sistema è visto come una componente che aggiunge un errore al messaggio trasmesso.
+
+\paragraph*{Block code}
+Si tratta della tipologia più semplice di coding in cui la coded word tramessa è composta da $n-k$ bit di parità.
+L'operazione è rappresentabile come operazione di moltiplicazione fra un vettore (word da trasmettere) e una matrice (\textbf{generator matrix}, definisce il tipo di operazione).
+
+\[
+    \mathbf{d} = \mathbf{uG}, \quad \begin{cases}
+        \mathbf{d} \text{ coded word} \quad d \in GF(2)^{1 \times n} \\
+        \mathbf{u} \text{ word da trasmettere} \quad u \in GF(2)^{1 \times k} \\
+        \mathbf{G} \text{ generator matrix} \quad G \in GF(2)^{k \times n}
+    \end{cases}
+\]
+
+In generale le prime $k$ colonne della matrice $G$ equiavalgono a $I_k$ (matrice identità $k \times k$) e le restanti $n-k$ colonne sono i bit di ridondanza.
+In totale si possono ottenere $2^k$ codeword differenti (uscita dell'encoder).
+Si parla di coding sistematico quando i bit di informazione sono semplicemente copiati.
+
+\paragraph*{Error detection}
+
+Le tecniche di error detection consistono nel confrontare i bit di ridondanza ricevuti con i bit di ridondanza calcolati utilizzando le word ricevute. Se il confronto ha successo si assume che la trasmissione non abbia introdotto errori, altrimenti si rileva un errore nella trasmissione.
+In casi di errore il ricevitore può richiedere una nuova trasmission, adottando lo schema \textbf{ARQ} (Automatic Repeat reQuest). In tale schema ad ogni ricezione si risponde con un ACK o un NACK, in base al risultato del confronto. In caso di NACK si procede con una nuova trasmissione. 
+Si tratta di una tecnica di time diversity, in quanto la ritrasmissione avviende dopo $T_{ARQ}$, un intervallo temporale superiore al coherence time del canale ($T_{ARQ} > T_c$).
+Alcuni ricevitori sono in grado di cambiare i due messaggi ricevuto, incrementando la probabilità di ricostruire l'informazione trasmessa.
+Una semplice tecnica di error detection è il \textbf{parity check code}, in cui si aggiunge un bit di parità alla fine della word di 7 bit da trasmettere. Se il numero di bit a 1 è pari, il bit di parità è 0, altrimenti è 1.
+
+\[
+    \begin{cases}
+        k = 7 \\
+        n = 8 
+    \end{cases}
+    \Rightarrow R = \frac{7}{8},
+    \quad \mathbf{G} = \left[I_7, 1_7\right] = 
+    \begin{bmatrix}
+        1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+        0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 \\
+        0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+        0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\
+        0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\
+        0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 \\
+        0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 \\
+    \end{bmatrix}
+    \Rightarrow u_7 = \sum_{i=0}^{6} u_i
+\]
+Il parity bit è calcolato sommando tutti i bit delle word usando l'algebra in GF(2).
+Sebbene sia molto semplice questa tecnica, non può essere sempre efficace in quanto può riconoscere unicamente un numero di errori dispari, mentre in caso di numero di errori pari si avrà un bilanciamente degli 1 ed il confronto avrà successo.
+
+\paragraph*{Error correction}
+Le tecniche di error correction sono utilizzate per rilevare e correggere errori di trasmissione, senza necessità di richiedere una nuova trasmissione.
+Dato un canale si definisce \textbf{capacità} il massimo rate a cui è possibile trasmettere:
+\[
+    C = B \log_2(1 + \text{SNR}) \quad \text{bit/s}
+\]
+
+Ogni trasmissione con rate $R < C$ ed $\epsilon$ arbitratio è possibile determinare un error correction code per cui $P_e < \epsilon$.
+Una semplice tecnica di error correction è il \textbf{repetition code}, in cui la word è ripetuta 3 volte. Per stabilire quale sia il bit corretto in casi si incongruenza si adotta una strategia maggioritaria.
+
+
+\[
+    \begin{cases}
+        k = 1 \\
+        n = 3 
+    \end{cases}
+    \Rightarrow R = \frac{1}{3},
+    \quad \mathbf{G} =
+    \begin{bmatrix}
+        1 & 1 & 1
+    \end{bmatrix}
+    \quad 
+    \begin{cases}
+        u = \begin{bmatrix}0\end{bmatrix} \Rightarrow d = \begin{bmatrix}0 & 0 & 0\end{bmatrix} \\
+        \\
+        u = \begin{bmatrix}1\end{bmatrix} \Rightarrow d = \begin{bmatrix}1 & 1 & 1\end{bmatrix}
+    \end{cases}
+\]
+
+
+Questa tecnica è in grado di correggere un unico errore, tuttavia se utilizzato come error detection può rilevare fino a due errori.
+La distanza tra due codeword è calcolata come numero di bit differenti fra le due stringhe, detta anche \textbf{Hamming distance}. Il decoder selezione le word con minima distanza rispetto a quella ricevuta.
+
+\[
+    \hat{d} = \text{argmin}_d \left\{\text{distance}(d, \hat{x})\right\}
+\]
+
+Dove $\hat{d}$ è la word in uscita dal decoder, $d$ è una word possibile e $\hat{x}$ è la word ricevuta
+Gli errori possono far scegliere al decoder la word sbagliata, la capacità di error correction di un block code è tanto maggiore quanto maggiore è la Hamming distance tra le codeword generabili. La bontà del block code è misurabile con la minima distanza tra codewords $d_{min}$.
+\[
+    d_{min} - 1 \quad \text{Numero massimo di errori rilevabili}
+\]
+
+\[
+    \left\lfloor \frac{d_{min} - 1}{2} \right\rfloor \quad \text{Numero massimo di errori correggibili}
+\]
+Maggiore è la distanza di Hamming, maggiore è la ridondanza da aggiungere.
+Fissata $R=\frac{k}{n}$, $d_{min}$ sarà più grande al crescere di $k$ e $n$, tuttavia si complica anche il sistema.
+\section*{Convolutional code}
+
+I codici convoluzionali, al contrario dei block code, non sono sistematici, si trasmettono infatti solo i bit di parità.
+L'encoder utilizza una sliding window per generare $n>1$ bit di parità, combinando vari sottoinsiemi di bit nel campo GF(2), realizzando una sorta di convoluzione.
+L'encoder si comporta come $n$ filtri lineari in paraellelo, i parametri che lo costituiscono sono:
+\begin{itemize}
+    \item $n$: bit generati
+    \item $k$: bit di informazione (si considererà sempre $k=1$)
+    \item $L$: lunghezza del vincolo, ovvero il numero di parole di input di $k$ bit che concorrono alla generazione degli $n$ bit dvincolo, ovvero il numero di parole di input di $k$ bit che concorrono alla generazione degli $n$ bit di output. Nel caso di $k=1$ sarà la lunghezza dei bit che concorrono alla generazione del codice.
+\end{itemize}
+
+La dimensione della finestra corrisponde a $L-K$, quindi si considererà $L-1$. Il codice generato, oltre alla word, è anche funzione dei bit di input precedenti. Ogni bit generato è ottenuto dalla convoluzione in GF(2) con una risposta impulsiva rappresentata da un diverso generatore $g$, di dimensione $kL$.
+I bit in uscita sono quindi un flusso continuo e non organizzati in blocchi.
+
+
+
+
+
 \section*{Transmissions over Fading Channels}
 
 \begin{itemize}
