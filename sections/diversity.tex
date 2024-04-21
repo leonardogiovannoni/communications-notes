@@ -144,7 +144,80 @@ L'encoder si comporta come $n$ filtri lineari in paraellelo, i parametri che lo 
 La dimensione della finestra corrisponde a $L-K$, quindi si considererà $L-1$. Il codice generato, oltre alla word, è anche funzione dei bit di input precedenti. Ogni bit generato è ottenuto dalla convoluzione in GF(2) con una risposta impulsiva rappresentata da un diverso generatore $g$, di dimensione $kL$.
 I bit in uscita sono quindi un flusso continuo e non organizzati in blocchi.
 
+Trattandosi di sistemi con memoria, l'encoder può essere rappresentato come una macchina a stati finiti.
+L'output dell'encoder dipende dal bit in input e dalla stato corrente.
+L'evoluzione temporale dell'encoder può essere catturata dal \textbf{trellis diagram}, in cui si ha l'evoluzione degli stati in funzione del tempo.
+Ogni sequenza, con la corrispondente encoded word, può essere rappresentata come un cammino nel trellis diagram.
+Una trasmissione di $N$ codewords implica la trasmissione di $n \cdot N$ bits, ottenuti dalla codifica di $k \cdot N$ input word.
+Poiché ogni codeword è funzione anche di $L-1$ input word precedenti, la sequenza può essere codificata considerandola solo nella sua interezza. 
+Il decoder dovrà scegliere la sequenza più "vicina" rispetto a quella ricevuta tra tutte le possibili sequenza, ovvero $2^{k \cdot N}$
+\[
+    \hat{d} = \text{argmin}_d \left\{\text{distance}(d, \hat{x})\right\}
+\]
+Dove d è una possibile sequenza, $\hat{x}$ è la sequenza ricevuta e $\hat{d}$ è la sequenza in uscita dal decoder.
+L'utilizzo nella pratica di codici convoluzionali è stata resa possibile solo dall'introduzione dell'algoritmo di Viterbi, in grado di applicare una decodifica con complessità lineare e non più esponenziale.
 
+\paragraph*{Algoritmo di Viterbi}
+L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevuta:
+
+\[
+    \hat{d} = \text{argmin}_d \left( d_H \left(\tilde{d}, \hat{x}\right) \right)
+\]
+Le possibili sequenza $\tilde{d}$ sono viste come sequene di $N$ blocchi, ciascuna composta da 
+$n$ bit, ovver i bit prodotti a partire dai $k$ bit di informaione in ingresso all'encoder.
+
+
+\[
+    d_H\left(\tilde{d}, \hat{x}\right) = \sum_{j=1}^{N} d_H\left(\tilde{d}_j, \hat{x}_j\right)
+\]
+
+Dove $d_H$ è la distanza di Hamming tra due sequenze di bit, $\tilde{d}_j$ è la $j$-esima codeword possibile e $\hat{x}_j$ è la $j$-esima codeword ricevuta.
+Ogni sequenza $\tilde{d}$ corrisponde ad una seuqenza di stati $\tilde{S}_0, \ldots, \tilde{S}_N$ nel diagramma a trabocco, ovvero a un determinato path. La $j$-esima uscita dell'encoder, $\tilde{d}_j$, dipende dalla transizione tra gli stati $\tilde{S}_{j-1}$ e $\tilde{S}_j$.
+.
+.
+.
+.
+
+
+\section*{Interleaving}
+
+I codici convoluzionali risultano adatto per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. Tuttavia un canale fading è tipicamente suggetto a \textbf{bursty errors}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. Quando il canaale è in \textbf{deep fade} ci sono delle dipendenze statistiche tra errori consecutivi.
+L'idea dell'interleaving consiste nel far sembrare il canale memoryless dal punto di vista del decoder, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti dell'encoder prima di effettuare la trasmissione. Lato ricevitore prima del decoder si effettuare un'operazione di de-interleaving per ripristinare l'ordine originale.
+Il costo delle operazioni di (de-)interleaving è pagato in termini di latenza in quanto sia lato ricevitore che lato trasmettitore è necessario avere un intero blocco di dati prima di poter effettuare le operazioni. Esiste un trade-off tra latenza e decorrelazione ottenibile, basata sulla profondità $k$ dell'interleaver, ovvero la dimensione del blocco sul quale si effettua l'operazione di rimescolamento.
+
+
+\paragraph*{Turbo code e LDPC (Low Density Parity Check)}
+Nella formula della capacità del canale di Shannon il rate $R = \frac{k}{n}$ prevede sia $k$ che $n$ tendenti all'infinito, tuttavia la lunghezza del codice nei sistemi reali è finito, quindi ciò che si ottiene è una performance teorica lontana da quella teorica.
+Negli anni sono stati introdotti nuovi codici, sempre più efficienti, tra cui turbo code e LDPC, i quali si avvicinano al limite teorico imposto dalla formula di Shannon.
+
+\paragraph*{Turbo code (error correction)}
+
+Si tratta di un convolutional code in cui sono utilizzati due encoder in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decoding grazie alla ridondanza ottenuta e alla diversity, ottenuta dalla presenza di uno stream di dati differente.
+Il sistema è composto da tre sequenze di cui due codificate e una inalterata. L'utilizzo dell'interleaver permette di estendere artificialmente la lunghezza della sequenza, avvicinandosi alle ipotesi di Shannon. Inoltre l'interleaver permette di ottenere sequenze indipendenti. 
+Il trasmettitore invia quindi tre sequenze, tra cui quella originaria, ottenendo un $R=\frac{1}{3}$. L'idea è che se il canale produce un errore le due sequenze prodotte in maniera differente possono essere unite  per correggere l'errore.
+Per quanto riguarda il decoder si utilizzano due decoder in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generanza senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
+Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decoder. L'uscita è infine inviata al deinterleaver. Completato il primoo ciclo è possibile effettuarne altri, mandando nuovamente in infresso al primo decoder l'uscita dell'interleaver. 
+L'uscita dei decoder rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
+In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes permette di effettuare la correzione degli errori ed ottenere dei BER molto bassi, tuttavia il prezzo è ancora pagato in termini di latenza.
+
+
+
+\section*{Space diversity}
+In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. senza sacrifici di risorse. Si possono sfruttare due tipologie di gain differenti:
+\begin{itemize}
+    \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il gain è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
+    \item \textbf{Diversity gain}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale gain è massimo quando i segnali sono completamente decorrelati. 
+\end{itemize} 
+
+Per assumere incorrelazione tra le varie antenne la loro distanza deve essere almeno la metà della lunghezza d'onda:
+\[
+    d_c = \frac{\lambda}{2} \quad \text{coherence distance}
+\]  
+
+La \textbf{coherence distance} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né temporali né della velocità.
+
+
+Le carrier frequencies attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
 
 
 
