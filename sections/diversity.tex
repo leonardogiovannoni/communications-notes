@@ -342,6 +342,20 @@ In un sistema MIMO, se il canale è sufficientemente multipath, la matrice $H$ h
     P = rank(H) = \min(N_R, N_T)
 \]
 
+La tecnica di \textbf{spatial multiplexing} consiste nell'effettuare sia un pre-coding lato trasmettitore, sia un combining lato ricevitore, dunque untilizzando due pesi differenti. In questo modo è possibile creare un certo numero di canali ortogonali indipendenti, detti \textbf{spatial channels}.
+\[
+    \begin{array}{ll}
+        \mathbf{H} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H \quad \text{decomposizione SVF matrice del canale MIMO} \\
+        \mathbf{B} = \mathbf{V} \quad \text{matrice pre-coder (Tx)} \\
+        \mathbf{W} = \mathbf{U} \quad \text{matrice combiner (Rx)}
+    \end{array}
+\]
+
+Scegliendo in questo modo le matrici si ottiene:
+\[
+    \mathbf{z} = \mathbf{W}^H \mathbf{y} = \mathbf{W}^H \left( \mathbf{H} \mathbf{x} + \mathbf{n}  \right)
+\]
+
 
 \section*{Transmissions over Fading Channels}
 
