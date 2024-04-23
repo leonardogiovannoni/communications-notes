@@ -220,6 +220,128 @@ La \textbf{coherence distance} deriva dalle proprietà di time varying del canal
 Le carrier frequencies attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
 
 
+\paragraph*{Canale MIMO (Multiple Input Multiple Output)}
+
+
+Nei classici sistemi con un antenna in trasmission ed un'antenna in ricezione, il canle, se narrow-band può essere descritto da uno scalare complesso con una certa fase e ampiezza.
+Nel caso di sistemi con più antenne in trasmission e ricezione tra ogni coppia di antenne vi è un canale differente, quindi l'intero sistema, per quanto riguarda il canale, può essere descritto tramite una mtrice complessa.
+\[ 
+    \mathbf{H} = 
+    \begin{bmatrix}
+        h_{11} & h_{12} & \ldots & h_{1M} \\
+        h_{21} & h_{22} & \ldots & h_{2M} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        h_{N1} & h_{N2} & \ldots & h_{NM} \\
+    \end{bmatrix}
+    , \quad
+    \begin{array}{ll}
+            \mathbf{H} \in \mathbb{C}^{N \times M} \\
+            \mathbf{y} = \mathbf{Hx} 
+    \end{array}
+\]
+
+Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e $\mathbf{H}$ è la matrice del canale. In questo caso, $M$ rappresenta il numero di antenne in trasmissione mentre $N$ il numero di antenne in ricezione.
+
+Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
+\[
+    x_i(m) = h_i c(m) + n_i(m) \quad i = 1, \ldots, N
+\]
+Questo rappresenta il segnale ricevuto sull'$i$-esima antenna. Ogni segnale ha il proprio rumore e distorisione da parte del canale.
+
+L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale. Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
+
+\[
+    z(m) = \sum_{i=1}^{N} \left( w_i h_i c(m) + w_i n_i(n) \right)
+\]
+dove $w_i$ sono i pesi assegnati alle varie antenne.
+
+
+\[
+    \begin{array}{ll} 
+        P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c(m)  \right|^2 \right] \quad & \text{Potenza segnale utile} \\
+        P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i(m)  \right|^2 \right] \quad & \text{Potenza rumore}
+    \end{array}
+\]
+L'obiettivo è massimizzare il SNR, così definito:
+\[
+    \text{SNR} = \frac{\sum_{i=1}^{N} w_i h_i}{\sum_{i=1}^{N} w_i} = \frac{A}{\sigma^2}  
+\]
+
+\[
+    P = \mathbb{E} \left[ \left|  \sum_{i=1}^{N} w_i h_i c(m)  \right| ^2  \right] = \left| \sum_{i=1}^{N} w_i h_i \right|^2 \mathbb{E} \left[ \left| c(m)\right|^2  \right] = \left| \sum_{i=1}^{N} w_i h_i \right|^2 A
+\]
+Scegliendo accuratamente $w_i$ si può eliminare la parte immaginaria, quindi possiamo riscrivere $P$ come:
+\[
+    P = \left( \sum_{i=1}^{N} w_i h_i \right)^2 A
+\]
+
+
+
+\[
+    \begin{array}{ll}
+            P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i(m)  \right|^2 \right] \\
+            = \mathbb{E} \left[ \left( \sum_{i=1}^{N} w_i n_i(m) \right)  \left( \sum_{i=1}^{N} w_i n_i(m) \right)^*  \right] \\
+            = \mathbb{E} \left[  \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* n_i n_j^*  \right] \\
+            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \mathbb{E} \left[ n_i n_j^* \right] \\
+            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \sigma^2 \delta_{ij} \\
+            = \sum_{i=1}^{N} w_i w_i^* \sigma^2 \\
+            = \sum_{i=1}^{N} |w_i|^2 \sigma^2 \\
+            = \sigma^2 \sum_{i=1}^{N} |w_i|^2 
+    \end{array}
+\]
+
+Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $hA/\sigma^2$, ovvero la forma valida per un semplice fading channel.
+L'espressione completa può essere analizzata sfruttando la disuguaglianza di Schwarz:
+\[
+    \text{SNR} = \frac{\left(\sum_{i} w_i h_i \right)^2}{\sum_{i} |w_i|^2} \frac{A}{\sigma ^2} \leq \frac{\sum_{i} |h_i|^2 \sum_{j} \left| w_j \right|^2}{\sum_{i} |w_i|^2} \frac{A}{\sigma^2}
+\]
+
+
+Rispettando la condizione $w_i = h_i^*$ si ottiene:
+\[
+    \text{SNR} = \frac{\left(\sum_{i} \left| h_i \right|^2 \right)^2}{\sum_{i} |h_i|^2} \frac{A}{\sigma ^2} \leq \sum_{i} |h_i|^2 \frac{A}{\sigma^2}
+\]
+
+
+Per quanto riguarda la configurazione con più antenne in trasmissione e singola antenna in ricezione, sistema MISO, si ottiene la stessa espressione con alcuni accorgimenti lato trasmettitore
+\[
+    x(m) = \sum_{i=1}^{N} h_i y_i(m) + n(m) \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
+\]
+
+
+La differenza sostanziale con il caso SIMO è che i vari segnali sono combinati ``naturalmente" durante la trasmissione e ricevuti quindi già aggregati. 
+La scelta dei coefficienti non può essere effettuata lato ricevitore, ma deve essere il trasmettitore a scegliere stimando il canale, lato ricevitore la stima è ovviamente più complessa rispetto a quella che effettuerebbe il ricevitore per proprio conto.
+L'operazione effettuata dal trasmettitore è detta \textbf{spatial precoding} ed il simbolo è denominato \textbf{spatial pre-coded symbol}.
+\[
+    y_i(m) = b_i c(m) \quad \text{simbolo trasmesso sulla $i$-esima antenna}
+\]
+L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
+
+Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| h \| }$
+
+\[
+    x(m) = \sum_{i=1}^{N} h_i b_i c(m) + n(m) = \sum_{i=1}^{N} \frac{h_i h_i^*}{\| \mathbf{h} \|} c(m) + n(m) = \| \mathbf{h} \| c(m) + n(m) = \sum_{i=1}^{N} |h_i|^2 \frac{A}{\sigma^2}
+\]
+
+La differenza tra il caso con singola antenna (rx e tx) e il caso con più antenne (MISO/SIMO) è dato dal fattore $\| \mathbf{h} \| = \sum_{i} |h_i|^2$.
+Considerando i gain del canale come variabili aleatore con distribuzione di Rayleigh è possibile calcolare la distribuzione della somma come convoluzione delle PDF.
+Il risultato dipende dal nnumero di antenne, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei gain verso destra (più potenza). Inoltre il \textbf{diversity gain} si manisgesta riducendo notevolmente la probabilità di ottenere gain molto bassi. Ciò è visibile confrontando gli integrali delle due PDF.
+Il caso generale MIMO, ovvero con più antenne sia in trasmissione che ricezione, sfrutta una tecnica denominata \textbf{spatial multiplexing} ed è basata sulla decomposizione ai valori singolari (SVD) della matrice $\mathbf{H}$ che descrive il canale.
+
+\paragraph*{SVD (Singular Value Decomposition)}
+
+Data una matrice $\mathbf{A} \in \mathbb{C}^{N \times M}$, la SVD permette di scrivere la matrice come prodotto di tre matrici:
+\[
+    \mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H
+\]
+con $\mathbf{U} \in \mathbb{C}^{m \times p}$, $\mathbf{\Sigma} \in \mathbb{C}^{p \times p}$ e $\mathbf{V} \in \mathbb{C}^{n \times o}$,
+dove $\mathbf{U}$ e $\mathbf{V}$ sono matrici unitarie, mentre $\mathbf{\Sigma} = diag(\sigma_1, \ldots, \sigma_p)$ è una matrice diagonale con $\sigma_1 \geq \sigma_2 \geq \ldots \geq \sigma_p$. 
+\
+In un sistema MIMO, se il canale è sufficientemente multipath, la matrice $H$ ha rango pieno, dunque:
+\[
+    P = rank(H) = \min(N_R, N_T)
+\]
+
 
 \section*{Transmissions over Fading Channels}
 
