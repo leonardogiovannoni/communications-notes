@@ -353,8 +353,96 @@ La tecnica di \textbf{spatial multiplexing} consiste nell'effettuare sia un pre-
 
 Scegliendo in questo modo le matrici si ottiene:
 \[
-    \mathbf{z} = \mathbf{W}^H \mathbf{y} = \mathbf{W}^H \left( \mathbf{H} \mathbf{x} + \mathbf{n}  \right)
+    \begin{array}{ll}
+        \mathbf{z} = \mathbf{W}^H \mathbf{y}  \\
+        = \mathbf{W}^H \left( \mathbf{H} \mathbf{x} + \mathbf{n}  \right) \\  
+        = \mathbf{W}^H \left( \mathbf{H} \mathbf{B} \mathbf{s} + \mathbf{n} \right) \\
+        = \mathbf{W}^H \mathbf{H} \mathbf{B} \mathbf{s} + \mathbf{W}^H \mathbf{n}  \\
+        = \mathbf{U}^H \mathbf{H} \mathbf{V} \mathbf{s} + \mathbf{W}^H \mathbf{n} \\
+        = \mathbf{\Sigma} \mathbf{s} + \mathbf{W}^H \mathbf{n}
+    \end{array}
 \]
+Sebbene ogni antenna riceva dei segnali sovrapposti, scegliendo le matrici in questa maniera è possibile ottenere dei canali ortogonali che non interferiscono tra loro dato che la matrice $\mathbf{\Sigma}$ è diagonale.
+
+Considerando un sistema $2 \times 2$ per esempio si ottiene:
+\[
+    \begin{cases*}
+        y_1 = h_{11} x_1 + h_{12} x_2 + n_1 \\
+        y_2 = h_{21} x_1 + h_{22} x_2 + n_2
+    \end{cases*}
+    \quad
+    \text{segnali sovrapposti su ogni antenna}
+\]
+
+L'utilizzo di un canale MIMO può incrementare la capacità del sistema, tuttavia è necessario tenere in considerazione anche i valori singolari, i quali potrebbero comportare un'attenuazione eccessiva.
+
+
+\[
+    \mathbf{z} = \begin{matrix}
+        \begin{bmatrix}
+            \sigma_1 s_1 + n_1' \\
+            \sigma_2 s_2 + n_2'
+        \end{bmatrix}
+    \end{matrix}
+    \quad 
+    \text{segnale ottenuto dopo combining lato ricevitore, non è alcuna sovrapposizione}
+\]
+
+\section*{Frequency diversity}
+
+La formula di Shannon fornisce il massimo rate sostenibile su un dato canale di trasmissione:
+\[
+    C = B \log_2 \left( 1 + \text{SNR} \right), \quad \text{SNR} = \frac{\left| H \right|^2 P}{\sigma^2}
+\]
+Dove $H$ è il gain del canale.
+In sistemi reali ci si può solo avvicinare al limite teorico e vi è una forte dipendenza, per quanto riguarda l'efficienza spettrale, del coding rate e modulation order, data dalla dimensione della costellazione di simbolim per cui esiste un trade-off tra capacità di trasmissione ed energia richiesta. Il rate di trasmissione reale può essere approssimato:
+\[
+    R_b = \log_2 M \  R \frac{1}{T}  \approx m R B
+\]
+
+Dove è $M$ è il numeri di simboli nella costenllazione, $R$ è il coding rate e $T$ è il simbol time, si fa l'approssimazione che $\frac{1}{T} \approx B$. 
+
+
+Per rispettare il limite di capacità si ha:
+\[
+    R_b < B \quad \Rightarrow \quad mR < \log_2 (1 + \text{SNR})
+\] 
+Misurando il SNR è possibile adattare i valori di $m$ ed $R$, ad esempio in base alla posizone in una cella.
+I valori di $m$ ed $R$ che si possono utilizzare appartengono ad un insieme finito, non è possibile scegliere arbitrariamente.
+
+La qualità del canale in termini di SNR può essere espressa tramite \textbf{radio beared index} (1 - 15).
+Utilizzando la modulazione OFDM l'idea sarebbe adattare $m$ ed $R$ per ogni canale, distribuendo la potenza nel modo più efficace possibile per massimizzare il rate di trasmmissione. Questo problema è inidcato con il termine di \textbf{water-filling}, la potenza a disposizione è invece detta \textbf{power budget}. Nella pratica si tratta di un problema di ottimizzazione per il quale sono definiti alcuni vincoli da rispettare:
+
+
+\[
+    \begin{cases}
+       \underset{p}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}), \quad P_n \geq 0 \quad n = 1, \ldots, N \\
+       \sum_{n=1}^{N} P_n = P_0 \quad \text{(power budget)}
+    \end{cases}    
+\]
+
+Dove $\sigma_n^2 = \frac{\sigma^2}{\left| H_n \right| ^2}$. Il termine $B$ non appare nell'espressione in quanto costante per ogni canale, massimizzare il rate o l'efficienza spettrale genera lo stesso risultato.
+\[
+    P_n^* = \text{max} \{ 0, \mu - \sigma_n^2    \} = (\mu - \sigma_n^2)^+, \quad n = 1, \ldots, N
+\]
+
+Per ottenere dei valori è necessario calcolare $\mu$, scelto in modo da rispettare il vincolo sulla potenza a disposizione.
+\[
+    \sum_{n=1}^{N} (\mu - \sigma_n^2)^+ = P_0
+\]
+\[
+    \begin{cases}
+        f(\mu) = \sum_{n=1}^{N} (\mu - \sigma_n^2)^+ - P_0 \\
+        f: \mathbb{R}^n \rightarrow \mathbb{R}
+    \end{cases}
+\]
+La risoluzione dell'equazione garantisce il valore $\mu$ tale per cui i vincoli sono rispettati, è quindi necessario trovare lo zero di una funzione in $\mu$, ad esempio con il metodo della bisettrice. Il metodo della bisettrice può essere applicata dato che la funzione risulta continua e monotona sul dominio.
+Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superiore irregolare, fino ad un livello pari a $\mu$.
+La distribuzione è ottima e rappresenta la miglior situazione per sfruttare la frequency diversity del canale. In sostanza la distribuzione favorisce i canali con miglior qualità, scartando completamente quelli la cui capacità è troppo bassa.
+
+
+
+
 
 
 \section*{Transmissions over Fading Channels}

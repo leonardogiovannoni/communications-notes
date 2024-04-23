@@ -1,3 +1,49 @@
+\section*{LTE (Long Term Evolution)}
+Lo standard LTE è il primo ad adottare una modulazione OFDM, con i seguenti parametri:
+\[
+    \begin{array}{ll}
+        f_s = \frac{1}{T_s} = 30.72 \text{ MHz} & \text{(banda totale a disposizione, idealmente)} \\
+        N = 2048 & \text{(numero canali)} \\
+        \Delta f = \frac{f_s}{N} = 15 \text{ kHz} & \text{(banda per canali)} \\
+    \end{array}    
+\]
+L'allocazione delle risorse di banda agli utenti è indicata come OFDMA, ovvero FDMA basata su OFDM, per cui la banda assegnata è un multiplo intero della banda di un canale. L'allocazione minima per ciascun utente è un blocco, composto da 12 subcarrier, quindi 180 kHz.
+Inoltre l'allocazione delle risorse richiede anche l'assegnamente di slot temporali, ovvero il tempo entro cui i blocchi di banda sono utilizzabili. L'unità minima è un slot composta da 7 blocchi OFDM (simboli) della durata di 0.5 ms.
+\begin{itemize}
+    \item slot temporale: 0.5 ms (7 simboli OFDM) 
+    \item blocco di banda: 180 kHz (12 subcarrier)
+\end{itemize}
+Delle 2048 subcarrier solo 1200 sono utilizzate, le altre rappresentano virtual subcarrier.
+Sebbene possa sembrare un numero molto alto di frequenze non utilizzate, la scelta deriva dall'utilizzo di un $f_s$ molto alto, tuttavia lo spettro realmente occupato è circa 20 MHz.
+Inoltre un'altra porzione di spettro è utilizzata per informazioni di controllo e sincronizzazione, riducendo la banda disponibile di 4 MHz.
+\[
+    B_{av} = B_{\text{raw}} - 4 \text{ MHz} = 1200 \cdot 15 \text{ kHz} - 4 \text{ MHz} = 14 \text{ MHz}
+\]
+
+Per quanto riguarda il coding rate e modulation order la scelta avvviene in base alla qualità del link, valutata in termini di CQI (Channel Quality Indicator). Le modulazioni possibili sono quelle comprese tra 4-QAM e 256-QAM, mentre il range di coding rate varia da 0.0762 a 0.9258.
+Il massimo rate su un canale SISO può quindi essere calcolato:
+\[
+    R_{1 \times 1} - 0.9258 \cdot 8 \cdot 14 \text{ MHz} \approx 100 \text{ Mbps}
+\]
+Lo standard prevedere il supporto per canali MIMO in diverse configurazioni, fino a 4$\times$4, per cui si ottiene un rate potenzialmente quadruplicato:
+\[
+    R_{4 \times 4} = 4 \cdot R_{1 \times 1} = 400 \text{ Mbps}
+\]
+    
+I terminali più avanzati possono affrefare più banda da 20 MHz ciascuna, incrementando notevolemnte il rate raggiungibile, fino a 2 Gbps. Da notare che nella realtà non è possibile raggiungere questi rate in quanto sarebbe richiesto un canale in ottime condizioni, tipicamente solo in prossimità delle antenne, ed inoltre tutte le risorse dovrebbero essere allocato ad un singolo utente. Infine bisogna considerare che spesso gli operatori impongnono dei limiti della performance ottenibile.
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section*{LTE Overview}
 
 \textbf{Long Term Evolution (LTE)} represents the fourth generation (\textbf{4G}) of wireless communication standards, preceded by:
