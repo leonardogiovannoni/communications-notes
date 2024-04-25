@@ -354,91 +354,97 @@ I vantaggi della modulazione in frequenza includono:
 \subsection*{FM Signal with a Modulating Sinusoid}
 
 % Modulating sinusoid
-Let \( m(t) \) be a sinusoid given by \( m(t) = V_m \cos(2\pi f_m t) \). This represents the message signal to be transmitted.
-
-% FM signal
-The FM signal is
+Sia \( m(t) \) una sinusoide data da \( m(t) = V_m \cos(2\pi f_m t) \). Il segnale FM diventa:
 \[
-s_{FM}(t) = A_c \cos \left( 2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} \frac{V_m}{2\pi f_m} \sin(2\pi f_m \tau) d\tau \right)
+s_{FM}(t) = A_c \cos \left( 2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} V_m \cos(2\pi f_m \tau) d\tau \right)
 \]
-which simplifies to
-\[
-s_{FM}(t) = A_c \cos \left(2\pi f_c t + \frac{k_f V_m}{f_m} \sin(2\pi f_m t) \right)
-\]
-where the term \( \frac{k_f V_m}{f_m} \) is the modulation index \( m_f \), illustrating how the modulating signal's frequency and amplitude affect the FM signal.
-
-% Complex envelope
-The complex envelope is given by
-\[
-\hat{S}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
-\]
-\subsection*{FM Signal with a Modulating Sinusoid (Continued)}
-
-% Integration of cosine in FM signal leads to modulation index
-The FM signal is further expressed with the modulation index directly:
+che si semplifica in:
 \[
 s_{FM}(t) = A_c \cos \left(2\pi f_c t + m_f \sin(2\pi f_m t) \right)
 \]
-where the modulation index \( m_f \) is the peak frequency deviation normalized by the modulating frequency and is defined as \( m_f = \frac{k_f V_m}{f_m} \).
-
-% Approximation of the complex envelope
-The complex envelope of the FM signal, considering a sinusoidal modulating signal, is approximated as:
+% Complex envelope
+L'inviluppo complesso sarà:
 \[
-\hat{S}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
+\hat{s}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
 \]
 
-% FM signal spectrum involving Bessel functions
-The FM signal spectrum involves Bessel functions due to the sinusoidal nature of the modulation:
-\[
-S_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + nf_m)t)
-\]
-where \( J_n \) are the Bessel functions of the first kind, indicating the strength of each harmonic in the FM signal's spectrum.
 
-% Fourier series representation of the FM signal
-The Fourier series representation of the FM signal's spectrum is given by:
-\[
-S_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
-\]
-
-% Relation between Fourier coefficients and Bessel functions
-The relation between the Fourier coefficients and Bessel functions for an FM signal is characterized by the integral:
-\[
-\int \cos(2\pi f_m z) e^{j 2\pi f_m z} dz = \frac{1}{j \pi} \sin(2\pi f_m z)
-\]
-This integral is used in deriving the coefficients for the FM spectrum analysis.
+Per ottenere il coefficiente di Foruier di deve risolvere l'integrale:
 
 
 
 
 
-\subsection*{FM Signal Spectrum}
+To compute the Fourier series coefficients for the complex envelope of the FM signal given by \( \hat{s}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)} \) and using your specified Fourier series integral formula, we will follow these steps:
 
-% Exploiting periodicity
-Exploiting the periodicity of \( \hat{S}_{FM}(t) \), the complex envelope can be written as a sum of Fourier coefficients:
+%The integral formula to find the Fourier series coefficients \( c_n \) of the signal \( x(t) \) over one period \( T_0 \) is given by:
+%\[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
+
+La formula dell'integrale per trovare i coefficienti della serie di Fourier \( c_n \) del segnale \( x(t) \) su un periodo \( T_0 \) è data da:
+\[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
+
+Per la modulazione FM, dove \( f_0 = f_m \) (la frequenza di modulazione) e \( T_0 = \frac{1}{f_m} \), i coefficienti per l'inviluppo complesso \( \hat{s}_{FM}(t) \) diventano:
+\[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} A_c e^{j m_f \sin(2\pi f_m t)} e^{-j 2\pi f_m n t} dt \]
+
+Applicando l'espansione di Jacobi-Anger, sappiamo che:
+\[ e^{j z \sin \theta} = \sum_{k=-\infty}^\infty J_k(z) e^{j k \theta} \]
+
+Quindi, con \( z = m_f \) e \( \theta = 2\pi f_m t \), otteniamo:
+\[ e^{j m_f \sin(2\pi f_m t)} = \sum_{k=-\infty}^\infty J_k(m_f) e^{j k 2\pi f_m t} \]
+
+
+Sostituendo l'espansione nell'integrale per \( c_n \):
+\[ c_n = \frac{A_c}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \sum_{k=-\infty}^\infty J_k(m_f) e^{j k 2\pi f_m t} e^{-j 2\pi f_m n t} dt \]
+
+Scambiando la somma e l'integrale (supponendo convergenza uniforme), e notando che \( e^{j (k-n) 2\pi f_m t} \) è periodico con periodo \( T_0 \), otteniamo:
+\[ c_n = \frac{A_c}{T_0} \sum_{k=-\infty}^\infty J_k(m_f) \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j (k-n) 2\pi f_m t} dt \]
+
+
+
+L'integrale:
+\[ \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j (k-n) 2\pi f_m t} dt \]
+è non nullo solo quando \( k = n \), in tal caso è uguale a \( T_0 \). Altrimenti è nullo a causa dell'ortogonalità delle funzioni esponenziali su un periodo completo.
+
+
+Quindi:
+\[ c_n = A_c J_n(m_f) \]
+
+
+
+
+
+La rappresentazione in serie di Fourier dello spettro dell'inviluppo complesso del segnale FM è quindi data da:
 \[
 \hat{S}_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
 \]
-where \( J_n \) is the Bessel function of the first kind of order \( n \), and \( m_f \) is the modulation index. This series represents the spectral components of the FM signal.
-
 % FM signal spectrum representation
-The FM signal spectrum can be represented as
+Il segnale FM può essere rappresentato come:
 \[
 s_{FM}(t) = \text{Re}\{ \hat{S}_{FM}(t) e^{j 2\pi f_c t} \} = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + n f_m) t)
 \]
-showing how the carrier frequency is altered by the frequencies of the modulating signal, with the amplitude of each component given by the Bessel function values.
+mostrando come la frequenza della portante sia alterata dalle frequenze del segnale di modulazione, con l'ampiezza di ciascuna componente data dai valori della funzione di Bessel.
 
+Ogni componente sinusoidale ha una frequenza che è un multiplo intero della frequenza di modulazione \( f_m \).
+Queste componenti sono chiamate "sidebands", e la loro ampiezza è determinata dalle funzioni di Bessel \( J_n(m_f) \).
+La frequenza della portante appare come il picco centrale nello spettro (per \( n = 0 \)), con la sua ampiezza modulata da \( J_0(m_f) \).
 
-\subsection*{FM Signal Spectrum}
-
-% Carson's Bandwidth Rule
-It is impossible to calculate a closed form expression for the FM spectrum. However, a good approximation is given by the Carson bandwidth rule:
-\[ B_{FM} \approx 2(m_f + 1)B = 2(\Delta f + B) \]
-where \( m_f \) is the modulation index, \( B \) is the message bandwidth, and \( \Delta f \) is the maximum frequency deviation. This rule estimates the bandwidth where most of the FM signal's energy is concentrated.
-
-% Energy concentration in FM signal
-Any frequency modulated signal has an infinite number of sidebands and hence an infinite bandwidth. But most of the energy (98\% or more) is concentrated within the bandwidth defined by Carson's rule. For commercial mono FM radio:
+In generale, l'ampiezza delle funzioni di Bessel (e quindi delle bande laterali) diminuisce all'aumentare di \( |n| \), anche se questo decadimento non è necessariamente monotono.
+Il pattern esatto dipende dal valore dell'indice di modulazione \( m_f \), un indice di modulazione più alto distribuisce più energia nelle bande laterali di ordine superiore, allargando la banda del segnale FM,
+infatti si può vedere graficamente come più è l'indice di modulazione, più è grande il numero di funzioni di Bessel di cui devo tenere conto quando rappresento lo spettro del segnale FM.
+Lo spettro è simmetrico rispetto alla frequenza della portante perché \( J_{-n}(m_f) = (-1)^n J_n(m_f) \). Quindi, per ogni componente di frequenza positiva, c'è una corrispondente componente di frequenza negativa con la stessa ampiezza ma potenzialmente fase diversa (a seconda che \( n \) sia dispari o pari).
+La banda di Carson approssima la larghezza di banda del segnale FM a:
+\[
+    B_{FM} \approx 2(\Delta f + f_{m}) = 2(m_f + 1) f_{m}
+\]
+\[
+    \Delta f \coloneqq \text{max} \{ | f_d(t) | \} = k_f \cdot \text{max} \{ | m(t) | \}
+\]
+% TODO: qual è la differenza tra f_{max} e f_m e B?
+Dove \( \Delta f \) è la deviazione massima della frequenza, \( f_{m} \) è la frequenza massima del signal modulante e \( m_f \) è l'indice di modulazione.
+Questa regola stima la banda in cui è concentrata la maggior parte dell'energia del segnale FM.
+Ogni segnale modulato in frequenza ha un numero infinito di bande laterali e quindi una banda infinita. Ma la maggior parte dell'energia (98\% o più) è concentrata all'interno della banda definita dalla regola di Carson. Per la radio FM mono commerciale:
 \begin{align*}
-B &= 15 \text{ kHz (high quality audio)}, \\
+f_m &= 15 \text{ kHz (high quality audio)}, \\
 \Delta f &= 75 \text{ kHz}, \\
 m_f &= 5, \\
 B_{FM} &\approx 180 \text{ kHz}.
