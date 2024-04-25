@@ -450,27 +450,59 @@ m_f &= 5, \\
 B_{FM} &\approx 180 \text{ kHz}.
 \end{align*}
 
-\subsection*{FM Receiver}
 
-% Complex envelope of the received signal
-Neglecting the effect of noise and channel, the complex envelope of the received signal is
-\[ \hat{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau} \]
+\paragraph*{Ricevitore FM}
+Trascurando il rumore, il segnale ricevuto assume la forma:
+\[
+\hat{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
+\]
+Che può quindi essere demodulato differenziando la fase di \( \hat{v}(t) \):
+\[
+\hat{m}(t) = \frac{1}{2\pi k_f} \frac{d}{dt} \angle \hat{v}(t)
+\]
+\begin{center}
 
-% Recovering the modulating signal
-The modulating signal can be recovered by differentiating the phase of \( \hat{v}(t) \):
-\[ \hat{m}(t) = \frac{1}{2\pi k_f} \frac{d}{dt} \Delta \hat{v}(t) \]
-where \( \Delta \hat{v}(t) \) is the phase deviation of the received signal.
+    \begin{tikzpicture}[
+            block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
+            node distance=1cm and 1cm,
+            auto
+        ]
+        % Blocks
+        \node[inner sep=0pt, minimum size=0pt] (source) {};
+        \node[block, right=of source] (encoder) {$\angle$};
+        \node[block, right=of encoder] (interp) {$\frac{d}{dt}$};
 
-% Conceptual FM baseband receiver block diagram
-The conceptual block diagram for an FM baseband receiver can be illustrated using a low-pass filter (L), followed by a differentiator and a demodulator to recover the message signal \( m(t) \).
+        % create a node which is above interp
+        \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
+        \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
 
-% Including the block diagram in TikZ would be the next step if you want a graphical representation of the FM baseband receiver as well.
-\section*{SDR (Software-Defined Radio) Concept}
 
-% SDR concept explained
-Software-defined radio (SDR) leverages modern computing power and analog-to-digital converters (ADCs) to implement radio components such as modulators, demodulators, and tuners in software, which traditionally were implemented in hardware.
 
-\section*{SDR Paradigm}
+
+        \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
+
+        \draw[->] (interp) -- (m1);
+        \node[below=of m1] (cos) {};
+        \draw[->] (cos) -- (m1) node[midway, right] {$\frac{1}{2\pi k_f}$};
+
+
+        \node[right=1cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
+
+
+        \draw[->] (m1) -- (dummy3) node[midway, above] {$\hat{m}(t)$};
+
+
+
+        %\draw[->] (interp) -- node[midway, above] {$x_c[n]$} (p1);
+
+        \draw[->] (source) -- (encoder) node[midway,above] {$\tilde{v}(t)$};
+        \draw[->] (encoder) -- (interp) node[midway,above] {};
+
+
+    \end{tikzpicture}
+\end{center}
+
+\section*{Software Defined Radio (SDR)}
 
 % Details of SDR processing
 In an SDR system, the incoming signal is converted to a digital format and then processed digitally. This allows for the radio hardware to be largely programmable and configurable by software, making it possible to update and adapt the system to new modulation formats, algorithms, and applications easily.
@@ -478,6 +510,8 @@ In an SDR system, the incoming signal is converted to a digital format and then 
 % Benefits of SDR
 SDR platforms offer versatility across various products and applications, potentially reducing costs and either maintaining or enhancing performance.
 
+\begin{center}
+    
 
 
 \begin{tikzpicture}[
@@ -522,9 +556,8 @@ SDR platforms offer versatility across various products and applications, potent
 \node[inner sep=0pt, outer sep=0pt, right=0.5cm of baseband] (output) {\includegraphics[width=1cm]{imgs/notes.pdf}};
 \draw[line] (baseband) -- (output);
 \end{tikzpicture}
-\
 
-
+\end{center}
 
 
 
