@@ -502,123 +502,86 @@ Che può quindi essere demodulato differenziando la fase di \( \hat{v}(t) \):
     \end{tikzpicture}
 \end{center}
 
+
+
+
+
+
 \section*{Software Defined Radio (SDR)}
+Le componenti di un sistema radio sono generalmente realizzate tramite dispositivi hardware analogici.
+Le recenti innovazioni tecnologiche hanno permesso di implementare tali componenti direttamente in software.
+All'interno di un ricevitore SDR il segnale in arrivo è convertito in formato digitale per essere processato.
+La componente software permette una semplice riprogrammazione, in tal modo è possibile modificare l'elaborazione del segnale senza dover cambiare componenti fisiche del sistema.
+La tecnica SDR deriva dal campo delle trasmissioni militari in cui è necessario equipaggiare i soldati con molte componenti radio per gestire le numerose comunicazioni da realizzare.
+L'introduzione del SDR ha permesso di semplificare l'equipaggiamento, riducendo il numero di dispositivi necessari pper supportare i protocolli radio militari.
 
-% Details of SDR processing
-In an SDR system, the incoming signal is converted to a digital format and then processed digitally. This allows for the radio hardware to be largely programmable and configurable by software, making it possible to update and adapt the system to new modulation formats, algorithms, and applications easily.
+Il campo in cui le tecniche SDR hanno portato innumerevoli vantaggi è quello della ricerca e sviluppo, perché il passaggio da design hardware a programmazione ha permesso di velocizzare i tempi di sviluppo di nuove tecnologie.
 
-% Benefits of SDR
-SDR platforms offer versatility across various products and applications, potentially reducing costs and either maintaining or enhancing performance.
+La chiave per lo sviluppo delle tecniche SDR è il miglioramento delle capacità di calcolo dei processori, perché sono in grado di applicare l'elaborazione precedentemente realizzata completamente in hardware specializzato.
+Con il passaggio al software è possibile modificare l'elaborazione del segnale senza dover cambiare componenti fisiche del sistema, semplificando il processo di sviluppo e riducendo i costi, introducendo eventuali nuovi formati di modulazione, algoritmi e applicazioni.
 
+
+
+
+\subsection*{Architettura SDR}
+
+% includi immagine in pdf chiamata imgs/sdr.pdf
 \begin{center}
-    
-
-
-\begin{tikzpicture}[
-    block/.style={rectangle, draw, minimum height=2em, minimum width=3em},
-    line/.style={draw, -Latex}
-]
-
-
-% create the node antenna with image imgs/antenna.pdf
-
-% Define nodes
-\node[block, align=center] (rfFrontEnd) {Flexible RF \\ Front End};
-\node[block, right=0.5cm of rfFrontEnd, align=center] (adConverter) {A/D Converter};
-\node[block, right=0.5cm of adConverter, align=center] (demod) {Demodulation \\ to Bband};
-\node[block, right=0.5cm of demod, align=center] (decimation) {Decimation \\ Filtering};
-\node[block, right=0.5cm of decimation, align=center] (carrierSync) {Carrier \& Timing \\ Synchronisation};
-\node[block, right=0.5cm of carrierSync, align=center] (baseband) {Baseband \\ Processing};
-% before rfFrontEnd, and upper of it of 0.5cm
-\node[inner sep=0pt, outer sep=0pt, above left=0.25cm and 0.05cm of rfFrontEnd] (antenna) {\includegraphics[width=1cm]{imgs/antenna.pdf}};
-
-% Connect blocks with arrows
-\draw[line] (rfFrontEnd) -- (adConverter);
-\draw[line] (adConverter) -- (demod);
-\draw[line] (demod) -- (decimation);
-\draw[line] (decimation) -- (carrierSync);
-\draw[line] (carrierSync) -- (baseband);
-% Draw antennae
-\draw (rfFrontEnd.west) -- ++(-0.5, 0) -- ++(0,0.5);
-
-
-% Group hardware and software parts
-\node[draw, dashed, fit=(rfFrontEnd) (adConverter) (demod) (decimation), inner sep=0.2cm, label=above:RTL-SDR Hardware] (hardware) {};
-\node[draw, dashed, fit=(carrierSync) (baseband), inner sep=0.2cm, label=above:MATLAB / Simulink design (running on computer)] (software) {};
-
-% Add frequency range and sampling frequency annotations
-\node[align=left, below=0.5cm of hardware.south] (freqRange) {Range: \\ 25MHz -- 1.75GHz};
-\node[align=left, below=0.5cm of software.south] (samplingFreq) {Sampling frequency (\(f_s\)): \\ up to around 2.8MHz};
-
-% Baseband output symbol
-%\node[right=0.5cm of baseband] (output) {\(\musicalnote\)};
-% create a node with a background image imgs/notes.svg
-\node[inner sep=0pt, outer sep=0pt, right=0.5cm of baseband] (output) {\includegraphics[width=1cm]{imgs/notes.pdf}};
-\draw[line] (baseband) -- (output);
-\end{tikzpicture}
-
+   % include sdr.pdf image
+    \includegraphics[width=0.8\textwidth]{imgs/sdr.png} 
 \end{center}
 
 
-
-
-
-
-
-
-
-\section*{SDR – Historical Milestones}
-
-% Timeline of SDR development
-Notable historical milestones in the development of SDR include:
-\begin{itemize}
-    \item \textbf{1984:} E-Systems Inc. (Raytheon) coined the term 'software radio.'
-    \item \textbf{1991:} SPEAKeasy, the first military radio program specifically requiring software radios, is initiated.
-    \item \textbf{1992:} J. Mitola publishes a paper on 'Software Radios: Survey, Critical Analysis and Future Directions.'
-    \item \textbf{2005:} Ettus Research introduces the USRP, the first commercial SDR, setting a standard for open-source, hardware GNU radio.
-    \item \textbf{2011:} A Finnish hacker discovers that the Realtek RTL2832U chip could be forced to operate in test mode, outputting raw I/Q data, marking a significant point in SDR accessibility.
-\end{itemize}
-
-
-\section*{Programmable Hardware for SDR}
-
-% Types of programmable hardware used in SDR
-There are various types of programmable hardware that facilitate the development of SDR:
-\begin{enumerate}
-    \item \textbf{Reconfigurable Radio:} Typically FPGA-based, these devices offer a high degree of flexibility and are often used for prototyping and research.
-    \item \textbf{Programmable Radio:} Devices like DSPs or hybrids of FPGA/DSP are used for more specific applications where dedicated processing is required.
-    \item \textbf{Fully Software Radio:} Utilizes General-Purpose Processors (GPP) like the Intel Core i7 for all radio functions, leveraging the processing power of modern CPUs.
-\end{enumerate}
-
-\section*{Telecom Services in the 0.1-2.5 GHz Band}
-
-% Telecom frequency bands
-The frequency spectrum from 0.1 to 2.5 GHz is populated with various telecom services, each occupying a specific band:
-\begin{itemize}
-    \item \textbf{AM Radio} is found in the lower frequencies, typically below 1 MHz.
-    \item \textbf{FM Radio and TV Broadcasts} generally occupy the spectrum from 88 to 108 MHz and 470 to 862 MHz, respectively.
-    \item \textbf{Mobile Services} such as 2G, 3G, and 4G span across multiple bands, from 700 MHz to over 2 GHz.
-    \item \textbf{Wi-Fi} operates in bands around 2.4 GHz and 5 GHz.
-    \item \textbf{Satellite Communications} and \textbf{GPS} also have designated bands within this range.
-\end{itemize}
-This band is essential for communication services and is carefully regulated to prevent interference between different services.
-
 \section*{RTL-SDR Architecture}
-
+Il RTL-SDR è un dispositivo inizialmente ideato per ricevere segnale TV su un PC, che è possibile hackerare settando un bit di debug nel driver, così che invierà tutti i campioni I/Q ricevuti dall'antenna. 
+Il compito dell'RTL-SDR è prendere un chunk dello spettro del segnale ricevuto e convertirlo in banda base, che potrà poi essere processato dal software.
 % Detailing the components of RTL-SDR
-The RTL-SDR is a popular SDR device that comprises several key components:
+
+Le componenti principali sono:
 \begin{itemize}
-    \item \textbf{R820T DTV Tuner:} Responsible for selecting the desired signal frequency band from the RF spectrum.
-    \item \textbf{28.8MHz Clock Crystal:} Provides a stable reference frequency for the tuner and demodulator.
-    \item \textbf{RTL2832U COFDM Demodulator:} Demodulates the digital signal from the tuner.
-    \item \textbf{MCX Antenna Connector:} Allows for the connection of various types of antennas.
-    \item \textbf{Serial EEPROM:} Stores the configuration data for the USB device.
-    \item \textbf{USB 2.0 Interface:} Facilitates the connection with computers for further processing.
-    \item Additional components such as a \textbf{Power LED}, \textbf{ESD Diode}, and \textbf{IR Sensor} for user interfacing and device protection.
+    \item \textbf{R820T DTV Tuner:} chip dedicato all'elaborazione del segnale in banda, responsabile della selezione della banda di frequenza del segnale desiderato dallo spettro RF.
+    \item \textbf{28.8MHz Clock Crystal:} fornisce una frequenza di riferimento stabile per il tuner e il demodulatore, determina la banda massima che può essere ottenuta dai campioni I/Q.
+    \item \textbf{RTL2832U COFDM Demodulator:} chip utilizzato per la conversione analogico-digitale, sebbene il nome "demodulator" possa essere fuorviante in questa fase non avviene nessuna demodulazione del segnale.
+    \item \textbf{MCX Antenna Connector:} permette la connessione di diversi tipi di antenne.
+    \item \textbf{Serial EEPROM:} memorizza i dati di configurazione del dispositivo USB.
+    \item \textbf{USB 2.0 Interface:} permette la connessione con i computer per l'elaborazione successiva.
+    \item Componenti aggiuntive come un \textbf{LED di alimentazione}, un \textbf{diodo ESD} e un \textbf{sensore IR} per l'interfacciamento con l'utente e la protezione del dispositivo.
 \end{itemize}
+% insert a piacture.png
 
-\section*{SDR Block Diagram for an FM Receiver}
+Il dispositivo implementa un ricevitore super heterodyne, in cui il segnale in banda è prima trasformato in media frequenza (IF) e dopo alcune trasformazioni in banda base.
+Questa doppia trasformazione è necessaria per ottimizzare l'amplificazione del segnale, più semplice a media frequenza rispetto al segnale in banda base.
 
+\begin{center}
+    \begin{tikzpicture}[
+        block/.style={rectangle, draw, minimum height=2em, minimum width=3em},
+        line/.style={draw, -Latex}
+    ]
+        \node[block, align=center] (rfFrontEnd) {Flexible RF \\ Front End};
+        \node[block, right=0.5cm of rfFrontEnd, align=center] (adConverter) {A/D Converter};
+        \node[block, right=0.5cm of adConverter, align=center] (demod) {Demodulation \\ to Bband};
+        \node[block, right=0.5cm of demod, align=center] (decimation) {Decimation \\ Filtering};
+        \node[block, right=0.5cm of decimation, align=center] (carrierSync) {Carrier \& Timing \\ Synchronisation};
+        \node[block, right=0.5cm of carrierSync, align=center] (baseband) {Baseband \\ Processing};
+        \node[inner sep=0pt, outer sep=0pt, above left=0.25cm and 0.05cm of rfFrontEnd] (antenna) {\includegraphics[width=1cm]{imgs/antenna.pdf}};
+        
+        \draw[line] (rfFrontEnd) -- (adConverter);
+        \draw[line] (adConverter) -- (demod);
+        \draw[line] (demod) -- (decimation);
+        \draw[line] (decimation) -- (carrierSync);
+        \draw[line] (carrierSync) -- (baseband);
+        \draw (rfFrontEnd.west) -- ++(-0.5, 0) -- ++(0,0.5);
+        
+        \node[draw, dashed, fit=(rfFrontEnd) (adConverter) (demod) (decimation), inner sep=0.2cm, label=above:RTL-SDR Hardware] (hardware) {};
+        \node[draw, dashed, fit=(carrierSync) (baseband), inner sep=0.2cm, label=above:MATLAB / Simulink design (running on computer)] (software) {};
+        
+        \node[align=left, below=0.5cm of hardware.south] (freqRange) {Range: \\ 25MHz -- 1.75GHz};
+        \node[align=left, below=0.5cm of software.south] (samplingFreq) {Sampling frequency (\(f_s\)): \\ up to around 2.8MHz};
+    
+        \node[inner sep=0pt, outer sep=0pt, right=0.5cm of baseband] (output) {\includegraphics[width=1cm]{imgs/notes.pdf}};
+        \draw[line] (baseband) -- (output);
+    \end{tikzpicture}
+\end{center}
 % Explanation of the SDR block diagram for FM reception
 The block diagram for an FM receiver using RTL-SDR hardware typically involves the following processing stages:
 \begin{enumerate}
@@ -632,9 +595,73 @@ The block diagram for an FM receiver using RTL-SDR hardware typically involves t
     \item \textbf{Baseband Output:} The final audio signal is output, ready for listening.
 \end{enumerate}
 The signal processing range for this system is from 25MHz to 1.75GHz with a sampling frequency (IF) up to around 2.8MHz.
-
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{imgs/rtl-sdr.png}
+\end{center}
 
 \section*{RTL-SDR Receiving Steps}
+
+
+
+
+\begin{center}
+
+    \begin{tikzpicture}[
+            block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
+            node distance=1cm and 1cm,
+            auto
+        ]
+
+        \tikzstyle{tri} = [draw, isosceles triangle, isosceles triangle apex angle=60, shape border rotate=360, minimum height=2em]
+        % Blocks
+        \node[inner sep=0pt, minimum size=0pt] (source) {};
+
+
+        \node[tri, right=of source] (encoder) {};
+        \node[block, right=of encoder] (interp) {BPF};
+
+        % create a node which is above interp
+        \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
+        \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
+
+
+
+
+        \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
+
+        \draw[->] (interp) -- (m1);
+        \node[below=of m1] (cos) {};
+        \draw[->] (cos) -- (m1) node[midway, right] {$\cos(2\pi(f_{LO} - f_{IF})t)$};
+
+
+        %\node[right=1cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
+        \node[tri, right=of m1] (dummy3) {};
+
+        \draw[->] (m1) -- (dummy3) node[midway, above] {};
+        \node[right=1cm of dummy3, inner sep=0pt, minimum size=0pt] (dummy4) {};
+        \draw[->] (dummy3) -- (dummy4) node[midway, above] {};
+
+        %\draw[->] (interp) -- node[midway, above] {$x_c[n]$} (p1);
+
+        \draw[->] (source) -- (encoder) node[midway,above] {};
+        \draw[->] (encoder) -- (interp) node[midway,above] {};
+
+
+    \end{tikzpicture}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 % Detailed steps of the RTL-SDR superheterodyne receiver chain
 The RTL-SDR device functions as a superheterodyne receiver, processing signals through the following steps:
@@ -648,6 +675,7 @@ This process outlines the steps involved in the digital reception and conversion
 
 
 \section*{RTL-SDR Block Diagram}
+
 The process of converting an RF signal to a baseband signal in an RTL-SDR involves several steps, illustrated in the block diagram and detailed equations:
 \begin{enumerate}
     \item The RF signal undergoes amplification and filtering, including active gain control and rejection of RF image frequencies.
