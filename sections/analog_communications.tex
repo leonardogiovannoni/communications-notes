@@ -624,9 +624,6 @@ The signal processing range for this system is from 25MHz to 1.75GHz with a samp
         \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
         \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
 
-
-
-
         \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
 
         \draw[->] (interp) -- (m1);
@@ -649,6 +646,13 @@ The signal processing range for this system is from 25MHz to 1.75GHz with a samp
 
     \end{tikzpicture}
 \end{center}
+
+
+
+Il processo di eterodinazione è essenziale per convertire le frequenze radio più alte in frequenze più basse, più facili da amplificare e processare.
+Nel disegno, $f_{LO}$ rappresenta la frequenza dell'oscillatore locale, mentre $f_{IF}$ (ovvero 3.57 Mz) è la frequenza intermedia a cui il segnale viene convertito, in cui avvengono anche una serie di filtraggi e amplificazioni.
+Successivamente avverrà anche la conversione analogico-digitale con campionamento a 28.8 MS/s, dunque rispettamendo abbondantemente il teorema di Nyquist ($f_s > 2 (f + B)$) fino a una banda di $14.4$ MHz, in quanto \( 28.8 MS/s > 2 \times (3.57 MHz + B) \) (TODO: ultima affermazione da controllare).
+
 
 
 
