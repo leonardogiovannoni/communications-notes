@@ -460,6 +460,8 @@ Che può quindi essere demodulato differenziando la fase di \( \hat{v}(t) \):
 \[
 \hat{m}(t) = \frac{1}{2\pi k_f} \frac{d}{dt} \angle \hat{v}(t)
 \]
+
+
 \begin{center}
 
     \begin{tikzpicture}[
@@ -503,8 +505,21 @@ Che può quindi essere demodulato differenziando la fase di \( \hat{v}(t) \):
 \end{center}
 
 
+Supponiamo che a causa della differenza tra trasmettitore e ricevitore ci sia adesso una frequenza $\Delta f$ (per esempio potrebbe essere anche solo 10 Hz)
+\[
+    v(t) = e^{j2\pi \Delta f t + j2 \pi K_f \int_{-\infty}^{t} m(\tau) d\tau}
+\]
 
+e quindi la fase sarà:
+\[
+    \angle v(t) = 2\pi \Delta f t + 2\pi K_f \int_{-\infty}^{t} m(\tau) d\tau
+\]
+da cui:
+\[
+    \frac{1}{2\pi K_f}  \frac{d}{dt} \angle v(t) = \frac{\Delta f}{K_f} + m(t)
+\]
 
+e da come possiamo notare, $\frac{\Delta f}{K_f}$ è solo una costante aggiunta al segnale. Come tale, sta sulla frequenza 0 che non può essere udita dall'orecchio umano. Quando la costante $\Delta f$ è grande, comunque, quando vogliamo prendere l'energia del segnale, parte del segnale potrebbe essere filtrate (TODO: Perché?).
 
 
 \section*{Software Defined Radio (SDR)}
@@ -519,8 +534,6 @@ Il campo in cui le tecniche SDR hanno portato innumerevoli vantaggi è quello de
 
 La chiave per lo sviluppo delle tecniche SDR è il miglioramento delle capacità di calcolo dei processori, perché sono in grado di applicare l'elaborazione precedentemente realizzata completamente in hardware specializzato.
 Con il passaggio al software è possibile modificare l'elaborazione del segnale senza dover cambiare componenti fisiche del sistema, semplificando il processo di sviluppo e riducendo i costi, introducendo eventuali nuovi formati di modulazione, algoritmi e applicazioni.
-
-
 
 
 \subsection*{Architettura SDR}
@@ -653,16 +666,96 @@ Il processo di eterodinazione è essenziale per convertire le frequenze radio pi
 Nel disegno, $f_{LO}$ rappresenta la frequenza dell'oscillatore locale, mentre $f_{IF}$ (ovvero 3.57 Mz) è la frequenza intermedia a cui il segnale viene convertito, in cui avvengono anche una serie di filtraggi e amplificazioni.
 Successivamente avverrà anche la conversione analogico-digitale con campionamento a 28.8 MS/s, dunque rispettamendo abbondantemente il teorema di Nyquist ($f_s > 2 (f + B)$) fino a una banda di $14.4$ MHz, in quanto \( 28.8 MS/s > 2 \times (3.57 MHz + B) \) (TODO: ultima affermazione da controllare).
 
+Campionando $\cos(2\pi f_{IF} t)$ si ottiene:
+\[
+    \cos(2\pi f_{IF} n T_s) = \cos(2\pi \frac{f_{IF}}{f_{ADC}} n)
+\]
+
+La frequenza di campionamento determina la massima banda estraibile dal segnale, ovvero 2.8 MHz
+
+\begin{center}
+    
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines=middle,
+    width=\textwidth,
+    height=8cm,
+    xlabel={$f$},
+    ylabel={},
+    xtick={-3,-2,-1,0,1,2,3},
+    xticklabels={$-f_{IF}-W$, $-f_{IF}$, $-f_{IF}+W$, $0$, $f_{IF}-W$, $f_{IF}$, $f_{IF}+W$},
+    ytick=\empty,
+    xmin=-4,
+    xmax=4,
+    ymin=0,
+    ymax=1,
+    clip=false
+]
+
+% Define f_IF and W
+\pgfmathsetmacro{\fIF}{2}
+\pgfmathsetmacro{\W}{1}
 
 
+\addplot[domain=-\fIF-\W:-\fIF+\W, samples=100, black, thick] 
+    ({x}, {((sqrt(-15129*(x+\fIF)^2 + 1968*(x+\fIF)*sin(deg(15*(x+\fIF)))^3 - 64*sin(deg(15*(x+\fIF)))^6 + 14400))/(120))} - 0.269 );
+%\addplot[domain=\fIF-\W:\fIF+\W, samples=100, black, thick] 
+%    ({x}, {sqrt(\W*\W - (x-\fIF)*(x-\fIF))});
+\addplot[domain=\fIF-\W:\fIF+\W, samples=100, black, thick] 
+    ({x}, {((sqrt(-15129*(x-\fIF)^2 + 1968*(x-\fIF)*sin(deg(15*(x-\fIF)))^3 - 64*sin(deg(15*(x-\fIF)))^6 + 14400))/(120))} - 0.269 );
+
+% Draw the arrows
+\draw[->,thick] (axis cs:-4,0) -- (axis cs:4,0) node[right] {};
+\draw[->,thick] (axis cs:0,0) -- (axis cs:0,1);
+
+\end{axis}
+\end{tikzpicture}
 
 
+\end{center}
+Nella figura è rappresentato il segnale in uscita dal mixer (TODO (?)), con frequenza intermedia $f_{IF} = 3.57$ MHz e banda $W = 1.4$ MHz.
+
+Ogni sample è composto da 8 bit. Isample sel segnale campionato seguono un percorso parallelo per estrarre la commponente in fase e in quadratura. Entrambi i rami effettuano la conversione da media a frequenza a banda base.
+Avvengono una serie di operazioni che permettono di estrarre la banda che sarà rappresentata dai sample I/Q in uscita da ques'ultima fase tramite interfaccia USB.
+La fase di decimation permette di adattare il campionamente  del segnale al valore richiesto dell'utente. Il rate massimo è circa 2.8 MS/s.
+Lo spettro di frequenza in grado di essere captato dal dispositivo risulta approssimativamente (TODO).
+Bisogna comunque tenere in considerazione che labanda limitata a 2.8 MHz non permette di estrarre informazioni di modulazioni che richiedano una banda superiore, ad esempio il Wi-Fi.
 
 
+\paragraph*{Ricezione radio FM}
+I simboli I/Q digitali ricevuti dal SDR richiedono una demodulazione per essere convertiti nell'informazione trasmessa. In particolare per la radio FM si considera
+\[
+    m(t) = L(t) + R(t)
+\]
+segnale FM mono, normalizzato ad 1, ovvero $\max{m(t)} = 1$ e quindi $\Delta f = k_f$.
 
 
+L'inviluppo complesso del segnale ricevuta assume la forma:
+
+\[
+    \tilde{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
+\]
+
+Campionando in $T_s$ si ottiene:
+\[
+    \tilde{v}(kT_s) = \tilde{v}[k] = A_c e^{j2\pi k_f \int_{-\infty}^{kT_s} m(\tau) d\tau}
+\]
+
+che può essere approssimato in
+\[
+    \tilde{v}[k] \approx A_c e^{j2\pi k_f \sum_{\ell = -\infty}^{k} m(\ell) T_s}
+\]
+
+moltiplicando per il coniugato del campione precedente si ottiene
+\[
+  \tilde{v}[k] \tilde{v}^*[k-1] \approx A_c^2 e^{j2\pi k_f \sum_{\ell = -\infty}^{k} m(\ell) T_s} e^{-j2\pi k_f \sum_{\ell = -\infty}^{k-1} m(\ell) T_s} = A_c^2 e^{j2\pi k_f m(k) T_s}
+\]
 
 
+da cui:
+\[
+    \tilde{m}[k] = \frac{1}{2\pi k_f T_s} \angle \left( \tilde{v}[k] \tilde{v}^*[k-1] \right)
+\]
 
 
 
