@@ -1,3 +1,228 @@
+
+\section*{Comunicazioni digitali}
+
+
+\begin{adjustwidth*}{-2.3cm}{-2cm}
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, block/.style={draw, rectangle}, scale=0.85]
+            % Blocks
+            \tikzstyle{block} = [rectangle, draw, text centered, minimum height=4em, align=center]
+
+            \node[block] (mod) {Modulatore \\ numerico};
+            \node[block, right=1cm of mod] (channel) {Canale di \\ comunicazione};
+            \node[block, right=1cm of channel] (demod) {Demodulatore \\ numerico};
+
+            % Nodes for connecting lines
+            \coordinate[left=2cm of mod] (input);
+            \coordinate[right=2cm of demod] (output);
+
+            % Lines
+            \draw[->] (input) -- node[above] {$m_s[n]$} (mod);
+            \draw[->] (mod) -- node[above] {$s(t)$} (channel);
+            \draw[->] (channel) -- node[above] {$r(t)$} (demod);
+            \draw[->] (demod) -- node[above] {$\hat{m}_s[n]$} (output);
+
+            % Dashed box
+            \begin{scope}
+                \draw[dashed, red] ($(mod.north west)+(-0.5,0.5)$) rectangle ($(demod.south east)+(0.5,-0.5)$);
+            \end{scope}
+
+            % Annotations
+            \node[align=center, red, above right= -1cm and -6cm of demod.south east] (channel-label) {Canale numerico};
+
+            % Circles
+            \draw (input) ++(-0.5cm,0) circle (0.5cm) node {$S$};
+            \draw (output) ++(0.5cm,0) circle (0.5cm) node {$D$};
+        \end{tikzpicture}
+    \end{center}
+\end{adjustwidth*}
+
+
+
+
+In una comunicazione digitale l'informazione è codificata in sequenze di bit. Se rappresentassimo ogni bit come un funzione delta otterremmo un treno di delta:
+\[
+    \sum_{k=-\infty}^{+\infty} d_k \delta(t - kT_b)
+\]
+che occupa però una banda infinita.
+
+La modulazione PAM consiste nell'effettuare il mapping dei bit ed effettuare un filtraggio con un filtro passa basso avente risposta all'impulso \( g_T(t) \), ottenendo:
+\[ s_{PAM}(t) \coloneqq \sum_{k=-\infty}^{+\infty} a_k\cdot g_T(t - kT_s) \]
+
+Una sequenza di bit può essere trattata come una variabile aleatoria con distribuzione uniforme:
+\[
+    P(d_k = 0) = P(d_k = 1) = \frac{1}{2} 
+\]
+\[
+    \mathbb{E}\{d_k\} = 0\cdot P(d_k = 0) + 1\cdot P(d_k = 1) = \frac{1}{2}
+\]
+
+
+% \begin{center}
+%     \begin{tikzpicture}
+%         \begin{axis}[
+%                 title={\( (M=4) \)},
+%                 xlabel={},
+%                 ylabel={},
+%                 xmin=-5, xmax=5,
+%                 ymin=-4, ymax=4,
+%                 grid=both,
+%                 grid style={line width=.1pt, draw=gray!10},
+%                 major grid style={line width=.2pt,draw=gray!50},
+%                 minor tick num=5,
+%                 axis lines=middle,
+%                 minor tick style={draw=none},
+%                 xtick={-3, -1, 1, 3},
+%                 ytick=\empty,
+%             ]
+% 
+%             \addplot+[only marks] coordinates {
+%                     (-3, 0)
+%                     (-1, 0)
+%                     (1, 0)
+%                     (3, 0)
+%                 };
+%         \end{axis}
+%     \end{tikzpicture}
+% \end{center}
+\[
+    E_{s_{PAM}}(i) = \int_{-\infty}^{+\infty} s_{PAM, i}^2(t) \, dt =  \int_{-\infty}^{+\infty} \alpha_i^2 \cdot g_T^2(t - kT_s) \, dt = \int_{-\infty}^{+\infty} (2i - 1 - M)^2 g_T^2(t) \, dt = (2i - 1 - M)^2 E_{g_T}
+\]
+
+Scegliendo una mappatura simmetrica dei bit, possiamo trasmettere simboli con media nulla e quindi con energia a media nulla:
+\[
+    a_i = 
+    \begin{cases}
+        -1 & \text{se } d_k = 0 \\
+        1 & \text{se } d_k = 1
+    \end{cases}
+\]
+Per \( M \) pari si ha \( A_s = \{ \pm 1, \pm 3, \ldots, \pm (M-1) \} \)
+
+Per \( M \) dispari si ha \( A_s = \{ 0, \pm 2, \pm 4, \ldots, \pm (M-1) \} \)
+
+
+Gli \( M \) valori \( (M \geq 2) \) che costituiscono l'alfabeto \( A_s = \{ \alpha_1, \alpha_2, \ldots, \alpha_M \} \) sono definiti come:
+\[ \alpha_i = 2i - 1 - M, \quad i = 1, 2, \ldots, M \]
+
+
+
+
+\subsection*{Proprietà derivate della M-PAM}
+\begin{enumerate}
+    \item Il valor medio di \( s(t) \) è zero per ogni \( t \):
+          \begin{equation*}
+              \mathbb{E}\left[ s(t) \right] = 0 \quad \forall t
+          \end{equation*}
+          \begin{equation*}
+              \mathbb{E} \left[ \sum_{k=-\infty}^{+\infty} a[k] \ p(t-kT_s) \right] = \sum_{k=-\infty}^{+\infty} \mathbb{E}\left[a[k]\right]\ p(t-kT_s) = 0
+          \end{equation*}
+          \begin{equation*}
+              \mathbb{E}\left[a[k]\right] = \frac{1}{M} \sum_{i=1}^{M} \alpha_i \mathbb{P}\{\alpha_i\} = \frac{1}{M} \sum_{i=1}^{M} (2i - 1 - M)
+          \end{equation*}
+          \begin{equation*}
+              = \frac{2}{M} \sum_{i=1}^{M} i - 1 - M = \frac{2}{M} \frac{M(M+1)}{2} - (M+1) = 0
+          \end{equation*}
+
+    \item La densità spettrale di potenza invece è:
+          \begin{equation*}
+              S_s(f) = \frac{1}{T_s} S_a(f) \ |G_T(f)|^2
+          \end{equation*}
+          \begin{equation*}
+              \text{dove } \sigma_a^2 = \mathbb{E}\left[ a\left[k\right]^2 \right] = \frac{(M-1)(M+1)}{3}
+          \end{equation*}
+\end{enumerate}
+
+\[
+    R_s(t,\tau) = \mathbb{E}[s(t) \ s^*(t-\tau)]
+\]
+\[
+    = \mathbb{E} \left[ \sum_{n=-\infty}^{+\infty} a\left[n\right] g_T(t - nT_s) \sum_{k=-\infty}^{+\infty} a^*\left[k\right] g_T^*(t - \tau - kT_s) \right]
+\]
+\[
+    = \sum_{n=-\infty}^{+\infty} \sum_{k=-\infty}^{+\infty} \mathbb{E}[a\left[n\right] a^*\left[k\right]] \cdot g_T(t - nT_s) \cdot g_T^*(t - \tau - kT_s)
+\]
+\[
+    = \sum_{n=-\infty}^{+\infty} \sum_{k=-\infty}^{+\infty} R_a\left[n-k\right] \cdot g_T(t - nT_s) \cdot g_T^*(t - \tau - kT_s)
+\]
+
+Imponendo \( n-k = m \) abbiamo che \( k = n-m \), quindi:
+
+\[
+    = \sum_{m=-\infty}^{+\infty} R_a[m] \sum_{n=-\infty}^{+\infty} g_T(t - nT_s) \cdot g_T^*(t - \tau - nT_s + mT_s)
+\]
+
+\paragraph*{Autocorrelazione media}
+
+La funzione di autocorrelazione media \( \overline{R}_s(\tau) \) è:
+\begin{align*}
+    \overline{R}_s(\tau) & = \lim_{T\to\infty} \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} R_s(t, \tau) dt                                                                   \\
+    \overline{R}_s(\tau) & = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} R_s(t,\tau)dt \quad \text{se} \quad R_s(t,\tau) \quad \text{è periodico in} t           \\
+    \overline{R}_s(\tau) & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \sum_{n=-\infty}^{\infty} \int_{-\frac{T_s}{2}}^{\frac{T_s}{2}} g_T(t-nT_s)g_T^*(t-\tau-nT_s+mT_s)dt   \\
+                         & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \sum_{n=-\infty}^{\infty}\int_{-\frac{T_s}{2}+nT_s}^{\frac{T_s}{2}+nT_s} g_T(t')g_T^*(t'-\tau+mT_s)dt' \\
+                         & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \int_{-\infty}^{\infty} g_T(t')g_T^*(t'-\tau+mT_s)dt'                                                  \\
+                         & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \int_{-\infty}^{\infty} G_T(f)[G_T(f)e^{-j2\pi f\tau}e^{j2\pi fmT_s}]^*df                              \\
+                         & = \int_{-\infty}^{\infty} P(f)P^*(f)\frac{1}{T_s} \sum_{m=-\infty}^{\infty} R_a[m] e^{-j2\pi fmT_s}e^{j2\pi f\tau}df                                \\
+                         & = \frac{1}{T_s} \int_{-\infty}^{\infty} |G_T(f)|^2 S_a(f)e^{j2\pi f\tau}df
+\end{align*}
+
+
+\[
+    \overline{R}_s(\tau) = \frac{1}{T_s} TCF^{-1} \left[ |G_T(f)|^2 S_a(f) \right]
+\]
+\[
+    \Rightarrow S_s(f) = \frac{1}{T_s} S_a(f) |G_T(f)|^2
+\]
+
+Nel caso in cui:
+\begin{enumerate}
+    \item $\mathbb{E} [ a[n] ] = 0$
+    \item $R_a[m] = \sigma_a^2 \delta[m]$
+\end{enumerate}
+
+Si ha che:
+\[
+    S_s(f) = \frac{\sigma_a^2}{T_s} |G_T(f)|^2
+\]
+
+In questo caso la $B_T$ coincide con quella del sagomatore $G_T(f)$.
+
+Calcolo di $\sigma_a^2$:
+\[
+    \sigma_a^2 = \mathbb{E} \left[ (a - \mu_a)^2 \right] = \int_{-\infty}^{\infty} (a - \mu_a)^2 f_a(a) da
+\]
+\[
+    = \frac{1}{M} \sum_{i=1}^{M} (2i - 1 - M)^2
+\]
+\[
+    = \frac{1}{M} \left[ 2 \sum_{i=1}^{M} i^2 + (1+M)^2 M - 4(1+M) \sum_{i=1}^{M} i \right]
+\]
+
+Sfruttando i seguenti risultati noti:
+\[
+    \sum_{i=1}^{n} i^2 = \frac{n(n+1)(2n+1)}{6}, \quad \sum_{i=1}^{n} i = \frac{n(n+1)}{2}
+\]
+
+Si ottiene:
+\[
+    \sigma_a^2 = \frac{M^2 - 1}{3}
+\]
+
+\[
+    P_s = \frac{\sigma_a^2 E_{g_T}}{T_s} = \frac{M^2 - 1}{3} \frac{E_{g_T}}{T_s}
+\]
+
+\paragraph*{Efficienza Spettrale di una M-PAM} TODO
+\[
+    \beta = \frac{R_b}{B_T} = \frac{\log_2 M}{T_s B_P}
+\]
+essendo \( B_T = B_P \),
+
+L'efficienza spettrale aumenta con l'aumentare del numero di livelli. Sfortunatamente, come verrà dimostrato più avanti, l'efficienza in potenza diminuisce all'aumentare di \( M \).
+
+
+
+
 \section*{Transmitting a Sequence of Bits}
 
 % Introduction to transmitting bits as an analog signal
