@@ -162,7 +162,7 @@ La funzione di autocorrelazione media \( \overline{R}_s(\tau) \) è:
                          & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \sum_{n=-\infty}^{\infty}\int_{-\frac{T_s}{2}+nT_s}^{\frac{T_s}{2}+nT_s} g_T(t')g_T^*(t'-\tau+mT_s)dt' \\
                          & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \int_{-\infty}^{\infty} g_T(t')g_T^*(t'-\tau+mT_s)dt'                                                  \\
                          & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \int_{-\infty}^{\infty} G_T(f)[G_T(f)e^{-j2\pi f\tau}e^{j2\pi fmT_s}]^*df                              \\
-                         & = \int_{-\infty}^{\infty} P(f)P^*(f)\frac{1}{T_s} \sum_{m=-\infty}^{\infty} R_a[m] e^{-j2\pi fmT_s}e^{j2\pi f\tau}df                                \\
+                         & = \int_{-\infty}^{\infty} G_T(f)G_T^*(f)\frac{1}{T_s} \sum_{m=-\infty}^{\infty} R_a[m] e^{-j2\pi fmT_s}e^{j2\pi f\tau}df                                \\
                          & = \frac{1}{T_s} \int_{-\infty}^{\infty} |G_T(f)|^2 S_a(f)e^{j2\pi f\tau}df
 \end{align*}
 
@@ -212,15 +212,77 @@ Si ottiene:
     P_s = \frac{\sigma_a^2 E_{g_T}}{T_s} = \frac{M^2 - 1}{3} \frac{E_{g_T}}{T_s}
 \]
 
+
+Come sarà dimostrato più avanti, $R_s \propto B$, dove $B$ è la banda del segnale $s_{PAM}(t)$. 
+Per $R_s$ valgono le seguenti equivalenze:
+\[
+    R_s = \frac{1}{T_s} = \frac{1}{mT_s} = \frac{R_b}{m} = \frac{R_b}{\log_2 M}
+\]
+
+Dove $R_b$ è il bit rate.
+
+
+
+
 \paragraph*{Efficienza Spettrale di una M-PAM} TODO
 \[
-    \beta = \frac{R_b}{B_T} = \frac{\log_2 M}{T_s B_P}
+    \beta = \frac{R_b}{B_T} = \frac{\log_2 M}{T_s B_{g_T}}
 \]
-essendo \( B_T = B_P \),
+essendo \( B_T = B_{g_T} \),
 
 L'efficienza spettrale aumenta con l'aumentare del numero di livelli. Sfortunatamente, come verrà dimostrato più avanti, l'efficienza in potenza diminuisce all'aumentare di \( M \).
 
+\begin{center}
+    \begin{tikzpicture}[
+            block/.style={rectangle, draw, minimum height=1cm, minimum width=2cm},
+            node distance=1cm,
+            auto
+        ]
+        \node[draw, circle] (source)  {S};
+        \node[block, right= of source] (interpolatore) {PAM tx};
+        \node[left=of interpolatore] (tmp) {};
+        \node[block, right= of interpolatore] (chan) {$h(t)$};
 
+        \node[draw, circle, right= of chan] (plus)  {\(+\)};
+        \node[below=of plus, inner sep=0pt, minimum size=0pt] (n) {};
+        \node[block, right=of plus] (sampler) {PAM rx};
+        \node[circle, draw, right=of sampler] (dest) {D};
+        
+        \draw[->] (source) -- (interpolatore) node[midway,above] {$d_k$};
+        \draw[->] (interpolatore) -- (chan) node[midway,above] {$\tilde{s}(t)$};
+        \draw[->] (chan) -- (plus) node[midway,above] {$y(t)$};
+        \draw[->] (plus) -- (sampler) node[midway,above] {$r(t)$};
+        \draw[->] (n) -- (plus) node[midway, right] {$w(t)$};
+        \draw[->] (sampler) -- (dest) node[midway,above] {$\hat{d}_k$};
+        
+    \end{tikzpicture}
+\end{center}
+
+
+
+
+Il canale di comunicazione è generalmente modella come un sistema LTI, caratterizzato da una risposta impusliva $h(t)$ e da un rumore additivo $w(t)$.
+Nel caso ideale $h(t) = \delta (t)$.
+Il rumore aggiunto al segnale si modella come rumore bianco gaussiano a potenza spettrale costante $N_0/2$, col quale si modella il disturbo proveniente dalle radiazioni solari, dalle radiazioni del big bang e del rumore dei dispositivi.
+Il ricevitore è composto da 3 componenti principali:
+\begin{enumerate}
+    \item \textbf{Filtro passa basso}, che filtra il segnale ricevuto per eliminare le frequenze superiori a $B_T$.
+    \item \textbf{Campionatore}, che campiona il segnale filtrato con rate $1/T_s$. 
+    \item \textbf{Decisore}, che associa ad ogni campione un simbolo appartenente alla costellazione.
+\end{enumerate}
+Il segnale ricevuto è il seguente:
+\[
+    r(t) = s(t) \ast h(t) + w(t)
+\]
+
+mentre il segnale filtrato è:
+\[
+    x(t) = r(t) \ast g_R(t) = \sum_{k=-\infty}^{+\infty} a_k g(t - kT_s) + n(t)
+\]
+dove $g(t) = g_T(t) \ast h(t) \ast g_R(t)$ e $n(t) = w(t) \ast g_R(t)$. La densità spettrale di energia del rumore diventa:
+\[
+    S_n(f) = S_w(f) |G_R(f)|^2
+\]
 
 
 \section*{Transmitting a Sequence of Bits}
