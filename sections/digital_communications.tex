@@ -254,7 +254,6 @@ L'efficienza spettrale aumenta con l'aumentare del numero di livelli. Sfortunata
         \draw[->] (plus) -- (sampler) node[midway,above] {$r(t)$};
         \draw[->] (n) -- (plus) node[midway, right] {$w(t)$};
         \draw[->] (sampler) -- (dest) node[midway,above] {$\hat{d}_k$};
-        
     \end{tikzpicture}
 \end{center}
 
@@ -283,6 +282,451 @@ dove $g(t) = g_T(t) \ast h(t) \ast g_R(t)$ e $n(t) = w(t) \ast g_R(t)$. La densi
 \[
     S_n(f) = S_w(f) |G_R(f)|^2
 \]
+
+
+
+\subsection*{Interferenza intersimbolica (ISI)}
+\noindent
+\begin{minipage}{.5\textwidth}
+    \centering
+    \textbf{Assenza di ISI:}
+    \[
+        x[k] = f(a[k])
+    \]
+    \\
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+    \centering
+    \textbf{Presenza di ISI:}
+    \[
+        x[k] = f(\dots, a[k-1], a[k], a[k+1], \dots)
+    \]
+    \\
+\end{minipage}
+
+
+Il risultato è che il campione estratto al ricevitore dal segnale ricevuto al $k$-esimo istante non dipende solo dal $k$-esimo simbolo.
+
+\begin{center}
+    \begin{tikzpicture}[
+            block/.style={rectangle, draw, minimum height=1cm, minimum width=2.5cm},
+            node distance=1cm and 2cm,
+            auto
+        ]
+
+        \node[block] (filter) {$g_R(t)$};
+        \node[left=of filter] (channel) {};
+        \node[right=of filter] (sampler) {};
+
+        \draw[->] (channel) -- (filter) node[midway,above] {$r(t)$};
+
+        \draw ([xshift=0]filter.east) -- ([xshift=1cm]filter.east) node[midway,above] {$x(t)$};
+        \draw ([xshift=1cm]filter.east) -- ([xshift=1.5cm,yshift=0.5cm]filter.east) node[midway,below, yshift=-0.2cm] {$T_s$};
+
+        \draw[->] ([xshift=1.5cm,yshift=0cm]filter.east) -- ++(1.5cm,0) node[midway,above] {$x[k]$};
+
+
+    \end{tikzpicture}
+\end{center}
+
+dove:
+\[
+    x(t) = r(t) \ast g_R(t) = \sum_{k=-\infty}^{+\infty} a_k g(t - kT_s) + n(t)
+\]
+campionato in $t = mT_s$ si ha:
+\[
+        x(mT_s) = x[m] = \sum_{k=-\infty}^{+\infty} a_k g(mT_s - kT_s) + n(mT_s) = \sum_{k=-\infty}^{+\infty} a_k g[m-k] + n[m] \\ 
+ \]
+\[
+        = a_m g(0) + \sum_{\substack{k \neq m, k=-\infty}}^{+\infty} a_k g[m-k] + n[m]
+\]
+
+
+
+Un canale con banda \( B_c \) in generale introduce ISI. Ci sono due aspetti di cui ci occuperemo:
+
+\begin{enumerate}
+    \item Determinazione del \( T_s \) minimo che può essere adottato al fine di ottenere una sequenza campionata priva di ISI.
+    \item Determinare le condizioni sotto le quali è possibile trasmettere un segnale M-PAM attraverso un canale non ideale in modo che non vi sia ISI nella sequenza campionata.
+\end{enumerate}
+
+Nel risolvere i due problemi riterremo \( h(t) \) fissata, e \( g_T(t) \) e \( g_R(t) \) variabili, in quanto determinabili dal progettista.
+
+Un approccio non perseguibileconsiste nel trasmettere impulsi di durata finita e quindi con banda illimitata. Questo è in contrasto con la limitatezza messa a disposizione dal canale di trasmissione \( (B_c < \infty) \).
+
+\(\Rightarrow\) Gli impulsi \( g_T(t) \) devono avere durata infinita.
+
+\paragraph{Criterio di Nyquist}*{Primo criterio di Nyquist per la trasmissione priva di ISI}
+
+\[ g(kT_s) =
+    \begin{cases}
+        1, & \text{se } k=0      \\
+        0, & \text{se } k \neq 0
+    \end{cases}
+    \quad \text{(Dominio del tempo)}
+\]
+
+\[ \sum_{k=-\infty}^{+\infty} G\left(f-\frac{k}{T_s}\right) = T_s \quad \text{(Dominio della frequenza)} \]
+
+
+
+
+\paragraph*{Dimostrazione}
+Il criterio di Nyquist nel dominio del tempo garantisce l'assenza di ISI in quanto
+\[ x[k] = a[k] \cdot g(0) + \sum_{\substack{i=-\infty \\ i \neq k}}^{+\infty} a[i] \cdot g[i-k] = a[k] \cdot g(0) \]
+dove il secondo termine è nullo e non vi è ISI se \( g[k] = \delta[k] \).
+
+La relazione in frequenza si ottiene come trasformazione
+\[ g[k] = \delta[k] \quad \Longleftrightarrow \quad \overline{G}(f) = 1 \]
+\[ \overline{G}(f) = \frac{1}{T_s} \sum_{k=-\infty}^{+\infty} G\left(f - \frac{k}{T_s}\right) = 1 \]
+\[ \sum_{k=-\infty}^{+\infty} G\left(f - \frac{k}{T_s}\right) = T_s \]
+
+\paragraph*{Trasmissione priva di ISI}
+Supponiamo sia assegnato un canale a banda rigorosamente limitata con banda \( B_c \).
+\[ H(f) = 0 \quad \text{per} \quad |f| > B_c \]
+e supponiamo che \( B_T = B_c \), ovvero che il segnale trasmesso occupa tutta la banda messa a disposizione dal canale.
+Allora si verificano le seguenti:
+\begin{enumerate}
+    \item Non è possibile in alcun modo eliminare l'ISI quando \( T_s < \frac{1}{2B_c} \).
+
+
+          \paragraph*{Dimostrazione:}
+
+          Quando \( T_s < \frac{1}{2B_c} \)
+
+          \begin{tikzpicture}[scale=0.5]
+              \draw[->] (-15,0) -- (15,0) node[right] {\( f \)};
+              \draw[->] (0,-1) -- (0,7) node[above] {\( \overline{G}(f) \)};
+
+              % Triangles
+              \draw (-11,0) -- (-8,3) -- (-5,0);
+              \draw[dashed, red] (-5,-1) -- (-5,4);
+              \draw[dashed, red] (-3,-1) -- (-3,4);
+              \draw (-3,0) -- (0,3) -- (3,0);
+              \draw[dashed, red] (3,-1) -- (3,4);
+              \draw[dashed, red] (5,-1) -- (5,4);
+              \draw (5,0) -- (8,3) -- (11,0);
+
+              \node at (-12,1.5) {\( \cdots \)};
+              \node at (12,1.5) {\( \cdots \)};
+          \end{tikzpicture}
+
+          Esistono degli intervalli di frequenza dove \( \overline{H}(f) = 0 \) per cui non può mai accadere che \( \overline{H}(f) = 1 \) \( \forall f \)
+
+          \bigskip
+
+    \item Il più piccolo valore di \( T_s \) che permette di eliminare l'\( ISI \) è
+
+          \( T_s^{(min)} = \frac{1}{2B_c} \)
+
+          \bigskip
+
+          \( f_s^{(max)}\) = \( \frac{1}{T_s^{(min)}} = 2B_c = f_N \) \quad (frequenza di Nyquist)
+
+          \bigskip
+
+          \begin{tikzpicture}[scale=0.5]
+              \draw[->] (-15,0) -- (15,0) node[right] {\( f \)};
+              \draw[->] (0,-1) -- (0,7) node[above] {\( \overline{G}(f) \)};
+
+              % Triangles
+              \draw (-9,0) -- (-6,3) -- (-3,0);
+              \draw (-3,0) -- (0,3) -- (3,0);
+              \draw (3,0) -- (6,3) -- (9,0);
+
+              \node at (-10,1.5) {\( \cdots \)};
+              \node at (10,1.5) {\( \cdots \)};
+              \
+          \end{tikzpicture}
+
+          Non esistono intervalli di frequenza dove \( \overline{G}(f) = 0 \)
+
+          \bigskip
+
+    \item Nel caso valga la condizione \( T_s = \frac{1}{2B_c} \), allora l'unica funzione di trasferimento che permette di eliminare completamente l'ISI è
+
+          \[ G(f) = \frac{1}{2B_c} \text{rect}\left(\frac{f}{2B_c}\right) \quad \Leftrightarrow \quad g(t) = \text{sinc}(2B_c t) \]
+
+          \paragraph*{Dimostrazione:}
+
+          \begin{center}
+
+              \begin{tikzpicture}[scale=1]
+                  \begin{axis}[
+                          axis lines=middle,
+                          xlabel={$f$},
+                          ylabel={$G(f)$},
+                          xtick={-4, -2, 2, 4},
+                          xticklabels={$-2B_c$, $-B_c$, $B_c$, $2B_c$},
+                          ytick={100},
+                          yticklabels={},
+                          ymin=-0.2, ymax=2,
+                          xmin=-8, xmax=8,
+                          xmajorgrids=false,
+                          ymajorgrids=false,
+                          clip=false
+                      ]
+
+                      \draw [thick] (axis cs:-2,0) rectangle (axis cs:2,0.4);
+
+                      \node [red]at (axis cs:7,0.6) {$\sum_{k=-\infty}^{\infty} G(f - \frac{k}{T_s})$};
+
+                      \draw [dashed, red] (axis cs:-6,0.4) -- (axis cs:-6,0);
+                      \draw [dashed, red] (axis cs:-8,0.4) -- (axis cs:-2,0.4);
+                      \draw [dashed, red] (axis cs:2,0.4) -- (axis cs:8,0.4);
+                      \draw [dashed, red] (axis cs:6,0.4) -- (axis cs:6,0);
+                  \end{axis}
+                  \
+              \end{tikzpicture}
+          \end{center}
+
+          Si nota anche che la funzione $\text{sinc}(2Bt)$ si annulla quando $t = \frac{k}{2B}$ con $k \neq 0$ per cui
+          \[
+              g(kT_s) = \text{sinc} \left(2B_c\cdot\frac{k}{2B_c}\right) = \text{sinc}(k) = 
+              \begin{cases}
+                  1 & \text{se } k=0    \\
+                  0 & \text{se } k\neq0
+              \end{cases}
+          \]
+\end{enumerate}
+
+
+\textbf{Limiti di applicabilità della funzione di trasferimento rettangolare:}
+
+\begin{enumerate}
+    \item Realizzabilità di una funzione di trasferimento rettangolare: risposte in frequenza ideali come quella rettangolare non sono fisicamente realizzabili (Criterio di Paley-Wiener).
+    \item Piccoli errori di campionamento provocano un ISI molto grande poiché la funzione $\text{sinc}(2B_ct)$ decresce molto lentamente.
+\end{enumerate}
+
+Un errore è nel campionatore induce un ISI grande in quanto si sommano molte contributi!
+
+
+
+
+\begin{figure}[ht]
+    \centering
+    \begin{center}
+        \begin{tikzpicture}
+            \begin{axis}[
+                    axis lines=middle,
+                    xlabel={$t$},
+                    ylabel={$\text{sinc}(2B_c t)$},
+                    xtick={-3, -2, -1, 0, 1, 2, 3},
+                    xticklabels={$-3T_s$, $-2T_s$, $-T_s$, $0$, $T_s$, $2T_s$, $3T_s$},
+                    ytick={1},
+                    ymin=-0.5, ymax=1.5,
+                    xmin=-4, xmax=4,
+                    every axis x label/.style={at={(ticklabel* cs:1.05)}, anchor=west,},
+                    every axis y label/.style={at={(ticklabel* cs:1.05)}, anchor=south,},
+                    xmajorgrids=true,
+                    ymajorgrids=true,
+                    grid style=dashed,
+                    clip=false,
+                    no markers,
+                    samples=1000,
+                    domain=-3.5:3.5
+                ]
+
+
+                \draw [thick, red] (axis cs:-2.75,0) -- (axis cs:-2.75,0.082);
+                \draw [thick, red] (axis cs:-1.75,0) -- (axis cs:-1.75,-0.13);
+                \draw [thick, red] (axis cs:-0.75,0) -- (axis cs:-0.75,0.30);
+
+                \draw [thick, red] (axis cs:0.15,0) -- (axis cs:0.15,0.965);
+
+                \draw [thick, red] (axis cs:1.15,0) -- (axis cs:1.15,-0.125);
+                \draw [thick, red] (axis cs:2.15,0) -- (axis cs:2.15,0.07);
+                \draw [thick, red] (axis cs:3.15,0) -- (axis cs:3.15,-0.045);
+
+
+                % Define sinc function
+                \addplot+[thick, black, smooth, unbounded coords=jump] {sin(deg(pi*x))/(pi*x)};
+                \addplot+[thick, black, smooth] coordinates {(0, 1)};
+
+                % Add the red vertical line at t=0
+
+            \end{axis}
+        \end{tikzpicture}
+    \end{center}
+    \caption*{Un errore $\epsilon$ nel campionatore induce un ISI grande in quanto si sommano molti contributi. In rosso l'errore $\epsilon$ del compionatore.}
+    %\label{fig:my_label} % Optional, for referencing the figure
+\end{figure}
+
+
+
+Rilassando la condizione $T_s > \frac{1}{2B_c}$, ovvero ammettendo
+
+\[ T_s > \frac{1}{2B_c} \]
+
+si ottiene il seguente effetto:
+
+\begin{center}
+
+    \begin{tikzpicture}[scale=1]
+        \begin{axis}[
+                axis lines=middle,
+                xlabel={$f$},
+                ylabel={$H(f)$},
+                xtick={-6, -4, -2, 2, 4, 6},
+                xticklabels={$-3B_c$, $-2B_c$, $-B_c$, $B_c$, $2B_c$, $3B_c$},
+                ytick={100},
+                yticklabels={},
+                ymin=-0.2, ymax=2,
+                xmin=-8, xmax=8,
+                %every axis x label/.style={at={(ticklabel* cs:1.05)}, anchor=west,},
+                %every axis y label/.style={at={(ticklabel* cs:1.05)}, anchor=south,},
+                xmajorgrids=false,
+                ymajorgrids=false,
+                clip=false
+            ]
+
+            \node[red] at (-7,0.25) {\( \cdots \)};
+
+            \draw[red] (-6,0) -- (-4,0.5) -- (-2,0);
+            \draw[red] (-4,0) -- (-2,0.5) -- (0,0);
+
+            \draw[red] (0,0) -- (2,0.5) -- (4,0);
+            \draw[red] (2,0) -- (4,0.5) -- (6,0);
+
+            \node[red] at (7,0.25) {\( \cdots \)};
+
+            \draw[blue] (-6,0.5) -- (6,0.5);
+
+            \draw (-2,0) -- (0,0.5) -- (2,0);
+
+
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+La sovrapposizione permette di definire una classe di infinite funzioni di trasferimento che soddisfano il primo criterio di Nyquist.
+
+In questo caso però $B_c > \frac{1}{2T_s}$, per cui al punto di $T_s$ c'è bisogno di una banda disponibile nel canale che è maggiore di quella che occorre con la funzione di trasferimento rettangolare.
+
+\subsection*{Filtro a coseno rialzato}
+
+% Define the piecewise function
+\[ H_{rc}(f) =
+    \begin{cases}
+        T_s                                                                                                          & \text{if } 0 \leq |f| \leq \frac{1-\alpha}{2T_s}                  \\
+        \frac{T_s}{2} \left[ 1 - \sin\left(\frac{\pi T_s}{\alpha} \left( |f| - \frac{1}{2T_s} \right)\right) \right] & \text{if } \frac{1-\alpha}{2T_s} < |f| \leq \frac{1+\alpha}{2T_s} \\
+        0                                                                                                            & \text{if } |f| > \frac{1+\alpha}{2T_s}
+    \end{cases}
+\]
+
+con $0 < \alpha < 1$.
+
+\begin{center}
+
+    \definecolor{myblue}{RGB}{30,144,255}
+    \definecolor{myred}{RGB}{178,34,34}
+    \begin{tikzpicture}
+        \begin{axis}[
+                axis lines=middle,
+                xlabel={$f$},
+                ylabel={$H_{RC}(f)$},
+                xtick={-0.5, 0.5},
+                xticklabels={$\frac{-1}{2T_s}$, $\frac{1}{2T_s}$},
+                ytick={0.5},
+                yticklabels={$T_s/2$},
+                ymin=0, ymax=1.5,
+                xmin=-1, xmax=1,
+                every axis x label/.style={at={(ticklabel* cs:1.05)}, anchor=west,},
+                every axis y label/.style={at={(ticklabel* cs:1.05)}, anchor=south,},
+                xmajorgrids=false,
+                ymajorgrids=false,
+                clip=false,
+                no markers,
+            ]
+
+            % Draw the ideal filter response (black box)
+            \draw [thick] (axis cs:-0.5,0) -- (axis cs:-0.5,1) -- (axis cs:0.5,1) -- (axis cs:0.5,0);
+
+            % Draw the realistic filter response for alpha = 0.5 (blue line)
+            % \addplot [myblue, thick, smooth, domain=-1:1] {0.5+0.5*cos(deg(pi*x))};
+            \addplot [myblue, thick, smooth, domain=-0.75:0.-0.25] {0.5 * (1 + cos(deg(pi*(abs(x)-0.25)/0.5)))};
+            \addplot [myblue, thick, smooth, domain=0.25:0.75] {0.5 * (1 + cos(deg(pi*(abs(x)-0.25)/0.5)))};
+
+
+            % Draw the realistic filter response for alpha = 1 (red dashed line)
+            \addplot [myred, thick, dashed, smooth, domain=-1:1] {0.5-0.5*sin(deg(pi*(abs(x)-0.5))};
+
+            % Add annotations for alpha values
+            \node[myblue] at (axis cs:0.75,0.8) {$\alpha=0.5$};
+            \node at (axis cs:-0.75,0.8) {$\alpha=0$};
+            \node[myred] at (axis cs:0.9,0.2) {$\alpha=1$};
+
+            % Add black dot at intersection
+            \node[circle,fill,inner sep=1.5pt] at (axis cs:0,0.5) {};
+
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+\subsection*{Propriet\`a}
+\begin{enumerate}
+    \item Quando \( \alpha = 0 \) il coseno rialzato coincide con la funzione di trasferimento rettangolare
+    \item La banda \( B_H \) \`e direttamente ottenibile da \( B_H = \frac{1+\alpha}{2T_S} \)
+\end{enumerate}
+
+La \( h_{RC}(t) \) \`e calcolabile in forma chiusa:
+
+\[ h_{RC}(t) = \sin\left(\frac{t}{T_S}\right) \frac{\cos\left(\frac{\alpha \pi t}{T_S}\right)}{\left(1- \frac{2\alpha t}{T_S}\right)^2}  \]
+
+\[ h_{RC}(kT_S) = \delta[k] \]
+
+\begin{itemize}
+    \item Soddisfa il criterio di Nyquist nel tempo, per cui garantisce l'assenza di ISI
+    \item Decresce per \( t \rightarrow \infty \) come \( \frac{1}{|t|^3} \) per \( \alpha > 0 \) quindi molto pi\`u velocemente del caso \( \alpha = 0 \) (rettangolare)
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \section*{Transmitting a Sequence of Bits}
