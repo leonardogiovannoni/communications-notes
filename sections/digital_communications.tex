@@ -356,7 +356,7 @@ Un approccio non perseguibileconsiste nel trasmettere impulsi di durata finita e
 
 \(\Rightarrow\) Gli impulsi \( g_T(t) \) devono avere durata infinita.
 
-\paragraph{Criterio di Nyquist}*{Primo criterio di Nyquist per la trasmissione priva di ISI}
+\paragraph*{Criterio di Nyquist}{Primo criterio di Nyquist per la trasmissione priva di ISI}
 
 \[ g(kT_s) =
     \begin{cases}
@@ -680,18 +680,45 @@ La \( h_{RC}(t) \) \`e calcolabile in forma chiusa:
 \end{itemize}
 
 
+\paragraph*{Rumore}
+Nel caso della banda passante il rumore dell'inviluppo complesso è definito come:
+\[
+    w(t) = w_I(t) + jw_Q(t) 
+\]
+e la densità spettrale di potenza è:
+\[
+    S_w(f) = 2N_0
+\]
 
 
+Dove sia la parte reale che immaginaria danno un contributo $N_0$. Il segnale originale presentava invece un rumore con densità spettrale di potenza $N_0/2$.
+Dopo il filtraggio la densià spettrale di potenza del rumore assume la forma:
+\[
+    S_n(f) = S_w |G_R(f)|^2 = 2N_0 |G_R(f)|^2
+\]
+
+Il ricevitore deve quindi essere implementato al fine di minimizzare l'effetto del rumore, ovvero massimizzare l'SNR.
+
+\paragraph*{Filtro adattato}
+La massimizzazione dell'SNR si ottiene con un filtro adattato, dove:
+\[
+    g_R(t) = g_T(-t) \quad \Longleftrightarrow \quad G_R(f) = G_T^*(f)
+\]
+
+Volendo quindi soddisfare il criterio di Nyquist col coseno rialzato e volendo utilizzare il filtro adattato, ottenieamo:
+\[
+    G(f) = G_T(F) H(f) G_R(f) = |G_T(f)|^2 H(f)
+\]
+
+Nel caso di canale ideale, definendo come $G_{SRRC} = \sqrt{G_{RC}}$ si ottiene:
+\[
+    g_T(t) = g_{SRRC}(t) \quad \Longleftrightarrow \quad G_T(f) = G_{SRRC}(f) 
+\]
 
 
-
-
-
-
-
-
-
-
+\[
+    g_R(t) = g_{SRRC}(-t) \quad \Longleftrightarrow \quad G_R(f) = G_{SRRC}^*(f)
+\]
 
 
 
