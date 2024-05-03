@@ -801,15 +801,41 @@ Le soglie sono date dal punto medio tra i due simboli adiacenti:
 \[
     Z^{(i)} = \left\{ x \mid d(x, a^{(i)}) < d(x, a^{(j)}), j \neq i, j = 1, \ldots, M \right\}
 \]
+
+
+% include image in img/regions.jpg
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.875\textwidth]{imgs/regions.jpg}
+    \caption*{Regioni di decisione per un sistema PAM}
+\end{figure}
+
+
+
+
+
 Sebbene si adotti il criterio di decisione ottimo, la presenza del rumore può portare a una decisione errata, traslando il segnale in una regione non associata al simbolo trasmesso.
 La probabilità di errore sul simbolo equivale alla probabilità di overstimare $a^{(i)}$ e il campione ricevuto non rientri nella regione $Z^{(i)}$:
 \[
     P_e = \frac{1}{M} \sum_{i=0}^{M-1} \mathbb{P}(\text{errore} \ | \ a^{(i)}) = \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{N^{(s)}} \quad \text{probabilità errore PAM}
 \]
 
+Considerando una modulazione 2-PAM, il campione ricevuto in presenza di rumore avrà una distribuzione gaussiana centrata in $a^{(i)}$, ovvero in $\pm 1$. Poiché la soglia è data da 0, nel caso sia stato trasmesso +1 (-1) la probabilità di errore corrisponde all'area della gaussiana a sinistra (destra) della soglia, centrata in 1 (-1).
+
+% include imgs/2pamerror.jpg
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{imgs/2pamerror.jpg}
+    \caption*{Probabilità di errore per una modulazione 2-PAM}
+\end{figure}
 
 
+Quindi la probabilità di errore in questo caso può essere espressa come:
+\[
+    P(e | -1) = \text{Q}(\frac{\text{d}(t_i, m_x)}{\sigma}) = \text{Q}(\frac{1}{\sigma})
+\]
 
+Dove l'ultima uguaglianza deriva dal fatto che la soglia $t_i=0$ e il valore medio della gaussiana è $m_x = -1$.
 
 
 
