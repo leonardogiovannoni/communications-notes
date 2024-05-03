@@ -710,23 +710,102 @@ Volendo quindi soddisfare il criterio di Nyquist col coseno rialzato e volendo u
     G(f) = G_T(F) H(f) G_R(f) = |G_T(f)|^2 H(f)
 \]
 
-Nel caso di canale ideale, definendo come $G_{SRRC} = \sqrt{G_{RC}}$ si ottiene:
+Nel caso di canale ideale, definendo come $H_{SRRC} = \sqrt{H_{RC}}$ si ottiene:
 \[
-    g_T(t) = g_{SRRC}(t) \quad \Longleftrightarrow \quad G_T(f) = G_{SRRC}(f) 
+    g_T(t) = h_{SRRC}(t) \quad \Longleftrightarrow \quad G_T(f) = H_{SRRC}(f) 
+\]
+
+\[
+    g_R(t) = h_{SRRC}(-t) \quad \Longleftrightarrow \quad H_R(f) = H_{SRRC}^*(f)
 \]
 
 
+In tal caso e considerando i simboli a media nulla ed equiprobabli: 
 \[
-    g_R(t) = g_{SRRC}(-t) \quad \Longleftrightarrow \quad G_R(f) = G_{SRRC}^*(f)
+    S_s(f) = \frac{1}{T_s} S_a |G_T(f)|^2 = \frac{A}{T_s} H_{RC}(f)
 \]
 
 
+Per quanto riguarda la banda invece:
+\[
+    B^{(BB)} = \frac{1+\alpha}{2T_s} = \frac{1_\alpha}{2} \frac{1}{\log_2(M) T_b} = \frac{1+\alpha}{2} \frac{R_b}{\log_2(M)} \quad \text{banda inviluppo complesso PAM}
+\]
+\[
+    B^{(PB)} = 2 B^{(BB)} = (1+\alpha) \frac{R_b}{\log_2(M)} \quad \text{banda PAM in banda passante}
+\]
+
+\[
+    P_s^{(BB)} = \int_{-\infty}^{+\infty} S_s(f) df = \frac{A}{T_s} \int_{-\infty}^{+\infty} H_{RC}(f) df = \frac{A}{T_s} h_{RC}(0) = \frac{A}{T_s} \quad \text{potenza media inviluppo complesso}
+\]
+
+\[
+    P_s^{(PB)} = \frac{1}{2} P_s^{(BB)} = \frac{A}{2T_s} \quad \text{potenza media PAM in banda passante}
+\]
+
+\[
+    E_s = P_s T_s = \frac{A}{2} = \frac{M^2 - 1}{6} \quad \text{energia media per simbolo}
+\]
 
 
+\section*{Strategia di decisione}
 
 
+\[
+    x[m] = a_m + n[m] = a_m + n_I[m] + jn_Q[m]
+\]  
+
+La potenza del segnale di disturbo può essere calcolatora considerando la densità spettrale di potenza:
+\[
+    P_n = \int_{-\infty}^{+\infty} S_n(f) df = 2N_0 \int_{-\infty}^{+\infty} |G_R(f)|^2 df = 2N_0 \int_{-\infty}^{+\infty} |H_{RC}(f)|^2 df = 2N_0
+\]
+
+Essendo il rumore a media nulla, la varianza del rumore è pari alla sua potenza:
+\[
+    \sigma_n^2 = P_n = 2N_0
+\]
+
+Quindi la variabile aleatoria associata al rumore ha distribuzione del tipo $\mathcal{N}(0, 2 N_0)$.
+
+Si può dimostrare che in presenza di filtro RRC e simboli equiprobabili la strategia di dicisione ottima consiste nel massimizzare la probabilità condizionata di aver ricevuto $a^{(i)}$ sapendo di aver ricevuto $x[m]$:
+
+\[
+    \hat{a}_m = \underset{i=1,\ldots,M}{\mathrm{argmax}} \ \mathbb{P}(a^{(i)}|x[m])
+\]
+
+Usando il criterio di massima verosimiglianza e la formula di Bayes di può dimostrare che:
+\[
+    \mathbb{P}(a^{(i)} \ | \ x[m]) \propto  \mathbb{P}(x[m] \ | \ a^{(i)})
+\]
+
+\[
+    x[m] \ | \ a^{(i)}  = a^{(i)} + n[m] \quad \Rightarrow \quad x[m] \ | \ a^{(i)} \sim \mathcal{N}(a^{(i)}, \sigma_n^2)
+\]
+
+\[
+    f_X(x \ | \ a^{(i)}) = f_{W}(x - a^{(i)}) = \frac{1}{\sqrt{2\pi \sigma_n^2}} e^{-\frac{(x - a^{(i)})^2}{2\sigma_n^2}}
+\]
 
 
+Essendo i simboli reali e quindi anche il segnale PAM, è possibile ignorare la componente in quadratura del segnale ricevuto, in quanto non vi sarà alcuna informazione.
+\[
+    x[m] \ | \ a^{(i)} \sim \mathcal{N}(a^{(i)}, N_0) \quad \Rightarrow \quad f_X(x \ | \ a^{(i)}) = \frac{1}{\sqrt{2\pi \sigma_n^2}} e^{-\frac{(x - a^{(i)})^2}{2\sigma_n^2}}
+\]
+Il massimo della densità di probabilità è ottenuto minimizzando l'opposto dell'esponente:
+\[
+    \hat{a}_m = \underset{i=1,\ldots,M}{\mathrm{argmin}} \left| x[m] - a^{(i)} \right| 
+\]
+
+Per adottare il criterio di decisione ottimo si possono definire regioni non sovrapposte, all'interno delle quali il segnale ricevuto è associato a un determinato simbolo.
+Ogni regione è composta da due punti il cui simbolo più vicino è $a^{(i)}$, nel caso di più simboli le due regioni agli estremi avranno una larghezza infinita, mentre quelle interne saranno limitate.
+Le soglie sono date dal punto medio tra i due simboli adiacenti:
+\[
+    Z^{(i)} = \left\{ x \mid d(x, a^{(i)}) < d(x, a^{(j)}), j \neq i, j = 1, \ldots, M \right\}
+\]
+Sebbene si adotti il criterio di decisione ottimo, la presenza del rumore può portare a una decisione errata, traslando il segnale in una regione non associata al simbolo trasmesso.
+La probabilità di errore sul simbolo equivale alla probabilità di overstimare $a^{(i)}$ e il campione ricevuto non rientri nella regione $Z^{(i)}$:
+\[
+    P_e = \frac{1}{M} \sum_{i=0}^{M-1} \mathbb{P}(\text{errore} \ | \ a^{(i)}) = \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{N^{(s)}} \quad \text{probabilità errore PAM}
+\]
 
 
 
