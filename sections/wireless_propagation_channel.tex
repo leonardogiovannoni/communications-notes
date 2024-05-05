@@ -93,6 +93,28 @@ Gli effetti generati da questi fenomeni possono essere riassunti in due diversi 
 \end{itemize}
 
 
+
+\begin{center}
+    \begin{tikzpicture}[every node/.style={rectangle,draw, minimum size=1.75em, align=center, font=\scriptsize},level/.style={sibling distance = 8.5cm/#1, level distance = 1.5cm}] 
+        \node {Fading Types}
+          child { node {Large Scale Fading} 
+            child { node {Path Loss} }
+            child { node {Shadowing} } 
+          }
+          child { node {Small Scale Fading} 
+              child { node {Multipath \\ delay spread} 
+                  child { node {Flat Fading} } 
+                  child { node {Frequency \\ Selective \\ Fading} } 
+              }
+              child { node {Doppler \\ spread} 
+                  child { node {Fast \\ Fading} } 
+                  child { node {Slow \\ Fading} } 
+              } 
+              };
+      \end{tikzpicture}
+\end{center}
+
+
 \subsection*{Large-scale fading}
 Il LSF modella la variazione della potenza del segnale in base alla fistanza fra trasmettitore e ricevitore, tipicamente variando per distanze nell'ordine del metro. Gli effetti sono modellati attraverso la combinazione di path loss e shadowing:
 Il path loss rappresenza un'approssimazione delle equazioni di Maxwell.
