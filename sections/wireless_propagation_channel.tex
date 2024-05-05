@@ -211,7 +211,7 @@ La ricezione di più repliche, soprattutto se notevolemnte distanziate tra loro,
 \]
 
 
-Sebbene quindi si scelga un filtro che rispetti la condizione di Nyquist, gli effetti del canale non permettono di rimuovere completamente l'ISI, generata dal fatto che g(k) non si annulla.
+Sebbene quindi si scelga un filtro che rispetti la condizione di Nyquist, gli effetti del canale non permettono di rimuovere completamente l'ISI, generata dal fatto che $g\left[m-k\right]$ non si annulla.
 
 
 Il delay spread permette di misurare la dispersione temporale introdotta dal canale:
@@ -220,8 +220,8 @@ Il delay spread permette di misurare la dispersione temporale introdotta dal can
     \item $\sigma_\tau > T$: delay spread maggiore del symbol time, il canale è detto \textbf{multipath} e l'effetto dell'ISI non è più trascurabile in quanto le varie repliche, appartenti a simboli differenti, interferiscono tra loro.
 \end{itemize}
 
-In entrambi i casi il canale è detto \textbf{multipath} in quanto la ricezione del segnale avviene attraverso più replichem poi si aggiunge una classificazione ulteriore dovuta al delay spread.
-flat fading. La coerenza temporale è il tempo entro il quale il canale è circa costante.
+In entrambi i casi il canale è detto \textbf{multipath} (TODO: non ha senso questo discorso) in quanto la ricezione del segnale avviene attraverso più replichem poi si aggiunge una classificazione ulteriore dovuta al delay spread.
+Il delay spread in frequenza è espresso tramite la \textbf{coherence bandwidth}, definita come l'intervallo di frequenze per cui la risposta del canale è circa costante: 
 \[
     B_c \approx \frac{1}{5\sigma_\tau}
 \]
