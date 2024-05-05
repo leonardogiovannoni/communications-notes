@@ -116,19 +116,23 @@ Gli effetti generati da questi fenomeni possono essere riassunti in due diversi 
 
 
 \subsection*{Large-scale fading}
-Il LSF modella la variazione della potenza del segnale in base alla fistanza fra trasmettitore e ricevitore, tipicamente variando per distanze nell'ordine del metro. Gli effetti sono modellati attraverso la combinazione di path loss e shadowing:
-Il path loss rappresenza un'approssimazione delle equazioni di Maxwell.
+Il LSF modella la variazione della potenza del segnale in base alla distanza fra trasmettitore e ricevitore, tipicamente variando per distanze nell'ordine del metro. Gli effetti sono modellati attraverso la combinazione di \textbf{path loss} e \textbf{shadowing}:
+
+\paragraph*{Path Loss}
+Il path loss rappresenta un'approssimazione delle equazioni di Maxwell.
 \begin{equation}
     P_{RX} \approx P_{TX} \cdot \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n \quad \text{for } d > d_0
 \end{equation}
 
-dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda}{4 \pi d_0} \right)^2 \) rappresenta il termine di campo vicino, \( P_{TX} \) è la potenza trasmessa, \( d_0 \) è la distanza di riferimento e \( n \) è l'esponente del path loss. Quest'ultimo dipende dall'ambiente in cui ci si trova, ad esempio in un ambiente urbano il valore di \( n \) varia tra 2.7 e 3.5.
+dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda}{4 \pi d_0} \right)^2 \) rappresenta il termine di campo vicino, \( P_{TX} \) è la potenza trasmessa, \( d_0 \) è la distanza di riferimento e \( n \) è l'esponente del path loss. Quest'ultimo dipende dall'ambiente in cui ci si trova, ad esempio in un ambiente urbano il valore di \( n \) varia tra 2.7 e 3.5. 
 
-
-
+Il valore di \( d_0 \) è scelto in modo da poter misurare o stimare con precisione il path loss in condizioni controllate, in modo da poter avere un punto di riferimento da cui calcolare le perdite aggiuntive a distanze maggiori.
+In reti cellulari che coprono aree estese si utilizza una distanza di riferimento di 1 km, mentre in reti progettate per aree più piccole e densamente popolate si utilizzano distanze di riferimento di 100 metri o anche 1 metro.
 La formula, deterministica, che fornisce il valore di attenuazione dato dal path loss è:
 \[
-    A_{PL} = \frac{P_{TX}}{P_{RX}} = \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n
+    A_{PL} = \frac{P_{RX}}{P_{TX}} = \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n
+\] 
+\[
     A_{PL}^{dB} = 10 \cdot \log_{10}(A_{PL}) = \Gamma(f_0, d_0)_{dB} + n \cdot 10 \cdot \log_{10}(d_0) - n \cdot 10 \cdot \log_{10}(d)
 \]
 
@@ -140,16 +144,16 @@ Nel vuoto l'attenuazione del segnale in base alla distanza è data dalla relazio
 dove \( A \) è l'area dell'antenna in ricezione, che tipicamente è \( A = \lambda^2 \) dove \( \lambda \) è la lunghezza d'onda del segnale.
 
 
-Per frequenze inferiori ai 6GhZ l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
+Per frequenze inferiori ai 6GHz l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
 
 Nella progettazione di sistemi di comunicazione wireless è essenziale tenere in considerazione il rapportarto tra frequenza utilizzata e distanza copribile da una singola antenna.
 
-\subsection*{Shadowing}
+\paragraph*{Shadowing}
 
-Dati due punti alla stessa distanza dal trasmettitore se si considerasse unicamente il path loss avrebbe la stessa attenuazione, tuttavia nella realtà vi è una componente aleatoria da dover considerare, modellabile tramite shadowing. La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto. La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri espressi in dB.
-\begin{equation}
-    p(A_S) = \frac{1}{\sqrt{2\pi \sigma_S}} e^{-\frac{A_S^2}{2\sigma_S^2}}
-\end{equation}
+Dati due punti alla stessa distanza dal trasmettitore, se si considerasse unicamente il path loss, si avrebbe la stessa attenuazione, tuttavia nella realtà vi è una componente aleatoria da dover considerare, modellabile tramite shadowing. La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto. La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri espressi in dB, ovvero la PDF è:
+\[
+    f_{A_s}(a_S) = \frac{1}{\sqrt{2\pi \sigma_S}} e^{-\frac{a_S^2}{2\sigma_S^2}}
+\]
 
 
 
@@ -164,30 +168,31 @@ Gli effetti del path loss e dello shadowing sono sommati per ottenere le variazi
 \]
 
 
-PL è deterministico e dipende dall'esponente scelto in base all'ambiente circostante e dalla distanza tra trasmettitore e ricevitore, mentre shadowing aleatorio e distribuito come una log-normale. Entrambi gli eggetti contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
+Il path loss è deterministico e dipende dall'esponente scelto in base all'ambiente circostante e dalla distanza tra trasmettitore e ricevitore, mentre lo shadowing è aleatorio e distribuito come una log-normale. Entrambi gli eggetti contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
 
 
 
 \section*{Small scale fading}
 
-SSF modella le variazioni aleatorie della potenza istantanea su sistanze nell'ordine della lunghezza d'onda, dovute ai vari fenomeni di propagazione delle onde che determinano la ricezione di repliche del segnale, ognuno con un certo ritardo, fase ed attenuazione. Il canale di tramissione è modellato come un filtro LTI, la cui risposta impulsiva dipende dagli effetti SSF.
+Lo small scale fading modella le variazioni aleatorie della potenza istantanea su distanze nell'ordine della lunghezza d'onda, dovute ai vari fenomeni di propagazione delle onde che determinano la ricezione di repliche del segnale, ognuno con un certo ritardo, fase ed attenuazione. 
+Il canale di tramissione è modellato come un filtro LTI, la cui risposta impulsiva dipende dagli effetti SSF:
 
 \[
     h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} \delta(t - \tau_{\ell})
 \]
 
-Dove \( A_{LS} \) è l'attenuazione dovuta al large scale fading, \( \alpha_{\ell} \) e \( \phi_{\ell} \) sono rispettivamente ampiezza e fase del segnale \(\ell\)-esimo, e \( \tau_{\ell} \) è il ritardo temporale. La risposta impulsiva del canale è la somma delle risposte impulsiva di ogni singolo percorso.
+Dove \( A_{LS} \) è l'attenuazione dovuta al large scale fading (quindi path loss e shadowing), \( \alpha_{\ell} \) e \( \phi_{\ell} \) sono rispettivamente ampiezza e fase del segnale \(\ell\)-esimo, e \( \tau_{\ell} \) è il ritardo temporale. La risposta impulsiva del canale è la somma delle risposte impulsiva di ogni singolo percorso.
 
 Per quanto riguarda i parametri delle varie repliche:
 \begin{itemize}
-    \item \textbf{Attenuazione} ($\alpha_\ell$): sono modellati come variabili aleatorie, tipicamente con distribuzione di Rayleigh, derivante dal fatto che le componenti in gase e quadratura hanno una distribuzione normale.
+    \item \textbf{Attenuazioni} ($\alpha_\ell$): sono modellate come variabili aleatorie, tipicamente con distribuzione di Rayleigh, derivante dal fatto che le componenti in fase e quadratura hanno una distribuzione normale.
     \[
         \alpha e^{j\phi_i} = x_i + j y_i \quad \text{con } x_i, y_i \sim \mathcal{N}(0, \sigma^2)
     \]
     \[
         \|\alpha e^{j\phi_i}\| = \sqrt{x_i^2 + y_i^2} \sim \text{Rayleigh}(\sigma)
     \]
-    \item \textbf{Fase} ($\phi_\ell$): sono modellati come variabili distribuite uniformemente nell'intervallo $[0, 2\pi]$.
+    \item \textbf{Fasi} ($\phi_\ell$): sono modellate come variabili distribuite uniformemente nell'intervallo $[0, 2\pi]$.
 \end{itemize}
 
 La ricezione di più repliche, soprattutto se notevolemnte distanziate tra loro, genera ISI.
@@ -195,16 +200,16 @@ La ricezione di più repliche, soprattutto se notevolemnte distanziate tra loro,
     x(t) = \sum_{i} c_i g(t - iT) \quad \text{uscita filtro in ricezione (senza rumore)}
 \]
 \[
-    g(t) = g_T(t) \ast h(t) \ ast g_R(t) = g_H(t) \ast h(t) = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_H(t - \tau_{\ell})
+    g(t) = g_T(t) \ast h(t) \ast g_R(t) = g_N(t) \ast h(t) = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_N(t - \tau_{\ell})
+\]
+\[
+    g\left[k\right] = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_N\left(kT - \tau_{\ell}\right)
 \]
 
 \[
-  x(m) = \sum_{k}  C_{m-k}g(k) = c_m g(0) + \underbrace{\sum_{k \neq 0} c_{m-k} g(k)}_{\text{ISI}}
+    x\left[m\right] = \sum_{k=-\infty}^{+\infty} c_k g\left[m - k \right] = c_m g(0) + \sum_{\substack{k \neq m,\\ k=-\infty}}^{+\infty} c_{k} g\left[m-k\right]
 \]
 
-\[
-    g(k) = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_H(k - \tau_{\ell})
-\]
 
 Sebbene quindi si scelga un filtro che rispetti la condizione di Nyquist, gli effetti del canale non permettono di rimuovere completamente l'ISI, generata dal fatto che g(k) non si annulla.
 
