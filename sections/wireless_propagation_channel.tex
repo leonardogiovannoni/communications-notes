@@ -31,9 +31,58 @@ Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraver
 
 Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione ne fa affidamento. Le space wave sono soggette a diversi fenomeni di propagazione:
 \begin{itemize}
-    \item \textbf{Riflessione}: quando il segnale impatta con un oggetto molto grande rispetto alla lunghezza d'onda può essere riflesso, ovvero rimbalza e prosegue con angolo differente, oppure passa attraverso.
+    \item \textbf{Riflessione}: quando il segnale impatta con un oggetto liscio molto grande rispetto alla lunghezza d'onda può essere riflesso, ovvero rimbalza e prosegue con angolo differente, oppure passa attraverso.
+    \begin{center}
+        \begin{tikzpicture}
+            \draw[thick] (-2,0) -- (2,0);
+            \draw[thick, -latex] (-1,1) -- (-0.025,0.01);
+            \draw[thick, -latex, dashed] (0.025,0.01) -- (1,1);
+        \end{tikzpicture}
+    \end{center}
+
+
+
+    
+   
     \item \textbf{Diffrazione}: quando il segnale è ostruito da oggetti con superfici taglienti, parte del segnale può modificare l'angolo con cui si propaga. Questo fenomeno permette in certe condizioni di ricevere un segnale anche in assenza di un line-of-sight a causa di un oggetto che crea una zona d'ombra, ovviamente l'energia ricevuta sarà minore rispetto a quella originaria del segnale.
+    \begin{center}
+        \begin{tikzpicture}
+            \draw[thick] (-2,0) -- (-0.0625,0);
+            \draw[thick] (0.0625,0) -- (2,0);
+            \draw[thick, -latex] (0,1) -- (0,0.1);
+           
+            \draw[thick, -latex, dashed] (-0.1618033988749895, -0.1175570504584946) -- (-0.8090169943749476, -0.587785252292473);
+            \draw[thick, -latex, dashed] (-0.061803398874989514, -0.1902113032590307) -- (-0.30901699437494756, -0.9510565162951535);
+            \draw[thick, -latex, dashed] (0.061803398874989444, -0.19021130325903074) -- (0.30901699437494723, -0.9510565162951536);
+            \draw[thick, -latex, dashed] (0.16180339887498946, -0.11755705045849467) -- (0.8090169943749473, -0.5877852522924734);
+        \end{tikzpicture}
+    \end{center}
+
+
+    
     \item \textbf{Scattering}: quando il segnale impatta con oggetti di piccola dimensione rispetto alla lunghezza d'onda si ha una propagazione in più direzioni del segnale.
+    \begin{center}
+        \begin{tikzpicture}
+            \shade[ball color=black!40, opacity=0.4] (0,0) circle (0.15cm);
+            \draw[thick, -latex] (0,2) -- (0,0.1);
+            \draw[thick, -latex, dashed] (0.16180339887498948, 0.11755705045849463) -- (0.8090169943749475, 0.5877852522924731);
+            \draw[thick, -latex, dashed] (0.06180339887498949, 0.1902113032590307) -- (0.30901699437494745, 0.9510565162951535);
+            \draw[thick, -latex, dashed] (-0.061803398874989465, 0.19021130325903074) -- (-0.30901699437494734, 0.9510565162951536);
+            \draw[thick, -latex, dashed] (-0.16180339887498946, 0.11755705045849466) -- (-0.8090169943749473, 0.5877852522924732);
+            \draw[thick, -latex, dashed] (-0.2, 2.4492935982947065e-17) -- (-1.0, 1.2246467991473532e-16);
+            \draw[thick, -latex, dashed] (-0.1618033988749895, -0.1175570504584946) -- (-0.8090169943749476, -0.587785252292473);
+            \draw[thick, -latex, dashed] (-0.061803398874989514, -0.1902113032590307) -- (-0.30901699437494756, -0.9510565162951535);
+            \draw[thick, -latex, dashed] (0.061803398874989444, -0.19021130325903074) -- (0.30901699437494723, -0.9510565162951536);
+            \draw[thick, -latex, dashed] (0.16180339887498946, -0.11755705045849467) -- (0.8090169943749473, -0.5877852522924734);
+            \draw[thick, -latex, dashed] (0.2, -4.898587196589413e-17) -- (1.0, -2.4492935982947064e-16);
+        \end{tikzpicture}
+    \end{center}
+ 
+
+
+
+
+
     \item \textbf{Assorbimento e rifrazione}: si tratta di fenomeni meno importanti, ma che comunque possono modificare la propagazione del segnale. 
 \end{itemize}
 
