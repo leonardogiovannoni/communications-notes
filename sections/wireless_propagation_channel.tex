@@ -253,15 +253,15 @@ Il ber a parità di rumore dipende fortemente dalla distorsione introdotta nel c
 
 Per quanto riguarda le decision variables:
 \[
-    x(m) = c_m + n(m) \quad \text{no fading} \quad Pe = Q(\sqrt{\text{SNR}})
+    x\left[m\right] = c_m + n\left[m\right] \quad \text{no fading} \quad P_e = Q(\sqrt{\text{SNR}})
 \]
 
 \[
-    x(m) = \alpha c_m + n(m) \quad \text{flat fading} \quad Pe = \frac{1}{\text{SNR}}
+    x\left[m\right] = \alpha c_m + n\left[m\right] \quad \text{flat fading} \quad P_e = \frac{1}{\text{SNR}}
 \]
 
 \[
-    x(m) = g(0) c_m + \sum_{k \neq 0} g(k) c_{m-k} + n(m) \quad \text{frequency selective}  
+    x\left[m\right] = c_m g(0) + \sum_{\substack{k \neq m,\\ k=-\infty}}^{+\infty} c_{k} g\left[m-k\right] + n\left[m\right] \quad \text{frequency selective}  
 \]
 
 Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la potenza di rasmissione si ottengono miglioramente nel BER, tuttavia così facendo si incrementa anche l'energia dei simboli finendo in una zona in cui è l'ISI a dominare.
