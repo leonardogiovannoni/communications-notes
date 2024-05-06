@@ -228,6 +228,8 @@ Il delay spread in frequenza è espresso tramite la \textbf{coherence bandwidth}
 Se $B_c > B_S \approx \frac{1}{T}$, ovvero la banda del segnale trasmesso, non si avrà alcune distorsione, il canale risulta \textbf{flat fading}. In caso contrario, se $B_c < B_S$ il canale è detto \textbf{frequency selective}. 
 
 La coherence bandwidth può essere determinata considerando la densità spettrale di potenza.
+TODO questa parte non è chiara.
+Quando $\sigma_{\tau} < T$ vale $B_c > B_s$ e il canale è flat fading, altrimenti se $\sigma_{\tau} > T$ vale $B_c < B_s$ e il canale è frequency selective.
 I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere proprietà statistiche si possono applicare le operazioni standard per il calcolo del valor medio e della varianza, tuttavia ciò risulta particolarmente complesso e serve dunque approssimare tramite un procedimento approssimativo.
 
 
@@ -237,7 +239,7 @@ I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere p
 
 Per quanto riguarda la varianza:
 \[  
-    \sigma_\tau = \sqrt{\mathbb{E}\left[({\tau - \overline{\tau}})^2\right]}
+    \sigma_\tau^2 = \mathbb{E}\left[({\tau - \overline{\tau}})^2\right] \approx \overline{\tau^2} - \overline{\tau}^2, \quad \overline{\tau^2} = \mathbb{E} \left[\tau^2\right] = \int_{0}^{+\infty} \tau^2 f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2 \tau_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} 
 \]
 
 Per modellare gli effetti di small scale fading si utilizza il parametro $\sigma_\tau$, ovvero il delay spread che dipende dall'ambiente in cui avviene la trasmissione. Il modello ottenuto risulta piuttosto semplice da utilizzare e secgliendo accuratamente i parametri può essere utilizzato per modellare diversi scenari di trasmissione. L'accuratezza ottenuta non è sempre fedele al caso reale, ma nella maggior parte dei casi non è richiesto, considerando anche che il canale è soggetto a cambiamenti repentini.
