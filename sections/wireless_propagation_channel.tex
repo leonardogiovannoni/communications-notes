@@ -234,12 +234,12 @@ I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere p
 
 
 \[
-   \overline{\tau} = \mathbb{E} \left[\tau\right] = \int_{0}^{+\infty} \tau f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2 \tau_{\ell}}{\sum_{m=0}^{N_c-1} \alpha_{m}^2}
+   \overline{\tau} = \mathbb{E} \left[\tau\right] = \int_{0}^{+\infty} \tau f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}
 \]
 
 Per quanto riguarda la varianza:
 \[  
-    \sigma_\tau^2 = \mathbb{E}\left[({\tau - \overline{\tau}})^2\right] \approx \overline{\tau^2} - \overline{\tau}^2, \quad \overline{\tau^2} = \mathbb{E} \left[\tau^2\right] = \int_{0}^{+\infty} \tau^2 f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2 \tau_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} 
+    \sigma_\tau^2 = \mathbb{E}\left[({\tau - \overline{\tau}})^2\right] \approx \overline{\tau^2} - \overline{\tau}^2, \quad \overline{\tau^2} = \mathbb{E} \left[\tau^2\right] = \int_{0}^{+\infty} \tau^2 f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}^2
 \]
 
 Per modellare gli effetti di small scale fading si utilizza il parametro $\sigma_\tau$, ovvero il delay spread che dipende dall'ambiente in cui avviene la trasmissione. Il modello ottenuto risulta piuttosto semplice da utilizzare e secgliendo accuratamente i parametri può essere utilizzato per modellare diversi scenari di trasmissione. L'accuratezza ottenuta non è sempre fedele al caso reale, ma nella maggior parte dei casi non è richiesto, considerando anche che il canale è soggetto a cambiamenti repentini.
@@ -268,9 +268,34 @@ Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la 
 Il trend delle nuove generazioni radio è quello di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
 
 
+Le misurazioni del canale dipendono dalla frequenza del segnale e dall'ambiente in cui avviene la trasmissione.
+%Typical values of delay spread are:
+Valori tipici di delay spread sono:
+
+\begin{itemize}
+    \item $0.2 \, \mu s$ (area rurale),
+    \item $0.5 \, \mu s$ (area suburbana),
+    \item $3-8 \, \mu s$ (area urbana),
+    \item $<2 \, \mu s$ (microcella urbana),
+    \item $50-300 \, \text{ns}$ (picocella indoor).
+\end{itemize}
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Ambiente} & \textbf{RMS Delay Spread ($\sigma_\tau$)} & \textbf{Note} \\
+        \hline
+        Urbano & $1300 \, \text{ns} \, (3500 \, \text{ns max})$ & NYC \\
+        LTE ETU & Fino a $5 \, \mu s$ & Caso tipico medio \\
+        Suburbano & $1960-2110 \, \text{ns}$ & Caso estremo medio \\
+        Indoor & $10-50 \, \text{ns}$ & Edificio d'uffici \\
+        Indoor & $70-94 \, \text{ns} \, (1470 \, \text{ns max})$ & Edificio d'uffici \\
+        \hline
+    \end{tabular}
+\end{center}
 
 
-
+Per esempio, in un'area urbana con dealy spread $\sigma_\tau = 4 \mu s$, avremo una coherence bandwidth di $B_c \approx \frac{1}{5 \sigma_\tau} = \frac{1}{20 \mu s} = 50 \text{kHz}$.
 \section*{Time varying channel}
 Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai gains e fasi alle varie repliche. Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente panche per distanze paragonabili alla lunghezza d'onda, ke quali possono essere nell'ordine del centimetro. Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsive, tuttavia nel caso di ricevitore mobile vi è una dipendenza dal tempo. Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida. 
 
@@ -280,6 +305,12 @@ Se il ricevitore di un segnale è in movimento il modello di canale risulta più
 
 
 Per il ritardo non si aggiunge dipendenza dal tempo in quanto rispetto ai gains e alla fase varia molto più lentamente dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
+
+
+
+TODO: two path channels and comparison between awgn, flat fading and frequency selective BER.
+
+
 
 \subsection*{Effeto doppler}
 L'effetto doppler, considerando un qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso. In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allonta sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore. Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come doppler shift ($f_d$). Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
