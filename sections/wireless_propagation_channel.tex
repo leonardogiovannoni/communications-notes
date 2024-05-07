@@ -360,39 +360,48 @@ dove:
 Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando. Nel nostro caso, si assume che il ricevitore si stia muovendo lontano dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
 (TODO: controllare se effettivamente il segno è corretto e se il ricevitore si sta allontanando)
 Il segnale ricevuto in $y$ risulta avere una frequenza inferiore a quello in $x$. Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce. In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
-In generale il doppler shift di ciascuna replica dipende dall'angolo $f_c \frac{v \cos(\theta)}{c}$, 
+In generale il doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$.
+Esistono diversi modelli utilizzati per descrivere lo spreading in frequenza, 
+che si verifica quando le varie repliche del segnale vengono aggregate al ricevitore.
 
-Esistono vari modelli per descrivere lo spreading in frequenza generato dalle varie repliche aggregate lato ricevitore, fra cui Jakes' doppler spectrum il quale assume che le repliche arrivino in maniera uniformemente distribuita da ogni direzione, ciascuna con stessa quantità di energia. L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomaeno introdotto dal canale.
+Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna repliche che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico}) (TODO: è corretto dire che è scattering isotropico).
+L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomeno introdotto dal canale.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.875\textwidth]{imgs/jakes.jpg}
+    \captionsetup{width=.5\textwidth}
+    \caption*{Spettro doppler di Jakes:
+        per il segnale $s$ vale \( S_S(f) = \frac{1}{2} \delta \left(f - f_c \right) + \frac{1}{2} \delta \left(f + f_c\right) \), 
+        mentre per il segnale $y$ vale \( S_Y(f) = S_D(f) \ast S_S(f) \).
+    }
+\end{figure}
 
-
+% include image imgs/jakes.jpg
 \[
-  \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f}{f_d}\right)^2}}
+  S_D(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f}{f_d}\right)^2}}
 \]
-Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effetto prodotto è l'allargamento dello spettro occupato, derivante dal fatto che il segnale stocastico ricevuto assume la forma:
+Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effetto prodotto è l'allargamento dello spettro occupato (\textbf{Doppler spread}), derivante dal fatto che il segnale stocastico ricevuto assume la forma:
 
 \[
-    y(t) = s(t) a(t)
+    y(t) = s(t) d(t)
 \]
 dove $s(t)$ è il segnale trasmesso e $a(t)$ è il Jokes' doppler spectrum. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
 
 \[
-    S_y(f) = S_s(f) \ast S_a(f) 
+    S_Y(f) = S_S(f) \ast S_D(f) 
 \]
 
-Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jokes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
+Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jakes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
 
+
+(TODO: tau o t?)
 \[
-    \rho (t) = J_0(2\pi f_d t) \approx 0 \quad \text{funzione di autocorrelazione time varying channel}
+    R_D (\tau) = J_0(2\pi f_d \tau) \quad \text{funzione di autocorrelazione time varying channel}
 \]
-
-\[
-    \Rightarrow f_d \tau = 
-\]
-
+Per $x=\frac{1}{2}$ si ha che $j_0(2\pi x) \approx 0$, quindi il canale può considerarsi incorrelato per $f_d T_c = \frac{1}{2}$.
 
 dove $J_0$ è la funzione di bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
-
 
 \[
     f_d T_c = \frac{1}{2} \quad \Rightarrow \quad  T_c = \frac{1}{2 f_d} = \frac{1}{2} \frac{c}{f_c v} \quad \text{coherence time}
@@ -407,12 +416,37 @@ Se $T < T_c$ si può asssumere che il canale sia modellabile come LTI in quanto 
 Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare il canale come LTI, tuttavia si rischia di incorrere in un canale frequency selective per cui sono necessarie contromisure per contrastare l'ISI generato.  
 
 \begin{itemize}
-    \item \textbf{Slow fading}: l'effetto doppler è trascurabile ($B_S \gg f_d, T_c > T$)
+    \item \textbf{Slow fading}: l'effetto doppler è trascurabile ($B_S \gg f_d$, $T_c > T$)
     \item \textbf{Fast fading}: l'effetto doppler distorce notevolemnte il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
 \end{itemize}
 Se la banda del segnale è maggiore del doppler shift la convoluzione genera un comportamento non molto significativo.
 
 In generale gli effeti LSF determinano la dimensione della cella di copertura, considerando anche la frequenza di trasmissione.
+
+
+Come esempio, consideriamo il caso di trasmissione di un segnale a una frequenza \( f_c = 2.1 \si{GHz} \) in un'area suburbana. L'utente si muove alla velocità di $90 \si{km/h}$, ovvero \( v = 25 \si{m/s} \). Lo scenario è caratterizzato da un delay spread \( \sigma_\tau = 2 \si{\mu s} \).
+
+Per la trasmissione, la banda del segnale è \( B_s = 2 \si{MHz} \), da cui possiamo approssimare \( T \) come \( T \approx \frac{1}{B_s} = 500 \si{ns} \), rappresentando la durata di un simbolo nella trasmissione dei dati.
+Un importante aspetto di questo scenario è il Doppler spread, calcolato utilizzando \( f_d = \frac{f_c v}{c} = \frac{2.1 \times 10 ^9 \si{Hz} \cdot 25 \si{m/s}}{3 \times 10^8 \si{m/s}} = 175\si{Hz}\).
+Il tempo di coerenza del canale \( T_c \) è quindi derivato da \( T_c = \frac{1}{2f_d} \approx 3 \si{ms}\), descrivendo il periodo di tempo durante il quale le condizioni del canale sono relativamente costanti.
+Inoltre, la banda di coerenza del canale \( B_c \) è calcolata dal delay spread \( \sigma_\tau \), risultando in \( B_c = \frac{1}{\sigma_\tau} = 500 \si{kHz} \). Questa banda misura l'intervallo di frequenze su cui la risposta del canale rimane uniforme.
+Il canale è quindi definibile come \textit{slow} poiché \( B_s \gg f_d \) (\( T \ll T_c \)), indicando che i cambiamenti nel canale dovuti agli effetti Doppler sono relativamente lenti rispetto alla larghezza di banda del segnale e al tempo di simbolo.
+Il canale è anche definibile come \textit{frequency-selective} a causa di \( B_s > B_c \) (\( T < \sigma_\tau \)), implicando che diversi segmenti della larghezza di banda possono subire variazioni delle caratteristiche di fading. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
