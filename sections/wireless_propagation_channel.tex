@@ -296,24 +296,30 @@ Valori tipici di delay spread sono:
 
 
 Per esempio, in un'area urbana con dealy spread $\sigma_\tau = 4 \mu s$, avremo una coherence bandwidth di $B_c \approx \frac{1}{5 \sigma_\tau} = \frac{1}{20 \mu s} = 50 \text{kHz}$.
+TODO: two path channels and comparison between awgn, flat fading and frequency selective BER.
 \section*{Time varying channel}
-Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai gains e fasi alle varie repliche. Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente panche per distanze paragonabili alla lunghezza d'onda, ke quali possono essere nell'ordine del centimetro. Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsive, tuttavia nel caso di ricevitore mobile vi è una dipendenza dal tempo. Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida. 
+Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai guadagni e alle fasi alle varie repliche. 
+Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente anche per distanze paragonabili alla lunghezza d'onda, le quali possono essere nell'ordine del centimetro. 
+Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsive, ma nel caso di ricevitore mobile vi è una dipendenza dal tempo. 
+Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida. 
 
 \[
-    h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
+    h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(\tau - \tau_{\ell})
 \]
 
 
-Per il ritardo non si aggiunge dipendenza dal tempo in quanto rispetto ai gains e alla fase varia molto più lentamente dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
+Per il ritardo non si aggiunge dipendenza dal tempo in quanto, rispetto ai guadagni e alla fase, varia molto più lentamente, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
 
 
 
-TODO: two path channels and comparison between awgn, flat fading and frequency selective BER.
 
 
 
 \subsection*{Effeto doppler}
-L'effetto doppler, considerando un qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso. In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allonta sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore. Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come doppler shift ($f_d$). Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
+L'effetto doppler, considerando un qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
+In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allontana sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore.
+Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{doppler shift} ($f_d$).
+Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
 \[
     d = vt \quad \text{distanza tra $x$ e $y$}
 \]  
@@ -333,7 +339,27 @@ L'effetto doppler, considerando un qualsiasi onda, è un fenomeno fisico che con
 \[
     = \sin\left(2\pi f_c \left(t - \frac{vt}{c}\right)\right) = \sin\left(2\pi \left(f_c - \frac{f_c v}{c}\right) t\right) = \sin\left(2\pi \left(f_c - f_d \right) t \right) \quad \boxed{f_d = -\frac{f_c v}{c}}
 \]
-Il segnale ricevuto in $y$ risulta aver una frequenza a quello in $x$. Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce. In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
+Indicando con $f'$ la frequenza apparente percepita in $y$, ovvero $f_c - f_d$, vale la relazione:
+\[
+    f' = f_c - f_d = f_c \left(1 - \frac{v}{c}\right) = f_c \left( \frac{c - v}{c} \right)
+\]
+cioè un caso particolare della formula generale dell'effetto Doppler, ovvero
+\[
+    f' = f_c \left( \frac{c \pm v}{c \pm v_s} \right)
+\]
+
+dove:
+\begin{itemize}
+    \item $f$ è la frequenza trasmessa,
+    \item $c$ è la velocità della luce,
+    \item $v$ è la velocità del ricevitore rispetto al mezzo di propagazione,
+    \item $v_s$ è la velocità della sorgente rispetto al mezzo di propagazione.
+\end{itemize}
+
+
+Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando. Nel nostro caso, si assume che il ricevitore si stia muovendo lontano dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
+(TODO: controllare se effettivamente il segno è corretto e se il ricevitore si sta allontanando)
+Il segnale ricevuto in $y$ risulta avere una frequenza inferiore a quello in $x$. Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce. In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
 In generale il doppler shift di ciascuna replica dipende dall'angolo $f_c \frac{v \cos(\theta)}{c}$, 
 
 Esistono vari modelli per descrivere lo spreading in frequenza generato dalle varie repliche aggregate lato ricevitore, fra cui Jakes' doppler spectrum il quale assume che le repliche arrivino in maniera uniformemente distribuita da ogni direzione, ciascuna con stessa quantità di energia. L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomaeno introdotto dal canale.
