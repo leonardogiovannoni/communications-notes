@@ -177,11 +177,10 @@ Una matrice circolante può essere diagonalizzata, cioè può essere espressa co
 
 
 
-TODO: che vuole dire H(n)?
 \[
     \begin{cases*}
-        \mathbf{F}: \left[\mathbf{F}\right]_{k, n} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi kn}{N}} \quad \text{fourier trasform matrix normalizzata} \\
-        \mathbf{H}: \left[\mathbf{H}\right]_{n, m} = \begin{cases*}
+        \mathbf{F}: \mathbf{F}_{k, n} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi kn}{N}} \quad \text{fourier trasform matrix normalizzata} \\
+        \mathbf{H}: \mathbf{H}_{n, m} = \begin{cases*}
                                                         \sum_{\ell=0}^{L-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} & \text{se } $n = m$ \\
                                                         0 & \text{se } $n \neq m$
                                                     \end{cases*}
@@ -274,17 +273,37 @@ Dove $s[k]$ è il segnale trasmesso nel dominio del tempo. Si può notare che in
 
 
 
+La somma di frequency tone genera uno spettro a righe, ogni frequenza genera una delta. In realtà trattandosi di un segnale finito, visto come sinusoide infinita moltiplicato per una rect, lo spettro sarà composto dalla convoluzione fra una delta e una sinc.
+Un simbolo OFMD corrisponde alla sovrapposizione di $N$ segnali nell'intervallo $[0, NT_s]$
+\[
+    s_n(t) = \frac{1}{\sqrt{N}} S(n) e^{j2\pi n \Delta f t}, \quad n = 0, \ldots, N-1 \quad \text{segnali analogici sovrapposti}
+\]
+\[
+    S_{s_n}(f) = \frac{A}{N} \text{sinc}^2 ((f-n\Delta f)N T_s) \quad \text{PSD segnale sull'$n$-esima subcarrier}
+\]
+Quindi si ottiene che la banda occupata da OFDM è la somma di N funzioni sinc, ciascuna centrata in una sub-carrier differente. In teoria ciò implica che l'occupazione di banda risulti essere infinita, tuttavia la sinc tende a 0 molto velocemente, quindi il contributo può considerarsi limitato ad una certa banda. Inoltre ciò che si può notare è che le varie sinc non interferiscono tra loro nelle sub-carrier, infatti in corrispondenza di tali valori solo una sinc risulterà non essere nulla. Per contenere la banda le sub-carrier agli estremi non sono utilizzate, in modo che al di fuori della banda a disposizione non vi sia un contributo energetico significativo.
+\[
+    B_{OFDM} \approx N \cdot \frac{1}{NT_s} = \frac{1}{T_s}
+\]
+Tale relazione vale solo se si impongono virtual carriers per minimizzare il fenomeno indicato come \textbf{out of band radiation} da parte della sinc.
+La banda risulta particolarmente ristretta in quanto non ci sono fattori a moltiplicare $\frac{1}{T_s}$, come avviene utilizzando un RRC. Tuttavia parte della banda risulta non sfruttata in quanto è necessario trasmettere sia il prefisso, sia non utilizzare alcune subcarrier agli estremi, dette \textbf{virtual subcarrier}.
 
 
-
-
-
-
-
-
-
-
-
+Per quanto riguarda il symbol time, in OFDM si ha la relazione:
+\[
+    T_{OFDM} = T_s(N+N_{CP}), \quad N_{CP} > L
+\]  
+% TODO: cos'è L?
+Dove $L$ non è noto a priori.
+Da questo valore si ottiene:
+\[
+    T_s < \sigma_{\tau} \ll T_{OFDM}, \quad B_s > B_c \gg \Delta f
+\]
+Ogni sub-carrier può considerare il canale \textbf{flat-fading}. Il canale per poter ricevere correttamente il segnale deve essere stimato, e ciò avviene su speciali sub-carrier detti \textbf{pilot sub-carrier}. Su tali frequenze avviene la trasmissione di simboli noti in modo da ricostruire la risposta del canale. Inoltre per poter ridurre la presenza di rumore la tramissione su tali frequenze avviene con una potenza superiore. In realtà la stima del canale è valida solo sulle frequenze pilotate, per quelle intermedie si effettua un'interpolazione e si ottiene un'approssimazione.
+L'efficienza spettrale è ridotta dell'utilizzo di virtual sub-carriers, pilot-subcarriers e cyclic prefix:
+\[
+    R = \left[N - (N_v + N_p) \right]\frac{1}{(N+N_{CP})T_s} = \frac{N - (N_v + N_p)}{(N+N_{CP})} \frac{1}{T_s}
+\]
 
 
 
@@ -382,57 +401,10 @@ Dove $s[k]$ è il segnale trasmesso nel dominio del tempo. Si può notare che in
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-La somma di frequency tone genera uno spettro a righe, ogni frequenza genera una delta. In realtà trattandosi di un segnale finito, visto come sinusoide infinita moltiplicato per una rect, lo spettro sarà composto dalla convoluzione fra una delta e una sinc.
-Un simbolo OFMD corrisponde alla sovrapposizione di $N$ segnali nell'intervallo $[0, NT_s]$
-\[
-    s_n(t) = \frac{1}{\sqrt{N}} S(n) e^{j2\pi n \Delta f t}, \quad n = 0, \ldots, N-1 \quad \text{segnali analogici sovrapposti}
-\]
-\[
-    S_{s_n}(f) = \frac{A}{N} \text{sinc}^2 ((f-n\Delta f)N T_s) \quad \text{PSD segnale sull'$n$-esima subcarrier}
-\]
-Quindi si ottiene che la banda occupata da OFDM è la somma di N funzioni sinc, ciascuna centrata in una sub-carrier differente. In teoria ciò implica che l'occupazione di banda risulti essere infinita, tuttavia la sinc tende a 0 molto velocemente, quindi il contributo può considerarsi limitato ad una certa banda. Inoltre ciò che si può notare è che le varie sinc non interferiscono tra loro nelle sub-carrier, infatti in corrispondenza di tali valori solo una sinc risulterà non essere nulla. Per contenere la banda le sub-carrier agli estremi non sono utilizzate, in modo che al di fuori della banda a disposizione non vi sia un contributo energetico significativo.
-\[
-    B_{OFDM} \approx N \cdot \frac{1}{NT_s} = \frac{1}{T_s}
-\]
-Tale relazione vale solo se si impongono virtual carriers per minimizzare il fenomeno indicato come \textbf{out of band radiation} da parte della sinc.
-La banda risulta particolarmente ristretta in quanto non ci sono fattori a moltiplicare $\frac{1}{T_s}$, come avviene utilizzando un RRC. Tuttavia parte della banda risulta non sfruttata in quanto è necessario trasmettere sia il prefisso, sia non utilizzare alcune subcarrier agli estremi, dette \textbf{virtual subcarrier}.
-
-
-Per quanto riguarda il symbol time, in OFDM si ha la relazione:
-\[
-    T_{OFDM} = T_s(N+N_{CP}), \quad N_{CP} > L
-\]  
-% TODO: cos'è L?
-Dove $L$ non è noto a priori.
-Da questo valore si ottiene:
-\[
-    T_s < \sigma_{\tau} \ll T_{OFDM}, \quad B_s > B_c \gg \Delta f
-\]
-Ogni sub-carrier può considerare il canale \textbf{flat-fading}. Il canale per poter ricevere correttamente il segnale deve essere stimato, e ciò avviene su speciali sub-carrier detti \textbf{pilot sub-carrier}. Su tali frequenze avviene la trasmissione di simboli noti in modo da ricostruire la risposta del canale. Inoltre per poter ridurre la presenza di rumore la tramissione su tali frequenze avviene con una potenza superiore. In realtà la stima del canale è valida solo sulle frequenze pilotate, per quelle intermedie si effettua un'interpolazione e si ottiene un'approssimazione.
-L'efficienza spettrale è ridotta dell'utilizzo di virtual sub-carriers, pilot-subcarriers e cyclic prefix:
-\[
-    R = \left[N - (N_v + N_p) \right]\frac{1}{(N+N_{CP})T_s} = \frac{N - (N_v + N_p)}{(N+N_{CP})} \frac{1}{T_s}
-\]
-
 \paragraph*{OFDM error rate}
 Considerando la presenza del rumore il segnale ricevuto avrà una componente aggiuntiva di disturbo
 \[
-    r(k) = y(k) + n(k)  
+    r[k] = y[k] + n[k]
 \]
 Applicando la DFT si ottiene:
 \[
@@ -440,26 +412,26 @@ Applicando la DFT si ottiene:
 \]
 
 \[
-    \mathbf{R}(m) = \mathbf{H}(m)\mathbf{S}(m) + \mathbf{N}(m)
+    \mathbf{R}_{m, m} = \mathbf{H}_{m, m}\mathbf{S}_{m, m} + \mathbf{N}_{m, m}
 \]
-Per poter dare un valore all'errore della modulazione è necessario analizzare le statistiche di $N(m)$, ovvero il rumore dopo la DFT.
+Per poter dare un valore all'errore della modulazione è necessario analizzare le statistiche di $\mathbf{N}_{m,m}$, ovvero il rumore dopo la DFT.
 Data l'unitarietà della matrice $\mathbf{F}$ si ha che, le statistiche del rumore dopo la trasformazione rimangono inalterate.
 \[
     \mathbb{E}[\mathbf{N}] = \mathbb{E}[\mathbf{F}\mathbf{n}] = \mathbf{F} \mathbb{E}[\mathbf{n}] = 0
 \]  
 \[
-    \mathbf{R}_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}\mathbf{R}_{n,n}\mathbf{F}^H
+    R_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}R_{n,n}\mathbf{F}^H
 \]
 
-Dove $\mathbf{R}_{n,n}$ è l'autocorrelazione del tempo.
-Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}(m)$, il canale è stimato:
+Dove $R_{n,n}$ è l'autocorrelazione del tempo.
+Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}_{m,m}$, il canale è stimato:
 \[
-    \mathbf{H}(n) = x(n) e^{j\phi(n)}
+    \mathbf{H}_{n,n}= x[n] e^{j\phi(n)}
 \]
 
 Se il canale fosse stimato alla perfezione si otterrebbe:
 \[
-    X(n) = \frac{R(n)}{N(n)} = S(n) + \frac{N(n)e^(-j\phi(n))}{\alpha(n)}
+    X_{n,n} = \frac{R_{n,n}}{N_{n,n}} = S_{n, n} + \frac{N_{n,n} e^{(-j\phi(n))}}{\alpha(n)}
 \]
 
 
@@ -467,19 +439,19 @@ Se il canale è molto attenuato, ovvero $\alpha(n) \approx 0$, il rumore viene a
 La fase non ha alcuna implicazione sul rumore, durante i calcoli di $\sigma ^2=2N_0$ infatti sparisce per via del complesso coniugato.
 L'espressione della variabile decisionale è confrontabile con quella di un sistema tradizionale
 \[
-    x(m) = x_m + n(m) \quad \text{variabile tradizionale}
+    x[m] = c_m + n[m] \quad \text{variabile tradizionale}
 \]
 
 \[
-    X(m) = S(m) + N'(m) \quad \text{variabile OFDM}
+    X_{m, m} = S_{m, m} + N'_{m, m} \quad \text{variabile OFDM}
 \]
 Questo permette di applicare le solite considerazioni per la probabilità di errore:
 
 \[
-    P(e|H(m)) = 2 Q\left( \sqrt{\frac{1}{\sigma^2(m)}}  \right) =  2 Q\left( \sqrt{\frac{\alpha^2(m)}{N_0}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
+    P(e|H_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2(m)}}  \right) =  2 Q\left( \sqrt{\frac{\alpha^2(m)}{N_0}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
 \]
 \[
-    P(e) = \sum_{m=0}^{N-1} P(e|H(m))P(H(m)) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
+    P(e) = \sum_{m=0}^{N-1} P(e \mid H_{m, m})P(H_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
 \]
 
 
