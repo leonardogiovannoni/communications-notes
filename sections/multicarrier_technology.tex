@@ -1,6 +1,5 @@
-\subsection*{Multi-Carrier and OFDM Technologies}
+\section*{Multi-Carrier and OFDM Technologies}
 
-p
 
 
 
@@ -18,49 +17,14 @@ L'idea base consiste nel suddividere il segnale originale da trasmettere, caratt
 
 
 
-\begin{tikzpicture}
-    \begin{axis}[
-      axis lines=middle,
-      ymin=0,
-      ymax=5,
-      xmin=0,
-      xmax=15,
-      xtick=\empty,
-      ytick=\empty,
-      xlabel={frequency},
-      every axis x label/.style={at={(ticklabel* cs:1.05)},anchor=west,},
-      x label style={at={(axis description cs:1.05,0)},anchor=north},
-      ]
-  
-      % Main plot
-      \addplot [
-          smooth,
-          domain=0:15,
-          samples=100,
-          draw=black
-      ] {4*exp(-((x-4.5)^2)/10) + 3*exp(-((x-10)^2)/10)} \closedcycle;
-      \addplot [
-          smooth,
-          domain=3:12,
-          samples=100,
-          fill=blue!40,
-          draw=black
-      ]  {4*exp(-((x-4.5)^2)/10) + 3*exp(-((x-10)^2)/10)} \closedcycle;
-  
-      % Subchannel bandwidth markers
-      \draw [<->, red, thick] (axis cs:3,2.5) -- node [above, text=black] {Subchannel channel bandwidth $B_s/N < B_c$} (axis cs:12,2.5);
-  
-      % Arrows on top of bars
-      \foreach \x in {3,3.75,...,12} {
-        \edef\temp{
-          \noexpand\draw [->] (axis cs:\x,0) -- (axis cs:\x, {4*exp(-((\x-4.5)^2)/10) + 3*exp(-((\x-10)^2)/10)});
-        }
-        \temp
-      }
-      % create an arrow  like this one <-> from 3 point on x-axis to 4 and name it \Delta B (so unitary len)
-        \draw [<->, blue, thick] (axis cs:3,0.125) -- node [above, text=black] {$\Delta B$} (axis cs:3.75,0.125);
-    \end{axis}
-  \end{tikzpicture}
+
+
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{imgs/multicarrier.jpg}
+\end{center}
+ 
+
+
 
 \[
   B_s > B_c \Rightarrow \text{frequency selective channel}  
