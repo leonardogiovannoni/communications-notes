@@ -61,65 +61,90 @@ Il segnale ricevuto è identico al segnale ottenuto utilizzando la rappresentazi
 La modulazione OFDM risulta essere una delle più utilizzate per trasmissioni digitali ed è del tipo multi-carrier, ereditando quindi i vantaggi di tale tipo di modulazione.
 Si consideri un blocco $S$ composto da $N$ campioni da trasmettere:
 \[
-  S = \left[S(0), S(1), \ldots, S(N-1)\right]
+  S = \left\{s\left[0\right], s\left[1\right], \ldots, s\left[N-1\right]\right\}
 \]
 
 L'effetto introdotto dal canale genera una componente ISI lato ricevitore:
 \[
-  y(k) = \sum_{\ell=0}^{L-1} h(\ell) s(k - \ell) = h(0)s(k) + \sum_{\ell=1}^{L-1} h(\ell) s(k - \ell)
+  y\left[k\right] = \sum_{\ell=0}^{L-1} h\left[\ell\right] s\left[k - \ell\right] = h(0)s\left[k\right] + \sum_{\ell=1}^{L-1} h\left[\ell\right] s\left[k - \ell\right]
 \]
 Tipicamente quando si studia una modulazione si considera una sequenza infinita di simboli, ma in questo caso se ne considera $N$, quindi gli indici negativi vengono considerati come 0 dato che non esistono.
 
 % create a system of equations
+%\[
+%  \begin{cases}
+%    y(0) = h(0)s(0) \\
+%    y(1) = h(0)s(1) + h(1)s(0) \\
+%    \vdots \\
+%    y(N-1) = h(0)s(N-1) + h(1)s(N-2) + \ldots + h(L-1)s(N-L)
+%  \end{cases}
+%\]
+
+% inset square brackets
 \[
-  \begin{cases}
-    y(0) = h(0)s(0) \\
-    y(1) = h(0)s(1) + h(1)s(0) \\
-    \vdots \\
-    y(N-1) = h(0)s(N-1) + h(1)s(N-2) + \ldots + h(L-1)s(N-L)
-  \end{cases}
+    \begin{cases}
+        y[0] = h[0]s[0] \\
+        y[1] = h[0]s[1] + h[1]s[0] \\
+        \vdots \\
+        y[N-1] = h[0]s[N-1] + h[1]s[N-2] + \ldots + h[L-1]s[N-L]
+    \end{cases}
 \]
+
+
 
 L'espressione può essere riscritta in forma matriciale: $\mathbf{y} = \mathbf{H} \mathbf{s}$, con $\mathbf{H} \in \mathbb{C}^{N \times N}$ 
 
 \[ 
-\begin{bmatrix} y(0) \\ y(1) \\ \vdots \\ y(N-1) \end{bmatrix} 
+\begin{bmatrix} y[0] \\ y[1] \\ \vdots \\ y[N-1] \end{bmatrix} 
 = 
 \begin{bmatrix}
-    h(0) & 0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 \\
-    h(1) & h(0) & \cdots & 0 \\
+    h[0] & 0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 \\
+    h[1] & h[0] & \cdots & 0 \\
     \vdots & \vdots & \ddots & \vdots \\
-    h(L-1) & h(L-2) & \cdots & h(0) & 0 & \cdots & \cdots & 0 \\
-    0 & h(L-1) & \cdots & h(1) & h(0) & 0 & \cdots & 0 \\
+    h[L-1] & h[L-2] & \cdots & h[0] & 0 & \cdots & \cdots & 0 \\
+    0 & h[L-1] & \cdots & h[1] & h[0] & 0 & \cdots & 0 \\
     \vdots & \vdots & \ddots & \vdots & \vdots \\
-    0 & 0 & \cdots & h(L-1) & h(L-2) & \cdots & h(1) & h(0)
-    \end{bmatrix}    
-\begin{bmatrix} s(0) \\ s(1) \\ \vdots \\ s(N-1) \end{bmatrix}
+    0 & 0 & \cdots & h[L-1] & h[L-2] & \cdots & h[1] & h[0]
+\end{bmatrix}   
+\begin{bmatrix} s[0] \\ s[1] \\ \vdots \\ s[N-1] \end{bmatrix}
 \]
 
 La matrice $\mathbf{H}$ è detta \textbf{matrice di Toeplitz} e la sua proprietà caratteristica è la presenza del solito elemento lungo le diagonali. Copiando gli ultimi $N_{CP} > L$ campioni del blocco $S$ e appendendoli in testa si ottiene un nuovo blocco con struttura circolare, cioè i primi $N_{CP}$ campioni sono identici agli ultimi $N_{CP}$.
 \[
-    \overline{S} = [s(N - N_{CP} - 1), \ldots, s(N - 1), s(0), \ldots, s(N - 1)] \quad \text{blocco cliclico}
+    \overline{S} = \left\{s\left[N - N_{CP} - 1\right], \ldots, s\left[N - 1\right], s\left[0\right], \ldots, s\left[N - 1\right]\right\} \quad \text{blocco cliclico}
 \]
 
 Il prefisso appeso in testa può essere utilizzato come elementi con indice negativo nella convuluzione con il canale.
 
+%\[
+%    \overline{S}(-1) = S(N - 1)
+%\]
+%\[
+%    \overline{S}(-2) = S(N - 2)
+%\]
+%\[
+%    \vdots
+%\]
+%\[
+%    \overline{S}(-N_{CP}) = S(N - N_{CP})
+%\]
+
+
 \[
-    \overline{S}(-1) = S(N - 1)
+    \begin{array}{ll}
+        \overline{s}[-1] = s[N - 1] \\
+        \overline{s}[-2] = s[N - 2] \\
+        \vdots \\
+        \overline{s}[-N_{CP}] = s[N - N_{CP}]
+    \end{array}
 \]
-\[
-    \overline{S}(-2) = S(N - 2)
-\]
-\[
-    \vdots
-\]
-\[
-    \overline{S}(-N_{CP}) = S(N - N_{CP})
-\]
+
+
+
 Calcolando nuovamente la convoluzione, adesso ogni campione avrà anche alcune componenti con indice negativo.
 Introducendo il prefisso nel blocco tramesso in uscita dal canale si ottiene un vettore $\mathbf{y}$ i cui elementi sono costituiti dalla somma di $L$ termini.
 \[
-    y(k) = \sum_{\ell=0}^{L-1} h(\ell) \overline{s}(k-\ell)
+    y[k] = \sum_{\ell=0}^{L-1} h[\ell] \overline{s}[k-\ell]
 \]
 \[
     \mathbf{y} = \mathbf{\overline{H}} \mathbf{s}
@@ -132,6 +157,7 @@ Una matrice circolante può essere diagonalizzata, cioè può essere espressa co
 \[
     \overline{\mathbf{H}} = \mathbf{F}^H \mathbf{H} \mathbf{F}
 \]
+TODO: che vuole dire H(n)?
 \[
     \begin{cases*}
         \mathbf{F}: f_{k, n} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi kn}{N}} \quad \text{fourier trasform matrix normalizzata} \\
