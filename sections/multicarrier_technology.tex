@@ -254,21 +254,147 @@ Dato che $\mathbf{H}$ è diagonale, il segnale ricevuto sul subcarrier $n$ dipen
 %\node[align=center, red, above right= -1cm and -6cm of filter.south east] (channel-label) {Demodulatore numerico};
 
 
-I simboli trasmessi sono idealmente generati in frequenze, ovvero sono convoluti prima della trasmissione tramite DFT inversa, quindi per essere recuperati è necessario effettuare la DFT. L'uso del prefisso risulta comunque essenziale affinché le proprietà algebriche sfruttate siano verificate. 
+I simboli trasmessi sono idealmente generati in frequenza, ovvero sono convoluti prima della trasmissione tramite DFT inversa, quindi per essere recuperati è necessario effettuare la DFT. L'uso del prefisso risulta comunque essenziale affinché le proprietà algebriche sfruttate siano verificate. 
 La DFT può essere calcolata tramite FFT, un'operazione molto semplice dato che è costituita da una moltiplicazione matriciale, quindi il costo per la rimozione dell'ISI è molto contenuto. In questo modo è vicino il limite del rate di tramissione raggiungibile, a patto che vi sia una banda sufficientemente ampia.
 Il costo da pagare è l'utilizzo aggiuntivo di energia e banda per la trasmissione del prefisso, il quale non contiene alcuna informazione utile.
 La denominazione OFDM deriva dal fatto che si tratta di una sorta di modulazione in frequenza, in cui le varie sub-carrier sono ortogonali, ovvero non interferiscono tra di loro. La banda occupata è data dalla somma delle bande occupate dalle varie sub-carrieri, dunque è necessario determinare quali sono tali contributi.
 
 \[
-    s(k) = \frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} S(n) e^{\frac{j2\pi nk}{N}}, \quad k = 0, \ldots, N-1
+    s[k] = \frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} S_n e^{\frac{j2\pi nk}{N}}, \quad k = 0, \ldots, N-1
 \]
 
-Dove $s(k)$ è il segnale trasmesso $s$ nel dominio del tempo. Si può notare che in ogni istante ci sono informazioni di ogni simbolo del blocco, questo deriva dal fatto che vi è stata l'operazione di DFT inversa. OFDM tramette i simboli in parallelo sulle varie sub-carrier. 
+Dove $s[k]$ è il segnale trasmesso nel dominio del tempo. Si può notare che in ogni istante ci sono informazioni di ogni simbolo del blocco, questo deriva dal fatto che vi è stata l'operazione di DFT inversa. OFDM tramette i simboli in parallelo sulle varie sub-carrier. 
 
+% TODO: perché BT = 1?
 
 \[
-    S(n) e^{\frac{j2\pi nk}{N}} = S(n) e^{\frac{j2\pi BTnk}{N}} = \underbrace{S(n) e^{j2\pi n\Delta f k T_s}}_{\text{Frequency tone con frequenza $\Delta f$}} = \underbrace{S(n) e^{j 2 \pi n \Delta f t}}_{\text{segnale analogico campionato}} \bigg|_{t=kT}
+    S_n e^{\frac{j2\pi nk}{N}} = S_n e^{\frac{j2\pi BTnk}{N}} = \underbrace{S_n e^{j2\pi n\Delta f k T_s}}_{\text{Frequency tone con frequenza $\Delta f$}} = \underbrace{S_n e^{j 2 \pi n \Delta f t}}_{\text{segnale analogico campionato}} \bigg|_{t=kT}
 \]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\makeatletter
+\pgfkeys{/tikz/semiellipse/.cd,
+  width/.initial=2cm,
+  height/.initial=1cm,
+  fill color/.initial=red,
+  fill opacity/.initial=0.5
+}
+\pgfdeclareshape{semiellipse}{
+    % The 'anchor' for positioning the node
+    \savedanchor\centerpoint{
+        \pgf@x=0pt
+        \pgf@y=0pt
+    }
+    \anchor{center}{\centerpoint}
+    \anchor{north}{
+        \pgf@x=0pt
+        \pgf@y=0.5\ht\pgfnodeparttextbox
+    }
+    \anchor{south}{
+        \pgf@x=0pt
+        \pgf@y=-0.5\ht\pgfnodeparttextbox
+    }
+    \anchor{east}{
+        \pgf@x=0.5\wd\pgfnodeparttextbox
+        \pgf@y=0pt
+    }
+    \anchor{west}{
+        \pgf@x=-0.5\wd\pgfnodeparttextbox
+        \pgf@y=0pt
+    }
+
+    % The background path
+    \backgroundpath{
+        % Get parameters
+        \pgfkeysgetvalue{/tikz/semiellipse/width}{\semiw}
+        \pgfkeysgetvalue{/tikz/semiellipse/height}{\semih}
+        \pgfkeysgetvalue{/tikz/semiellipse/fill color}{\semifillcolor}
+        \pgfkeysgetvalue{/tikz/semiellipse/fill opacity}{\semifillopacity}
+
+        % Convert to dimensions
+        \pgfmathsetlengthmacro\halfwidth{.5*\semiw}
+        \pgfmathsetlengthmacro\halfheight{.5*\semih}
+        
+        % Draw and fill the semi-ellipse
+        \pgfpathmoveto{\pgfpoint{\halfwidth}{0pt}}
+        \pgfpatharc{0}{180}{\halfwidth and \halfheight}
+        \pgfpathclose % Close the path to form a proper semi-ellipse
+
+        % Fill settings
+        \pgfsetfillcolor{\semifillcolor}
+        \pgfsetfillopacity{\semifillopacity}
+        \pgfusepath{fill,stroke} % Fill and then draw the stroke
+    }
+}
+\makeatother
+
+\resizebox{\textwidth}{!}{
+    \begin{tikzpicture}    
+        \foreach \i in {0,1,2,3,4} {
+            \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=1.5cm, semiellipse/fill color=gray, semiellipse/fill opacity=0.4] (se) at (0.5+\i*0.5,0) {};
+        }
+        \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=7.5cm, semiellipse/fill color=blue, semiellipse/fill opacity=0.5] (se) at (3,0) {};
+
+        \foreach \i in {7,8,9, 10, 11, 12, 13, 14, 15, 16, 17, 18} {
+            \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=5.5cm, semiellipse/fill color=red, semiellipse/fill opacity=0.4] (se) at (\i*0.5,0) {};
+        }
+        \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=7.5cm, semiellipse/fill color=blue, semiellipse/fill opacity=0.5] (se) at (9.5,0) {};
+
+        \foreach \i in {19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30} {
+            \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=5.5cm, semiellipse/fill color=red, semiellipse/fill opacity=0.4] (se) at (0.5+\i*0.5,0) {};
+        }
+        \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=7.5cm, semiellipse/fill color=blue, semiellipse/fill opacity=0.5] (se) at (16,0) {};
+        \foreach \i in {31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42} {
+            \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=5.5cm, semiellipse/fill color=red, semiellipse/fill opacity=0.4] (se) at (1+\i*0.5,0) {};
+        }
+        \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=7.5cm, semiellipse/fill color=blue, semiellipse/fill opacity=0.5] (se) at (22.5,0) {};
+        \foreach \i in {43, 44, 45, 46} {
+            \node[shape=semiellipse, draw, semiellipse/width=1cm, semiellipse/height=1.5cm, semiellipse/fill color=gray, semiellipse/fill opacity=0.4] (se) at (1.5+\i*0.5,0) {};
+        }
+        \draw[->] (-1,0) -- (26.0,0) node[right] {Frequency};
+        \draw[->] (-1,0) -- (-1,6) node[above] {};
+        \begin{scope}[shift={(24, 5)}] % Adjust the position of the legend
+            \node[draw, fill=gray, fill opacity=0.4, label=right: Guard sub-carrier] at (0,0) {};
+            \node[draw, fill=blue, fill opacity=0.5, label=right:Pilot sub-carrier] at (0,-1) {};
+            \node[draw, fill=red, fill opacity=0.4, label=right:Data sub-carrier] at (0,-2) {};
+        \end{scope}
+    \end{tikzpicture}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 La somma di frequency tone genera uno spettro a righe, ogni frequenza genera una delta. In realtà trattandosi di un segnale finito, visto come sinusoide infinita moltiplicato per una rect, lo spettro sarà composto dalla convoluzione fra una delta e una sinc.
@@ -291,7 +417,8 @@ Per quanto riguarda il symbol time, in OFDM si ha la relazione:
 \[
     T_{OFDM} = T_s(N+N_{CP}), \quad N_{CP} > L
 \]  
-Dove $L$ non è noto a priori (?).
+% TODO: cos'è L?
+Dove $L$ non è noto a priori.
 Da questo valore si ottiene:
 \[
     T_s < \sigma_{\tau} \ll T_{OFDM}, \quad B_s > B_c \gg \Delta f
