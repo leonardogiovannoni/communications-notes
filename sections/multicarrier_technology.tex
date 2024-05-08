@@ -38,17 +38,19 @@ I segnali in cui è stato suddiviso l'originale non saranno affetti da ISI.
 Per effettuare una trasmissione parallela dei veri segnali si potrebbe utilizzare filtri passa banda in parallelo, tuttavia nella pratica cioè non è possibile a causa della mancanza di un filtro ideale, la cui rappresentazione in frequenza sarebbe una perfetta rect. Inoltre l'utilizzo di molti filtri sarebbe molto costoso.
 Per poter analizzare una modulazione multi-carrier è necessaria una rappresentazione alternativa, ma equivalente, del canale di trasmissione, ottenuto campionando il segnale con frequenza $\frac{1}{T}$. La rappresentazione ottenuta risulta valida solo nella banda del segnale trasmesso, ma non è un problema dato che non si ha interesse nell'analizzare il canali in altri punti.
 
-Considerando l'inviluppo complesso risulta chiaro che il teorme di Nyquist per il campionamento è rispettato con frequenza di campionamente $\frac{1}{T}$.
+Considerando l'inviluppo complesso risulta chiaro che la condizione di Nyquist\footnote{\label{nyquist_cond} La condizione di Nyquist garantisce l'assenza di aliasing per segnali campionati, ovvero dato l'intervallo di campionamento $T_s$ e la banda $B$ del segnale da campionare, deve valere $T_s \leq \frac{1}{2B}$, ovvero $f_s \geq 2B$} è rispettata con frequenza di campionamente $\frac{1}{T}$.
+
+
 
 \[
     f_s \geq 2 \frac{1}{2T} = \frac{1}{T} \quad \text{frequenza di campionamento} 
 \]
 \[
-    h_{eq}(t) = \sum_{\ell=0}^{L-1} h(\ell) \delta(t - \ell T) \quad \text{rappresentazione equivalente del canale}
+    h_{eq}(t) = \sum_{\ell=0}^{L-1} h \left[\ell\right] \delta(t - \ell T) \quad \text{rappresentazione equivalente del canale}
 \]
 
 \[
-    y(t) = h_{eq}(t) \ast s(t) = \sum_{\ell=0}^{L-1} h(\ell) s(t - \ell T) \quad \text{inviluppo complesso del segnale ricevuto}
+    y(t) = h_{eq}(t) \ast s(t) = \sum_{\ell=0}^{L-1} h\left[\ell\right] s(t - \ell T) \quad \text{inviluppo complesso del segnale ricevuto}
 \]
 
 Il segnale ricevuto è identico al segnale ottenuto utilizzando la rappresentazione fisica del canale, ma la forma permette un'analisi più semplice.
