@@ -144,12 +144,28 @@ Il prefisso appeso in testa può essere utilizzato come elementi con indice nega
 Calcolando nuovamente la convoluzione, adesso ogni campione avrà anche alcune componenti con indice negativo.
 Introducendo il prefisso nel blocco tramesso in uscita dal canale si ottiene un vettore $\mathbf{y}$ i cui elementi sono costituiti dalla somma di $L$ termini.
 \[
-    y[k] = \sum_{\ell=0}^{L-1} h[\ell] \overline{s}[k-\ell]
+    y[k] = \sum_{\ell=0}^{L-1} h[\ell] \ \overline{s}[k-\ell]
 \]
 \[
     \mathbf{y} = \mathbf{\overline{H}} \mathbf{s}
 \]
 Invece di aggiungere elementi al vettore $\mathbf{s}$, ottentendo un vettore $\mathbf{\overline{s}}$, si modifica la matrice $\mathbf{H}$.
+\[ 
+\begin{bmatrix} y[0] \\ y[1] \\ \vdots \\ y[N-1] \end{bmatrix} 
+= 
+\begin{bmatrix}
+    h[0] & 0 & \cdots & \cdots & \cdots & h[3] & h[2] & h[1] \\
+    h[1] & h[0] & \cdots & 0 & \cdots & h[4] & h[3] & h[2] \\
+    \vdots & \vdots & \ddots & \vdots & &  & \vdots & \vdots \\
+    h[L-1] & h[L-2] & \cdots & h[0] & 0 & \cdots & 0 & 0 \\
+    0 & h[L-1] & \cdots & h[1] & h[0] & 0 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots & \vdots & & h[0] & 0 \\
+    0 & 0 & \cdots & h[L-1] & h[L-2] & \cdots & h[1] & h[0]
+\end{bmatrix}   
+\begin{bmatrix} s[0] \\ s[1] \\ \vdots \\ s[N-1] \end{bmatrix}
+\]
+
+
 
 La nuova matrice risulta ancora essere del tipo Toeplitz, ma in aggiunta è anche \textbf{circolante}, dato che ogni riga è ottenuta tramite uno shift circolare verso destra della riga precedente (vale anche per le colonne, shiftando verso il basso).
 
@@ -157,11 +173,18 @@ Una matrice circolante può essere diagonalizzata, cioè può essere espressa co
 \[
     \overline{\mathbf{H}} = \mathbf{F}^H \mathbf{H} \mathbf{F}
 \]
+
+
+
+
 TODO: che vuole dire H(n)?
 \[
     \begin{cases*}
-        \mathbf{F}: f_{k, n} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi kn}{N}} \quad \text{fourier trasform matrix normalizzata} \\
-        \mathbf{H}: h_{n, n} = H(n) = \sum_{\ell=0}^{L-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} 
+        \mathbf{F}: \left[\mathbf{F}\right]_{k, n} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi kn}{N}} \quad \text{fourier trasform matrix normalizzata} \\
+        \mathbf{H}: \left[\mathbf{H}\right]_{n, m} = \begin{cases*}
+                                                        \sum_{\ell=0}^{L-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} & \text{se } $n = m$ \\
+                                                        0 & \text{se } $n \neq m$
+                                                    \end{cases*}
     \end{cases*}
 \]
 L'elemento $n$-esimo sulla diagonale risulta avere la trasformata di fourier discreta di fourier del canale (manca solo il termine $\frac{1}{\sqrt{N}}$)
@@ -178,47 +201,57 @@ Considerando $\mathbf{Y} = \mathbf{F} \mathbf{y}$ e $\mathbf{S} = \mathbf{F} \ma
     \mathbf{Y} = \mathbf{F} \mathbf{y} = \mathbf{F} \mathbf{\overline{H}} \mathbf{s} = \mathbf{F} \left(\mathbf{F}^H \mathbf{H} \mathbf{F}\right)\mathbf{S} =  \mathbf{H} \mathbf{F} \mathbf{s} = \mathbf{H} \mathbf{S}
 \]
 \[
-    \Rightarrow Y(n) = H(n) S(n) \quad \text{per } n = 0, 1, \ldots, N-1
+    \Rightarrow \mathbf{Y}_{n,n} = \mathbf{H}_{n,n} \mathbf{S}_{n,n} \quad \text{per } n = 0, 1, \ldots, N-1
 \]
+Dato che $\mathbf{H}$ è diagonale, il segnale ricevuto sul subcarrier $n$ dipende esclusivamente dal segnale trasmesso sullo stesso subcarrier. Nel dominio della frequenza quindi non abbiamo ISI.
 
-Trattandosi di una matrice diagonale non si ha più alcun problema di ISI.
 
+\begin{center}
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[
+            block/.style={rectangle, draw, minimum height=1cm, minimum width=2.5cm},
+            node distance=1cm and 2cm,
+            align=center,
+            auto
+        ]
+        \node[block] (BitSource) {Bit source};
+        \node[block, right=of BitSource] (SymbolMapping) {Symbol\\mapping};
+        \node[block, right=of SymbolMapping] (S2PConverter) {Serial\\to\\parallel\\converter};
 
-\begin{tikzpicture}[
-    block/.style={rectangle, draw, minimum height=15mm, minimum width=20mm, align=center},
-    arrow/.style={->,>=stealth}
-]
+        \node[block, right=of S2PConverter] (InverseDFT) {Inverse\\DFT};
+        \node[block, right=of InverseDFT] (CpInsertion) {CP\\insertion};
+        \node[right=of CpInsertion, inner sep=0pt, minimum size=0pt] (channel) {};
 
-% Transmitter Blocks
-\node[block] (bitsource) {Bit source};
-\node[block, right=of bitsource] (symbolmapping) {Symbol\\mapping};
-\node[block, right=of symbolmapping] (s2p) {Serial to\\parallel\\converter};
-\node[block, right=of s2p] (idft) {Inverse\\DFT};
-\node[block, right=of idft] (cpinsertion) {CP\\insertion};
+        \node[block, below=of channel] (MultipathChannel) {Multipath\\channel};
 
-% Receiver Blocks
-\node[block, below=3cm of s2p] (cpremoval) {CP\\removal};
-\node[block, left=of cpremoval] (dft) {DFT};
-\node[block, left=of dft] (p2s) {Serial to\\parallel\\converter};
-\node[block, left=of p2s] (symboldecision) {Symbol\\decision};
+        \node[below=of MultipathChannel, inner sep=0pt, minimum size=0pt] (dummy2) {};
+        \node[block, left=of dummy2] (CpRemoval) {CP\\removal};
+        \node[block, left=of CpRemoval] (P2SConverter) {Serial\\to\\parallel\\converter};
+        \node[block, left=of P2SConverter] (DFT) {DFT};
+        \node[block, left=of DFT] (SymbolDecision) {Symbol\\decision};
+        \node[block, left=of SymbolDecision] (Destination) {Destination};
 
-% Channel
-%\node[block, right=of cpremoval, minimum width=30mm] (channel) {Multipath\\channel};
-\node[block, below=1.5cm of cpinsertion, minimum width=30mm] (channel) {Multipath\\channel};
-% Arrows Transmitter
-\draw[arrow] (bitsource) -- (symbolmapping);
-\draw[arrow] (symbolmapping) -- (s2p);
-\draw[arrow] (s2p) -- (idft);
-\draw[arrow] (idft) -- (cpinsertion);
+        \draw[->] (BitSource) -- (SymbolMapping) node[midway,above] {$b[n]$};
+        \draw[->] (SymbolMapping) -- (S2PConverter) node[midway,above] {$s[n]$};
+        \draw[->] (S2PConverter) -- (InverseDFT) node[midway,above] {$\mathbf{s}$};
+        \draw[->] (InverseDFT) -- (CpInsertion) node[midway,above] {$S_k$};
 
-% Arrows Receiver
-\draw[arrow] (cpinsertion) -| ([xshift=5mm]channel.north);
-\draw[arrow] ([xshift=-5mm]channel.south) |- (cpremoval);
-\draw[arrow] (cpremoval) -- (dft);
-\draw[arrow] (dft) -- (p2s);
-\draw[arrow] (p2s) -- (symboldecision);
+        \draw[-] (CpInsertion) -- (channel) node[midway,above] {$\overline{S}_k$};
+        \draw[->] (channel) -- (MultipathChannel) node[midway,right] {};
+        \draw[-] (MultipathChannel) -- (dummy2) node[midway,right] {};
+        \draw[->] (dummy2) -- (CpRemoval) node[midway,above] {$Y_k$};
+%        % TODO: 2 Y uguali?
+        \draw[->] (CpRemoval) -- (P2SConverter) node[midway,above] {$\mathbf{Y}$};
+        \draw[->] (P2SConverter) -- (DFT) node[midway,above] {$\mathbf{Y}$};
+        \draw[->] (DFT) -- (SymbolDecision) node[midway,above] {$\mathbf{y}$};
+        \draw[->] (SymbolDecision) -- (Destination) node[midway,above] {$\hat{b}[n]$};
+        \end{tikzpicture}
+    }
+\end{center}
 
-\end{tikzpicture}
+%\draw[dashed, red, thick] ([xshift=-0.5cm,yshift=0.5cm]sampler.north west) rectangle ([xshift=0.5cm,yshift=-0.5cm]filter.south east);
+
+%\node[align=center, red, above right= -1cm and -6cm of filter.south east] (channel-label) {Demodulatore numerico};
 
 
 I simboli trasmessi sono idealmente generati in frequenze, ovvero sono convoluti prima della trasmissione tramite DFT inversa, quindi per essere recuperati è necessario effettuare la DFT. L'uso del prefisso risulta comunque essenziale affinché le proprietà algebriche sfruttate siano verificate. 
