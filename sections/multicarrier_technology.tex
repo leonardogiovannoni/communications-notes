@@ -402,7 +402,7 @@ L'efficienza spettrale è ridotta dell'utilizzo di virtual sub-carriers, pilot-s
 
 
 \paragraph*{OFDM error rate}
-Considerando la presenza del rumore il segnale ricevuto avrà una componente aggiuntiva di disturbo $\mathbf{n}$, con $\mathbf{n}_k \sim \mathcal{N}(0, \sigma^2), \ \forall k = 0, \ldots, N-1$, quindi il segnale ricevuto sarà:
+Considerando la presenza del rumore il segnale ricevuto avrà una componente aggiuntiva di disturbo $\mathbf{n}$, con $\mathbf{n}_k \sim \mathcal{N}(0, \sigma^2), \ \forall k = 0, \ldots, N-1$, quindi il la componente $k$-esima del segnale ricevuto sarà:
 \[
     \mathbf{r}_k = \mathbf{y}_k + \mathbf{n}_k
 \]
@@ -451,10 +451,10 @@ L'espressione della variabile decisionale è confrontabile con quella di un sist
 Questo permette di applicare le solite considerazioni per la probabilità di errore:
 % TODO: probabilmente non è H_{m, m}
 \[
-    P(e \mid \mathbf{H}_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
+    \mathbb{P}(e \mid \mathbf{H}_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
 \]
 \[
-    P(e) = \sum_{m=0}^{N-1} P(e \mid \mathbf{H}_{m, m})P(\mathbf{H}_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
+    \mathbb{P}(e) = \sum_{m=0}^{N-1} \mathbb{P}(e \mid \mathbf{H}_{m, m}) \mathbb{P}(\mathbf{H}_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
 \]
 
 
