@@ -264,7 +264,7 @@ La denominazione OFDM deriva dal fatto che si tratta di una sorta di modulazione
 
 Dove $s[k]$ è il segnale trasmesso nel dominio del tempo. Si può notare che in ogni istante ci sono informazioni di ogni simbolo del blocco, questo deriva dal fatto che vi è stata l'operazione di DFT inversa. OFDM tramette i simboli in parallelo sulle varie sub-carrier. 
 
-% TODO: perché BT = 1?
+% TODO: perché BT = 1? la banda è 1/T?
 
 \[
     S_n e^{\frac{j2\pi nk}{N}} = S_n e^{\frac{j2\pi BTnk}{N}} = \underbrace{S_n e^{j2\pi n\Delta f k T_s}}_{\text{Frequency tone con frequenza $\Delta f$}} = \underbrace{S_n e^{j 2 \pi n \Delta f t}}_{\text{segnale analogico campionato}} \bigg|_{t=kT}
@@ -402,9 +402,9 @@ L'efficienza spettrale è ridotta dell'utilizzo di virtual sub-carriers, pilot-s
 
 
 \paragraph*{OFDM error rate}
-Considerando la presenza del rumore il segnale ricevuto avrà una componente aggiuntiva di disturbo
+Considerando la presenza del rumore il segnale ricevuto avrà una componente aggiuntiva di disturbo $\mathbf{n}$, con $\mathbf{n}_k \sim \mathcal{N}(0, \sigma^2), \ \forall k = 0, \ldots, N-1$, quindi il segnale ricevuto sarà:
 \[
-    r[k] = y[k] + n[k]
+    \mathbf{r}_k = \mathbf{y}_k + \mathbf{n}_k
 \]
 Applicando la DFT si ottiene:
 \[
@@ -412,26 +412,26 @@ Applicando la DFT si ottiene:
 \]
 
 \[
-    \mathbf{R}_{m, m} = \mathbf{H}_{m, m}\mathbf{S}_{m, m} + \mathbf{N}_{m, m}
+    \mathbf{R}_{m} = \mathbf{H}_{m, m}\mathbf{S}_{m} + \mathbf{N}_{m}
 \]
-Per poter dare un valore all'errore della modulazione è necessario analizzare le statistiche di $\mathbf{N}_{m,m}$, ovvero il rumore dopo la DFT.
-Data l'unitarietà della matrice $\mathbf{F}$ si ha che, le statistiche del rumore dopo la trasformazione rimangono inalterate.
+Per poter dare un valore all'errore della modulazione è necessario analizzare le statistiche di $\mathbf{N}_{m}$, ovvero il rumore dopo la DFT.
+Data l'unitarietà della matrice $\mathbf{F}$ si ha che le statistiche del rumore dopo la trasformazione rimangono inalterate.
 \[
-    \mathbb{E}[\mathbf{N}] = \mathbb{E}[\mathbf{F}\mathbf{n}] = \mathbf{F} \mathbb{E}[\mathbf{n}] = 0
+    \mathbb{E}[\mathbf{N}] = \mathbb{E}[\mathbf{F}\mathbf{n}] = \mathbf{F} \mathbb{E}[\mathbf{n}] = \mathbf{0}
 \]  
 \[
-    R_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}R_{n,n}\mathbf{F}^H
+    R_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}R_{n,n}\mathbf{F}^H = \mathbf{F} \sigma^2 \mathbf{I}_N \mathbf{F}^H = \sigma^2 \mathbf{I}_N
 \]
 
-Dove $R_{n,n}$ è l'autocorrelazione del tempo.
+Dove $R_{n,n}$ è l'autocorrelazione del tempo, e quindi $\mathbf{N}_{n} \sim \mathcal{N}(0, \sigma^2)$.
 Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}_{m,m}$, il canale è stimato:
 \[
-    \mathbf{H}_{n,n}= x[n] e^{j\phi(n)}
+    \mathbf{H}_{n, n}= \alpha(n) e^{j\phi(n)}
 \]
 
 Se il canale fosse stimato alla perfezione si otterrebbe:
 \[
-    X_{n,n} = \frac{R_{n,n}}{N_{n,n}} = S_{n, n} + \frac{N_{n,n} e^{(-j\phi(n))}}{\alpha(n)}
+    \mathbf{X}_{n} = \frac{\mathbf{R}_{n}}{\mathbf{H}_{n, n}} = \mathbf{S}_{n} + \frac{\mathbf{N}_{n} e^{-j\phi(n)}}{\alpha(n)}
 \]
 
 
@@ -443,15 +443,18 @@ L'espressione della variabile decisionale è confrontabile con quella di un sist
 \]
 
 \[
-    X_{m, m} = S_{m, m} + N'_{m, m} \quad \text{variabile OFDM}
+    \mathbf{X}_{m} = \mathbf{S}_{m} + \mathbf{N}'_{m} \quad \text{variabile OFDM}
+\]
+\[
+    \mathbf{N}'_{m} \sim \mathcal{CN}(0, \frac{\sigma}{\mathbf{H}_{m, m}})
 \]
 Questo permette di applicare le solite considerazioni per la probabilità di errore:
-
+% TODO: probabilmente non è H_{m, m}
 \[
-    P(e|H_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2(m)}}  \right) =  2 Q\left( \sqrt{\frac{\alpha^2(m)}{N_0}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
+    P(e \mid \mathbf{H}_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
 \]
 \[
-    P(e) = \sum_{m=0}^{N-1} P(e \mid H_{m, m})P(H_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
+    P(e) = \sum_{m=0}^{N-1} P(e \mid \mathbf{H}_{m, m})P(\mathbf{H}_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
 \]
 
 
@@ -794,13 +797,13 @@ The efficiency losses must be balanced with the robustness benefits that CP and 
     where \( S(n) \) is an information symbol and the noise is \( N'(n) \sim \mathcal{N}\left(0, \frac{\sigma^2}{|H(n)|^2}\right) \).
     
     \item Hence, the symbol error probability will be
-    \[ P(e|H(n)) = Q\left(\frac{|H(n)|}{\sigma}\right) = Q\left(\sqrt{\frac{E_s |H(n)|^2}{N_0}}\right) \]
+    \[ P(e \mid H(n)) = Q\left(\frac{|H(n)|}{\sigma}\right) = Q\left(\sqrt{\frac{E_s |H(n)|^2}{N_0}}\right) \]
 \end{itemize}
 
 \textbf{PAM error probability (\( M = 2 \))}
 \begin{itemize}
-    \item To compute \( P(e|a(i)) \) we assume that \( x(m) = a(i) + n(m) \) and the probability of error is
-    \[ P(e|a(i)) = \text{Pr}\{x(m) \notin \mathcal{Z}|a_m = a(i)\} = Q\left(\frac{d(a(i), 0)}{\sigma}\right) = Q\left(\frac{1}{\sigma}\right) \]
+    \item To compute \( P(e \mid a(i)) \) we assume that \( x(m) = a(i) + n(m) \) and the probability of error is
+    \[ P(e \mid a(i)) = \text{Pr}\{x(m) \notin \mathcal{Z}|a_m = a(i)\} = Q\left(\frac{d(a(i), 0)}{\sigma}\right) = Q\left(\frac{1}{\sigma}\right) \]
 \end{itemize}
 
 
