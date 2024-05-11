@@ -1,5 +1,13 @@
 \section*{Diversity Techniques in Wireless Communications}
 
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.675\textwidth]{imgs/diversity_graph.jpg}
+\end{figure}
+
+
 Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene modulazioni come OFDM siano in grado di ridurre l'effetto del multipath fading, tuttavia lo \textbf{slow flat Rayleigh fading} non può essere contrastato nello stesso modo.
 
 \begin{itemize}
@@ -29,12 +37,49 @@ La ridondanza è misurata come:
 
 Le operazioni effettuate sfruttano le proprietà matematiche del Galois Field GF(2), su cui sono definite somma (xor) e moltiplicazione (and) per due elementi $\{0, 1\}$.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.675\textwidth]{imgs/encoder_decoder.jpg}
+\end{figure}
+
 Sorgente e destinazione introducono \textbf{encoder} e \textbf{decoder} per la gestione dei bit di ridondanza, si può utilizzare lo schema:
 
 
-\begin{tikzpicture}
+\begin{center}
+\begin{tikzpicture} [align=center]
+    % Draw the block
     
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=1.5cm] (block) {Block \\ coder};
+    
+    % Draw the input arrow
+    \draw[-] (block.west) -- ++(-4,0) node[midway, above] {$k$ information digits};
+    
+    % Draw the output arrow
+    \draw[->] (block.east) -- ++(3,0) node[midway, above] {$n$ encoded digits};
 \end{tikzpicture}
+\end{center}
+
+
+\begin{center}
+    \begin{tikzpicture}[align=center]
+    % Draw the main rectangle
+    \draw[thick] (0,0) rectangle (5,1);
+    
+    % Draw the dividing line
+    \draw[thick] (3,0) -- (3,1);
+    
+    % Labels inside the rectangles
+    \node at (1.5,0.5) {Information\\digits};
+    \node at (4,0.5) {Parity\\digits};
+    
+    % Arrows and labels
+    \draw[<->] (0,1.25) -- (3,1.25) node[midway, above] {$k$};
+    \draw[<->] (3,1.25) -- (5,1.25) node[midway, above] {$n-k$};
+    \draw[<->] (0,-0.25) -- (5,-0.25) node[midway, below] {$n$ digit codeword};
+\end{tikzpicture}
+
+\end{center}
+
 In questo schema l'intero sistema è visto come una componente che aggiunge un errore al messaggio trasmesso.
 
 \paragraph*{Block code}
@@ -54,6 +99,47 @@ In totale si possono ottenere $2^k$ codeword differenti (uscita dell'encoder).
 Si parla di coding sistematico quando i bit di informazione sono semplicemente copiati.
 
 \paragraph*{Error detection}
+
+\begin{center}   
+    \begin{tikzpicture}
+        % Nodes for the transmitter side
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.65cm] (T1) at (0,4) {Data 1};
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.65cm] (T2) at (3,4) {Data 2};
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.65cm] (T3) at (6,4) {Data 2};
+        % create a node containing a red cross
+        %\node[draw, cross out, red, thick, minimum size=1cm] (cross) at (4,3) {};
+        % create a rotate of 45 degrees
+        \node[draw, cross out, red, thick, minimum size=0.5cm, rotate=45] (cross) at (4,3) {};
+        % Nodes for the receiver side
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.65cm] (R1) at (2,2) {Data 1};
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.65cm] (R2) at (5,2) {Data 2};
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.65cm] (R3) at (8,2) {Data 2};
+
+        % Arrows for data transmission
+        \draw[->, thick] (T1) -- (R1);
+        \draw[->, thick] (R1) -- (T2) node[midway, above, sloped] {ACK};
+        \draw[->, thick] (T2) -- (R2);
+        \draw[->, thick] (R2) -- (T3) node[midway, above, sloped, red] {NACK};
+        \draw[->, thick] (T3) -- (R3);
+
+        % Arrow for time
+        \draw[<->, dashed] (4.75,1.25) -- (7.75,1.25) node[midway, below] {$T_{ARQ} > T_c$};
+
+        % Vertical lines for transmission boundaries
+        \draw[dashed] (4.675,0.5) -- (4.675,3.5);
+        \draw[dashed] (7.675,0.5) -- (7.675,3.5);
+        
+        % Labels for transmissions
+        \node at (4.675,0) {1\textsuperscript{st} transmission};
+        \node at (7.675,0) {2\textsuperscript{nd} transmission};
+        
+        % Labels for Transmitter and Receiver
+        \node[] at (-2,4) {Transmitter};
+        \node[] at (-2,2) {Receiver};
+    \end{tikzpicture}
+\end{center}
+
+
 
 Le tecniche di error detection consistono nel confrontare i bit di ridondanza ricevuti con i bit di ridondanza calcolati utilizzando le word ricevute. Se il confronto ha successo si assume che la trasmissione non abbia introdotto errori, altrimenti si rileva un errore nella trasmissione.
 In casi di errore il ricevitore può richiedere una nuova trasmission, adottando lo schema \textbf{ARQ} (Automatic Repeat reQuest). In tale schema ad ogni ricezione si risponde con un ACK o un NACK, in base al risultato del confronto. In caso di NACK si procede con una nuova trasmissione. 
@@ -177,6 +263,90 @@ Ogni sequenza $\tilde{d}$ corrisponde ad una seuqenza di stati $\tilde{S}_0, \ld
 .
 .
 .
+
+% insert python code hello world hre
+La distanza di Hamming può essere calcolata in Python come:
+\begin{minted}{python3}
+def hamming_distance(a: int, b: int) -> int:
+    return bin(a ^ b).count('1')
+\end{minted}
+
+
+Dal Trellis diagram possiamo dedurre la funzione di transizione come:
+\begin{minted}{python3}
+
+def state_machine(state: int, input_bit: bool) -> Tuple[int, int]:
+    match state:
+        case 0b01:
+            return (0b11, 0b00) if not input_bit else (0b00, 0b10)
+        case 0b10:
+            return (0b10, 0b01) if not input_bit else (0b01, 0b11)
+        case 0b11:
+            return (0b01, 0b01) if not input_bit else (0b10, 0b11)
+        case 0b00:
+            return (0b00, 0b00) if not input_bit else (0b11, 0b10)
+        case _:
+            raise ValueError("Invalid state")
+
+\end{minted}
+Per quanto riguarda invece l'algoritmo di Viterbi, esso può essere definito per sommi capi come:
+
+\begin{minted}{python3}
+def viterbi_algorithm(sequence: List[bool]) -> List[bool]:
+    chunks: List[int] = bit_pairs_to_integers(sequence)
+    matrix: List[List[Optional[ViterbiCell]]] = populate_matrix(chunks)
+    final_state = get_last_state(matrix)
+    return get_decoded_sequence(matrix, final_state)
+\end{minted}
+
+La funzione \textit{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di input.
+
+\begin{minted}{python3}
+def populate_matrix(chunks: List[int]) -> List[List[Optional[ViterbiCell]]]:
+    matrix: List[List[Optional[ViterbiCell]]] = empty_matrix(rows=4, cols=len(chunks) + 1)
+    matrix[0][0] = ViterbiCell(prev_state=0, global_distance=0, input_bit=False)
+
+    for col in range(len(chunks)):
+        for row in range(4):
+            current_cell = matrix[row][col]
+            if current_cell is None:
+                continue
+            for input_bit in [False, True]:
+                output, next_state = state_machine(row, input_bit)
+                new_distance = current_cell.global_distance + hamming_distance(output, chunks[col])
+                next_cell = matrix[next_state][col + 1]
+                if next_cell is None or next_cell.global_distance > new_distance:
+                    matrix[next_state][col + 1] = ViterbiCell(
+                        row, new_distance, input_bit
+                    )
+    return matrix
+\end{minted}
+La funzione \textit{get\_last\_state} trova lo stato finale con la distanza globale minima nell'ultima colonna della matrice.
+\begin{minted}{python3}
+def get_last_state(matrix: List[List[Optional[ViterbiCell]]]) -> int:
+    min_distance = float('inf')
+    final_state = None
+    for i in range(4):
+        last_row_cell = matrix[i][-1]
+        if last_row_cell and last_row_cell.global_distance < min_distance:
+            min_distance = last_row_cell.global_distance
+            final_state = i
+    return final_state
+\end{minted}
+La funzione \textit{get\_decoded\_sequence} ricostruisce la sequenza decodificata risalendo dalla matrice a partire dallo stato finale.
+\begin{minted}{python3}
+def get_decoded_sequence(matrix: List[List[Optional[ViterbiCell]]], final_state: int) -> List[bool]:
+    sequence_length = len(matrix[0]) - 1
+    decoded_sequence: List[bool] = [False] * sequence_length
+    
+    current_state = final_state
+    for i in range(sequence_length - 1, -1, -1):
+        cell = matrix[current_state][i + 1]
+        decoded_sequence[i] = cell.input_bit
+        current_state = cell.prev_state
+
+    return decoded_sequence
+\end{minted}
 
 
 \section*{Interleaving}
