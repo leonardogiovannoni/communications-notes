@@ -359,7 +359,7 @@ Come esempio consideriamo di voler trasmettere la sequenza di bit $010000$, l'en
 \end{center}
 
 
-Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampanda il campo \textit{global\_distance}:
+Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampando il campo \textit{global\_distance}:
 
 \begin{table}[h!]
 \centering
@@ -375,7 +375,40 @@ Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione i
 
 \section*{Interleaving}
 
-I codici convoluzionali risultano adatto per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. 
+
+
+\begin{center}
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[node distance=1.5cm, auto, >=Stealth, minimum height=1cm, minimum width=1.5cm]
+        % Nodes
+        \node[draw, rectangle] (S) {S};
+        \node[draw, rectangle, right=of S] (Encoder) {Encoder};
+        \node[draw, rectangle, right=of Encoder] (Interleaver) {Interleaver};
+        \node[draw, rectangle, right=of Interleaver] (Channel) {Channel};
+        \node[draw, rectangle, right=of Channel] (Deinterleaver) {Deinterleaver};
+        \node[draw, rectangle, right=of Deinterleaver] (Decoder) {Decoder};
+        \node[right=of Decoder, inner sep=0pt, minimum size=0pt] (Uhat) {};
+
+        % Connections
+        \draw[->] (S) -- node {$u$} (Encoder);
+        \draw[->] (Encoder) -- (Interleaver);
+        \draw[->] (Interleaver) -- node {$d$} (Channel);
+        \draw[->] (Channel) -- node {$x$} (Deinterleaver);
+        \draw[->] (Deinterleaver) -- (Decoder);
+        \draw[->] (Decoder) -- node {$\hat{u}$} (Uhat);
+
+
+        % Dashed boxes
+        \draw[dashed] ($(S.north west)+(-0.5,0.5)$) rectangle ($(Interleaver.south east)+(0.5,-0.5)$);
+        \draw[dashed] ($(Deinterleaver.north west)+(-0.5,0.5)$) rectangle ($(Decoder.south east)+(0.5,-0.5)$);
+    \end{tikzpicture}
+}
+\end{center}
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{imgs/deep_fade.png}
+\end{center}
+
+I codici convoluzionali risultano adatti per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. 
 Tuttavia un canale fading è tipicamente suggetto a \textbf{bursty errors}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. 
 Quando il canale è in \textbf{deep fade} ci sono delle dipendenze statistiche tra errori consecutivi.
 L'idea dell'interleaving consiste nel far sembrare il canale memoryless dal punto di vista del decoder, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti dell'encoder prima di effettuare la trasmissione.
@@ -383,24 +416,117 @@ Lato ricevitore prima del decoder si effettuare un'operazione di de-interleaving
 Il costo delle operazioni di (de-)interleaving è pagato in termini di latenza in quanto sia lato ricevitore che lato trasmettitore è necessario avere un intero blocco di dati prima di poter effettuare le operazioni. 
 Esiste un trade-off tra latenza e decorrelazione ottenibile, basata sulla profondità $k$ dell'interleaver, ovvero la dimensione del blocco sul quale si effettua l'operazione di rimescolamento.
 
+Per esempio disponendo una sequenza dentro una matrice, possiamo ottenere un interleaver considerando la trasposta:
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{c}
+    
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    A & B & C & D \\ \hline
+    E & F & G & H \\ \hline
+    I & J & K & L \\ \hline
+    M & N & O & P \\ \hline
+    \end{tabular}
+    
+    \quad $\rightarrow$ \quad
+    
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    A & E & I & M \\ \hline
+    B & F & J & N \\ \hline
+    C & G & K & O \\ \hline
+    D & H & L & P \\ \hline
+    \end{tabular}
+    
+    \end{tabular}
+\end{table}
+   
+
+\begin{center}
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}
+        \node (input) at (0,0) {$\{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P\}$};
+        \node[draw, minimum height=2cm, minimum width=3cm, align=center] (interleaver) at (6,0) {Interleaver};
+        \node (output) at (12,0) {$\{A,E,I,M,B,F,J,N,C,G,K,O,D,H,L,P\}$};
+
+        \draw[->] (input) -- (interleaver);
+        \draw[->] (interleaver) -- (output);
+    \end{tikzpicture}
+    }
+\end{center}
+
+
 
 \paragraph*{Turbo code e LDPC (Low Density Parity Check)}
-Nella formula della capacità del canale di Shannon il rate $R = \frac{k}{n}$ prevede sia $k$ che $n$ tendenti all'infinito, tuttavia la lunghezza del codice nei sistemi reali è finito, quindi ciò che si ottiene è una performance teorica lontana da quella teorica.
+Nella formula della capacità del canale di Shannon\footnote{$C=B\log_2(1+\text{SNR}) \si{b/s}$} il rate $R = \frac{k}{n}$ prevede sia $k$ che $n$ tendenti all'infinito, tuttavia la lunghezza del codice nei sistemi reali è finito, quindi ciò che si ottiene è una performance lontana da quella teorica.
 Negli anni sono stati introdotti nuovi codici, sempre più efficienti, tra cui turbo code e LDPC, i quali si avvicinano al limite teorico imposto dalla formula di Shannon.
 
-\paragraph*{Turbo code (error correction)}
 
+\begin{center}
+
+\includegraphics[width=0.5\textwidth]{imgs/codes_and_shannon_bound.png}
+\end{center}
+\paragraph*{Turbo code (error correction)}
+\begin{center}
+\begin{tikzpicture}
+
+    % Draw blocks
+    \node[draw, rectangle] (RSC1) at (3,2) {RSC1};
+    % dummy node for alignment
+    \node[inner sep=0pt, minimum size=0pt] (dummy) at (3,1) {};
+    \node[draw, rectangle] (Interleaver) at (0,0) {Interleaver};
+    \node[draw, rectangle] (RSC2) at (3,0) {RSC2};
+    
+    \draw[->] (0,2) -- (RSC1) node[midway, above] {};
+    \draw[->] (RSC1) -- (5,2) node[midway, above] {$d^{(1)} = p_1$};
+    \draw[->] (Interleaver) -- (RSC2);
+    \draw[->] (RSC2) -- (5,0) node[midway, above]{$d^{(2)} = p_2$}; 
+    \draw[->] (-1,1) -- (5,1) node[midway, above, xshift=63, yshift=2] {$d^{(0)} = u$};
+    \draw[-] (Interleaver) -- (0, 2) node[midway, left] {}; 
+    \node at (-0.2,1.2) {$u$};
+    
+\end{tikzpicture}
+\end{center}
 Si tratta di un convolutional code in cui sono utilizzati due encoder in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decoding grazie alla ridondanza ottenuta e alla diversity, ottenuta dalla presenza di uno stream di dati differente.
 Il sistema è composto da tre sequenze di cui due codificate e una inalterata. L'utilizzo dell'interleaver permette di estendere artificialmente la lunghezza della sequenza, avvicinandosi alle ipotesi di Shannon. Inoltre l'interleaver permette di ottenere sequenze indipendenti. 
 Il trasmettitore invia quindi tre sequenze, tra cui quella originaria, ottenendo un $R=\frac{1}{3}$. L'idea è che se il canale produce un errore le due sequenze prodotte in maniera differente possono essere unite  per correggere l'errore.
 Per quanto riguarda il decoder si utilizzano due decoder in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generanza senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
-Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decoder. L'uscita è infine inviata al deinterleaver. Completato il primoo ciclo è possibile effettuarne altri, mandando nuovamente in infresso al primo decoder l'uscita dell'interleaver. 
+Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decoder. L'uscita è infine inviata al deinterleaver. 
+Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in infresso al primo decoder l'uscita dell'interleaver. 
 L'uscita dei decoder rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
 In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes permette di effettuare la correzione degli errori ed ottenere dei BER molto bassi, tuttavia il prezzo è ancora pagato in termini di latenza.
+\begin{center}
+    
+
+\begin{tikzpicture}[node distance=1.5cm, auto, >=Stealth, minimum height=1cm, minimum width=1.5cm]
+
+    % Nodes
+    \node[draw, rectangle] (D1) at (3,0) {D1};
+    \node[draw, rectangle] (I) at (6,0) {I};
+    \node[draw, rectangle] (D2) at (9,0) {D2};
+    \node[draw, rectangle] (InvI) at (6,2) {Inv(I)};
+
+    % Arrows
+    \draw[->] (0,0) -- (2.25, 0) node[midway, above] {Parity1};
+    \draw[->] (0,-0.875) -| (D1) node[midway, below] {Systematic};
+    \draw[->] (0,-1.75) -| (I) node[midway, below] {Parity2};
+    \draw[->] (3,-0.875) -| (5.675, -0.5) node[midway, below] {};
+    %\draw[->] (-2,-0.3) -- (2.25, -0.3) node[midway, below] {Parity2};
+    \draw[->] (D1) -- (I) node[midway, above] {Le12};
+    \draw[->] (I) -- (D2);
+    \draw[->] (D2) |- (InvI) node[midway, right] {Le21};
+    \draw[->] (InvI) -| (D1);
+
+% Additional Arrows
+\draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
+
+\end{tikzpicture}
 
 
-
+\end{center}
 \section*{Space diversity}
+
 In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. senza sacrifici di risorse. Si possono sfruttare due tipologie di gain differenti:
 \begin{itemize}
     \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il gain è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
@@ -413,7 +539,6 @@ Per assumere incorrelazione tra le varie antenne la loro distanza deve essere al
 \]  
 
 La \textbf{coherence distance} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né temporali né della velocità.
-
 
 Le carrier frequencies attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
 
