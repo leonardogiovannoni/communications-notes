@@ -351,9 +351,13 @@ def get_decoded_sequence(matrix: List[List[Optional[ViterbiCell]]], final_state:
 
 \section*{Interleaving}
 
-I codici convoluzionali risultano adatto per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. Tuttavia un canale fading è tipicamente suggetto a \textbf{bursty errors}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. Quando il canaale è in \textbf{deep fade} ci sono delle dipendenze statistiche tra errori consecutivi.
-L'idea dell'interleaving consiste nel far sembrare il canale memoryless dal punto di vista del decoder, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti dell'encoder prima di effettuare la trasmissione. Lato ricevitore prima del decoder si effettuare un'operazione di de-interleaving per ripristinare l'ordine originale.
-Il costo delle operazioni di (de-)interleaving è pagato in termini di latenza in quanto sia lato ricevitore che lato trasmettitore è necessario avere un intero blocco di dati prima di poter effettuare le operazioni. Esiste un trade-off tra latenza e decorrelazione ottenibile, basata sulla profondità $k$ dell'interleaver, ovvero la dimensione del blocco sul quale si effettua l'operazione di rimescolamento.
+I codici convoluzionali risultano adatto per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. 
+Tuttavia un canale fading è tipicamente suggetto a \textbf{bursty errors}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. 
+Quando il canale è in \textbf{deep fade} ci sono delle dipendenze statistiche tra errori consecutivi.
+L'idea dell'interleaving consiste nel far sembrare il canale memoryless dal punto di vista del decoder, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti dell'encoder prima di effettuare la trasmissione.
+Lato ricevitore prima del decoder si effettuare un'operazione di de-interleaving per ripristinare l'ordine originale.
+Il costo delle operazioni di (de-)interleaving è pagato in termini di latenza in quanto sia lato ricevitore che lato trasmettitore è necessario avere un intero blocco di dati prima di poter effettuare le operazioni. 
+Esiste un trade-off tra latenza e decorrelazione ottenibile, basata sulla profondità $k$ dell'interleaver, ovvero la dimensione del blocco sul quale si effettua l'operazione di rimescolamento.
 
 
 \paragraph*{Turbo code e LDPC (Low Density Parity Check)}
