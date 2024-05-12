@@ -473,39 +473,62 @@ Nella formula della capacità del canale di Shannon\footnote{$C=B\log_2(1+\text{
 Negli anni sono stati introdotti nuovi codici, sempre più efficienti, tra cui turbo code e LDPC, i quali si avvicinano al limite teorico imposto dalla formula di Shannon.
 
 
-\begin{center}
+Più nel dettaglio abbiamo lato trasmettitore da eseguire i seguenti passi:
 
-\includegraphics[width=0.5\textwidth]{imgs/codes_and_shannon_bound.png}
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{imgs/codes_and_shannon_bound.png}
 \end{center}
 \paragraph*{Turbo code (error correction)}
-\begin{center}
-\begin{tikzpicture}
 
-    % Draw blocks
-    \node[draw, rectangle] (RSC1) at (3,2) {RSC1};
-    % dummy node for alignment
-    \node[inner sep=0pt, minimum size=0pt] (dummy) at (3,1) {};
-    \node[draw, rectangle] (Interleaver) at (0,0) {Interleaver};
-    \node[draw, rectangle] (RSC2) at (3,0) {RSC2};
-    
-    \draw[->] (0,2) -- (RSC1) node[midway, above] {};
-    \draw[->] (RSC1) -- (5,2) node[midway, above] {$d^{(1)} = p_1$};
-    \draw[->] (Interleaver) -- (RSC2);
-    \draw[->] (RSC2) -- (5,0) node[midway, above]{$d^{(2)} = p_2$}; 
-    \draw[->] (-1,1) -- (5,1) node[midway, above, xshift=63, yshift=2] {$d^{(0)} = u$};
-    \draw[-] (Interleaver) -- (0, 2) node[midway, left] {}; 
-    \node at (-0.2,1.2) {$u$};
-    
-\end{tikzpicture}
-\end{center}
 Si tratta di un convolutional code in cui sono utilizzati due encoder in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decoding grazie alla ridondanza ottenuta e alla diversity, ottenuta dalla presenza di uno stream di dati differente.
 Il sistema è composto da tre sequenze di cui due codificate e una inalterata. L'utilizzo dell'interleaver permette di estendere artificialmente la lunghezza della sequenza, avvicinandosi alle ipotesi di Shannon. Inoltre l'interleaver permette di ottenere sequenze indipendenti. 
 Il trasmettitore invia quindi tre sequenze, tra cui quella originaria, ottenendo un $R=\frac{1}{3}$. L'idea è che se il canale produce un errore le due sequenze prodotte in maniera differente possono essere unite  per correggere l'errore.
 Per quanto riguarda il decoder si utilizzano due decoder in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generanza senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
 Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decoder. L'uscita è infine inviata al deinterleaver. 
-Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in infresso al primo decoder l'uscita dell'interleaver. 
+Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in ingresso al primo decoder l'uscita dell'interleaver. 
 L'uscita dei decoder rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
 In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes permette di effettuare la correzione degli errori ed ottenere dei BER molto bassi, tuttavia il prezzo è ancora pagato in termini di latenza.
+
+
+
+
+
+
+\begin{center}
+
+    \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+    
+            % Draw blocks
+            \node[draw, rectangle] (RSC1) at (3,2) {RSC1};
+            % dummy node for alignment
+            \node[inner sep=0pt, minimum size=0pt] (dummy) at (3,1) {};
+            \node[draw, rectangle] (Interleaver) at (0,0) {Interleaver};
+            \node[draw, rectangle] (RSC2) at (3,0) {RSC2};
+            
+            \draw[->] (0,2) -- (RSC1) node[midway, above] {};
+            \draw[->] (RSC1) -- (5,2) node[midway, above] {$d^{(1)} = p_1$};
+            \draw[->] (Interleaver) -- (RSC2);
+            \draw[->] (RSC2) -- (5,0) node[midway, above]{$d^{(2)} = p_2$}; 
+            \draw[->] (-1,1) -- (5,1) node[midway, above, xshift=63, yshift=2] {$d^{(0)} = u$};
+            \draw[-] (Interleaver) -- (0, 2) node[midway, left] {}; 
+            \node at (-0.2,1.2) {$u$};
+            
+        \end{tikzpicture}
+        \caption{}
+       
+        \label{fig:turbo_encoder}
+    \end{figure}
+\end{center}
+\begin{enumerate}
+    \item I bit di informazione (e.g. $01101$) entrano nel trasmettitore e vengono copiati negli encoder RSC1 RSC2. Prima di entrare in RSC2, i bit di informazione vengono rimescolati dall'interleaver (e.g. $10011$).
+    \item Ogni encoder genera una stringa di bit di correzione di errore (bit di parità) eseguendo una serie di calcoli sui bit di dati che riceve (e.g. rispettivamente, $10110$ e $11100$).
+    \item I bit di informazione e le due stringhe di bit di parità sono combinati in un unico blocco e inviati sul canale, dove il rumore può causare errori nella trasmissione.
+\end{enumerate}
+
+Per quanto rigurda la ricezione, il processo è il seguente:
+
 \begin{center}
     \begin{tikzpicture}[node distance=1.5cm, auto, >=Stealth, minimum height=1cm, minimum width=1.5cm]
 
@@ -514,9 +537,9 @@ In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes
         \node[draw, rectangle] (D2) at (9,0) {D2};
         \node[draw, rectangle] (InvI) at (6,2) {Inv(I)};
 
-        \draw[->] (0,0) -- (2.25, 0) node[midway, above] {Parity1};
-        \draw[->] (0,-0.875) -| (D1) node[midway, below] {Systematic};
-        \draw[->] (0,-1.75) -| (I) node[midway, below] {Parity2};
+        \draw[->] (0,0) -- (2.25, 0) node[midway, above] {$\hat{p}_1$};
+        \draw[->] (0,-0.875) -| (D1) node[midway, below] {$\hat{u}$};
+        \draw[->] (0,-1.75) -| (I) node[midway, below] {$\hat{p}_2$};
         \draw[->] (3,-0.875) -| (5.675, -0.5) node[midway, below] {};
         \draw[->] (D1) -- (I) node[midway, above] {Le12};
         \draw[->] (I) -- (D2);
@@ -525,6 +548,23 @@ In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes
         \draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
     \end{tikzpicture}
 \end{center}
+
+
+
+\begin{enumerate}
+    \item Al segnale (campionato) viene associata una lista di interi (e.g. $[7, -5, 5, 2, -4; \ 6, 5, 7 -2, \textcolor{red}{-2}; \ 3, 8, 1, -5, -3]$, dove $\hat{p}_1$, $\hat{u}$ e $\hat{p}_2$ sono stati separati da un punto e virgola, mentre il rosso è idicata una predizione sbagliata), 
+    i cui elementi indicano quanto è probabile che un bit sia 0 o 1. Ad esempio, -7 significa che il bit è quasi certamente un 0; +7 significa che è quasi certamente un 1. Notare che un errore è avvenuto nel quinto bit del blocco: originariamente un 1, ora ha un valore negativo, che suggerisce un 0 logico.
+    \item Ogni decoder prende la lista contenente l'informazione con rumore e la rispettiva lista di parità e calcola quanto è sicuro di ciascun bit decodificato. I due decoder scambiano queste informazioni di confidenza ripetutamente e dopo un certo numero di iterazioni, tipicamente da quattro a dieci, iniziano ad essere d'accordo su tutti i bit decodificati. 
+    \item I dati decodificati sono la somma della lista contenente l'informazione (con rumore, e.g. $[6, 5, 7 -2, \textcolor{red}{-2}]$) più le due liste finali contenti i valori di confidenza(e.g. $[-5, 3, 7, -6, 5]$ e $[-3, 4, 2, -4, 3]$). L'output ($[-14, 12, 16, -12, 6]$) viene convertito nuovamente in bit binari ($[0, 1, 1, 0, 1]$,  da cui si può notare che il quinto bit ora ha il valore corretto).
+\end{enumerate}
+
+
+
+\begin{center}
+    
+\includegraphics[width=0.5\textwidth]{imgs/turbo_code_ber.png}
+\end{center}
+
 \section*{Space diversity}
 
 In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. senza sacrifici di risorse. Si possono sfruttare due tipologie di gain differenti:
