@@ -545,7 +545,8 @@ Per quanto rigurda la ricezione, il processo è il seguente:
         \draw[->] (I) -- (D2);
         \draw[->] (D2) |- (InvI) node[midway, right] {Le21};
         \draw[->] (InvI) -| (D1);
-        \draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
+        % TODO: a cosa serve la seconda freccia?
+        %\draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
     \end{tikzpicture}
 \end{center}
 
@@ -637,8 +638,6 @@ Scegliendo accuratamente $w_i$ si può eliminare la parte immaginaria, quindi po
 \[
     P = \left( \sum_{i=1}^{N} w_i h_i \right)^2 A
 \]
-
-
 
 \[
     \begin{array}{ll}

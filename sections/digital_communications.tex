@@ -806,7 +806,7 @@ Le soglie sono date dal punto medio tra i due simboli adiacenti:
 % include image in img/regions.jpg
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.875\textwidth]{imgs/regions.jpg}
+    \includegraphics[width=0.875\textwidth]{imgs/regions.png}
     \caption*{Regioni di decisione per un sistema PAM}
 \end{figure}
 
@@ -910,10 +910,11 @@ Incrementando il numero di bit per simbolo, per ottenere una stessa probabilità
     \begin{tikzpicture}[
             block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
             node distance=1cm and 1cm,
-            auto
+            auto,
+            every node/.style={align=center}
         ]
         % Blocks
-        \node[block] (source) {Sorgente binaria};
+        \node[block] (source) {Sorgente\\binaria};
         \node[block, right=of source] (encoder) {Mapper};
         \node[block, right=of encoder] (interp) {S/P};
 
@@ -939,23 +940,19 @@ Incrementando il numero di bit per simbolo, per ottenere una stessa probabilità
         \node[right=2cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
         \node[right=2cm of m2, inner sep=0pt, minimum size=0pt] (dummy4) {};
 
-
-        \draw[-] (m1) -- (dummy3);
-        \draw[-] (m2) -- (dummy4);
-
         \node[draw, circle, right=5.125cm of interp] (sum) {\(+\)};
 
-        \draw[->] (dummy3) -- (sum);
-        \draw[->] (dummy4) -- (sum);
+        \draw[->] (m1) -| (sum);
+        \draw[->] (m2) -| (sum);
 
         \node[right=2cm of sum] (dummy5) {};
         \draw[->] (sum) -- node[midway, above] {$s_{QAM}(t)$} (dummy5) {};
 
-        \draw[-] (interp) -- (dummy1);
-        \draw[-] (dummy2) -- (interp);
+        %\draw[-] (interp) -- (dummy1);
+        %\draw[-] (dummy2) -- (interp);
 
-        \draw[->] (dummy1) -- node[midway, above] {$a_i$} (p1);
-        \draw[->] (dummy2) -- node[midway, below] {$b_i$} (p2);
+        \draw[->] (interp) |- node[midway, above] {$a_i$} (p1);
+        \draw[->] (interp) |- node[midway, below] {$b_i$} (p2);
 
         \draw[->] (source) -- (encoder) node[midway,above] {$bin_i$};
         \draw[->] (encoder) -- (interp) node[midway,above] {$c_i$};
