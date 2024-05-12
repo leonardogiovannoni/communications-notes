@@ -566,12 +566,15 @@ Per quanto rigurda la ricezione, il processo è il seguente:
 \includegraphics[width=0.5\textwidth]{imgs/turbo_code_ber.png}
 \end{center}
 
+In figura viene mostrata la convergenza con $K=2048$, $R=1/2$ e un numero di iterazioni, da sinistra a destra, pari rispettivamente a $32, 16, 8, 4, 2, 1$.
+
+
 \section*{Space diversity}
 
-In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. senza sacrifici di risorse. Si possono sfruttare due tipologie di gain differenti:
+In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di gain differenti:
 \begin{itemize}
-    \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il gain è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
-    \item \textbf{Diversity gain}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale gain è massimo quando i segnali sono completamente decorrelati. 
+    \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
+    \item \textbf{Diversity gain}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati. 
 \end{itemize} 
 
 Per assumere incorrelazione tra le varie antenne la loro distanza deve essere almeno la metà della lunghezza d'onda:
@@ -579,7 +582,7 @@ Per assumere incorrelazione tra le varie antenne la loro distanza deve essere al
     d_c = \frac{\lambda}{2} \quad \text{coherence distance}
 \]  
 
-La \textbf{coherence distance} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né temporali né della velocità.
+La \textbf{coherence distance} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né dal tempo, né dalla velocità.
 
 Le carrier frequencies attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
 
@@ -587,8 +590,8 @@ Le carrier frequencies attualmente utilizzate permettono di utilizzare anche ant
 \paragraph*{Canale MIMO (Multiple Input Multiple Output)}
 
 
-Nei classici sistemi con un antenna in trasmission ed un'antenna in ricezione, il canle, se narrow-band può essere descritto da uno scalare complesso con una certa fase e ampiezza.
-Nel caso di sistemi con più antenne in trasmission e ricezione tra ogni coppia di antenne vi è un canale differente, quindi l'intero sistema, per quanto riguarda il canale, può essere descritto tramite una mtrice complessa.
+Nei classici sistemi con un antenna in trasmissione ed un'antenna in ricezione, il canale, se narrow-band può essere descritto da uno scalare complesso.
+Nel caso di sistemi con più antenne in trasmissione e ricezione tra ogni coppia di antenne vi è un canale differente, quindi l'intero sistema, per quanto riguarda il canale, può essere descritto tramite una mtrice complessa.
 \[ 
     \mathbf{H} = 
     \begin{bmatrix}
@@ -608,9 +611,9 @@ Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e
 
 Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
 \[
-    x_i(m) = h_i c(m) + n_i(m) \quad i = 1, \ldots, N
+    x_i[m] = h_i c[m] + n_i[m] \quad i = 1, \ldots, N
 \]
-Questo rappresenta il segnale ricevuto sull'$i$-esima antenna. Ogni segnale ha il proprio rumore e distorisione da parte del canale.
+Questo rappresenta il segnale ricevuto sull'$i$-esima antenna. È ragionevole assumere $h_i$ reale, dato che si può sempre moltiplicare $x_i[m]$ per l'esponenziale dell'inverso della fase senza cambiare le statistiche del segnale. Ogni segnale ha il proprio rumore e distorisione da parte del canale.
 
 L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale. Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
 
