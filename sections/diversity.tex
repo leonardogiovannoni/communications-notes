@@ -359,19 +359,29 @@ Come esempio consideriamo di voler trasmettere la sequenza di bit $010000$, l'en
 \end{center}
 
 
-Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampando il campo \textit{global\_distance}:
+Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampando i campi \textit{prev\_state}, \textit{global\_distance} e \textit{input\_bit} per ogni cella della matrice:
+
 
 \begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
-\hline
-\textbf{Row} & \textbf{Col 1} & \textbf{Col 2} & \textbf{Col 3} & \textbf{Col 4} & \textbf{Col 5} & \textbf{Col 6} & \textbf{Col 7} \\ \hline
-0b00         & 0              & 0              & 1              & 2              & 1              & 1              & 1              \\ \hline
-0b10         & None           & 2              & 1              & 2              & 2              & 3              & 3              \\ \hline
-0b01         & None           & None           & 2              & 1              & 3              & 3              & 4              \\ \hline
-0b11         & None           & None           & 4              & 3              & 3              & 3              & 4              \\ \hline
-\end{tabular}
-\end{table}
+
+\resizebox{\textwidth}{!}{
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    State & Column 1 & Column 2 & Column 3 & Column 4 & Column 5 & Column 6 & Column 7 \\
+    \hline
+    Row 0b00 & 0b00, 0, 0 & \textbf{0b00, 0, \textcolor{red}{0}} & 0b00, 1, 0 & 0b00, 2, 0 & \textbf{0b01, 1, \textcolor{red}{0}} & \textbf{0b00, 1, \textcolor{red}{0}} & \textbf{0b00, 1, \textcolor{red}{0}} \\
+    \hline
+    Row 0b10 & None & 0b00, 2, 1 & \textbf{0b00, 1, \textcolor{red}{1}} & 0b00, 2, 1 & 0b00, 2, 1 & 0b00, 3, 1 & 0b00, 3, 1 \\
+    \hline
+    Row 0b01 & None & None & 0b10, 2, 0 & \textbf{0b10, 1, \textcolor{red}{0}} & 0b10, 3, 0 & 0b10, 3, 0 & 0b10, 4, 0 \\
+    \hline
+    Row 0b11 & None & None & 0b10, 4, 1 & 0b10, 3, 1 & 0b10, 3, 1 & 0b10, 3, 1 & 0b10, 4, 1 \\
+    \hline
+    \end{tabular} 
+        
+    }
+    \end{table}
 
 \section*{Interleaving}
 
@@ -497,33 +507,23 @@ Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in
 L'uscita dei decoder rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
 In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes permette di effettuare la correzione degli errori ed ottenere dei BER molto bassi, tuttavia il prezzo è ancora pagato in termini di latenza.
 \begin{center}
-    
+    \begin{tikzpicture}[node distance=1.5cm, auto, >=Stealth, minimum height=1cm, minimum width=1.5cm]
 
-\begin{tikzpicture}[node distance=1.5cm, auto, >=Stealth, minimum height=1cm, minimum width=1.5cm]
+        \node[draw, rectangle] (D1) at (3,0) {D1};
+        \node[draw, rectangle] (I) at (6,0) {I};
+        \node[draw, rectangle] (D2) at (9,0) {D2};
+        \node[draw, rectangle] (InvI) at (6,2) {Inv(I)};
 
-    % Nodes
-    \node[draw, rectangle] (D1) at (3,0) {D1};
-    \node[draw, rectangle] (I) at (6,0) {I};
-    \node[draw, rectangle] (D2) at (9,0) {D2};
-    \node[draw, rectangle] (InvI) at (6,2) {Inv(I)};
-
-    % Arrows
-    \draw[->] (0,0) -- (2.25, 0) node[midway, above] {Parity1};
-    \draw[->] (0,-0.875) -| (D1) node[midway, below] {Systematic};
-    \draw[->] (0,-1.75) -| (I) node[midway, below] {Parity2};
-    \draw[->] (3,-0.875) -| (5.675, -0.5) node[midway, below] {};
-    %\draw[->] (-2,-0.3) -- (2.25, -0.3) node[midway, below] {Parity2};
-    \draw[->] (D1) -- (I) node[midway, above] {Le12};
-    \draw[->] (I) -- (D2);
-    \draw[->] (D2) |- (InvI) node[midway, right] {Le21};
-    \draw[->] (InvI) -| (D1);
-
-% Additional Arrows
-\draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
-
-\end{tikzpicture}
-
-
+        \draw[->] (0,0) -- (2.25, 0) node[midway, above] {Parity1};
+        \draw[->] (0,-0.875) -| (D1) node[midway, below] {Systematic};
+        \draw[->] (0,-1.75) -| (I) node[midway, below] {Parity2};
+        \draw[->] (3,-0.875) -| (5.675, -0.5) node[midway, below] {};
+        \draw[->] (D1) -- (I) node[midway, above] {Le12};
+        \draw[->] (I) -- (D2);
+        \draw[->] (D2) |- (InvI) node[midway, right] {Le21};
+        \draw[->] (InvI) -| (D1);
+        \draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
+    \end{tikzpicture}
 \end{center}
 \section*{Space diversity}
 
