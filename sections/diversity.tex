@@ -349,6 +349,30 @@ def get_decoded_sequence(matrix: List[List[Optional[ViterbiCell]]], final_state:
 \end{minted}
 
 
+Come esempio consideriamo di voler trasmettere la sequenza di bit $010000$, l'encoder emetterà quindi la sequenza $00 \ 11 \ 10 \ 11 \ 00 \ 00$. Supponendo che il decoder riceva la sequenza $00 \ 10 \ 10 \ 11 \ 00 \ 00$, l'algoritmo di Viterbi sarà in grado di correggere l'errore e restituire la sequenza corretta $010000$.
+
+
+
+
+\begin{center}
+    \includegraphics[width=1\textwidth]{imgs/viterbi_example.png}
+\end{center}
+
+
+Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampanda il campo \textit{global\_distance}:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Row} & \textbf{Col 1} & \textbf{Col 2} & \textbf{Col 3} & \textbf{Col 4} & \textbf{Col 5} & \textbf{Col 6} & \textbf{Col 7} \\ \hline
+0b00         & 0              & 0              & 1              & 2              & 1              & 1              & 1              \\ \hline
+0b10         & None           & 2              & 1              & 2              & 2              & 3              & 3              \\ \hline
+0b01         & None           & None           & 2              & 1              & 3              & 3              & 4              \\ \hline
+0b11         & None           & None           & 4              & 3              & 3              & 3              & 4              \\ \hline
+\end{tabular}
+\end{table}
+
 \section*{Interleaving}
 
 I codici convoluzionali risultano adatto per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. 
