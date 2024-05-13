@@ -611,43 +611,32 @@ Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e
 
 Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
 \[
-    x_i[m] = h_i c[m] + n_i[m] \quad i = 1, \ldots, N
+    x_i[m] = h_i c_m + n_i[m] \quad i = 1, \ldots, N
 \]
-Questo rappresenta il segnale ricevuto sull'$i$-esima antenna. È ragionevole assumere $h_i$ reale, dato che si può sempre moltiplicare $x_i[m]$ per l'esponenziale dell'inverso della fase senza cambiare le statistiche del segnale. Ogni segnale ha il proprio rumore e distorisione da parte del canale.
+Questo rappresenta il segnale ricevuto sull'$i$-esima antenna.
+È ragionevole assumere $h_i \in \mathbb{R}$ , dato che si può sempre moltiplicare $x_i[m]$ per $ e^{j\arg(h_i)} $ senza cambiare le statistiche del segnale.
+Ogni segnale ha il proprio rumore e distorsione da parte del canale.
 
-L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale. Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
-
+L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale.
+Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
+% TODO: i w_i sono reali o complessi 
 \[
-    z(m) = \sum_{i=1}^{N} \left( w_i h_i c(m) + w_i n_i(n) \right)
+    z[m] = \sum_{i=1}^{N} w_i x_i[m] = \sum_{i=1}^{N} w_i h_i c_m + \sum_{i=1}^{N} w_i n_i[m]
 \]
 dove $w_i$ sono i pesi assegnati alle varie antenne.
 
 
+% TODO: ma anche qui si moltiplica per l'opposto della fase?
 \[
-    \begin{array}{ll} 
-        P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c(m)  \right|^2 \right] \quad & \text{Potenza segnale utile} \\
-        P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i(m)  \right|^2 \right] \quad & \text{Potenza rumore}
-    \end{array}
-\]
-L'obiettivo è massimizzare il SNR, così definito:
-\[
-    \text{SNR} = \frac{\sum_{i=1}^{N} w_i h_i}{\sum_{i=1}^{N} w_i} = \frac{A}{\sigma^2}  
-\]
-
-\[
-    P = \mathbb{E} \left[ \left|  \sum_{i=1}^{N} w_i h_i c(m)  \right| ^2  \right] = \left| \sum_{i=1}^{N} w_i h_i \right|^2 \mathbb{E} \left[ \left| c(m)\right|^2  \right] = \left| \sum_{i=1}^{N} w_i h_i \right|^2 A
-\]
-Scegliendo accuratamente $w_i$ si può eliminare la parte immaginaria, quindi possiamo riscrivere $P$ come:
-\[
-    P = \left( \sum_{i=1}^{N} w_i h_i \right)^2 A
+    P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c_m  \right|^2 \right] = \mathbb{E} \left[  |c_m|^2  \right] \left| \sum_{i=1}^{N} w_i h_i \right|^2 =  A \left| \sum_{i=1}^{N} w_i h_i \right|^2
 \]
 
 \[
     \begin{array}{ll}
-            P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i(m)  \right|^2 \right] \\
-            = \mathbb{E} \left[ \left( \sum_{i=1}^{N} w_i n_i(m) \right)  \left( \sum_{i=1}^{N} w_i n_i(m) \right)^*  \right] \\
-            = \mathbb{E} \left[  \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* n_i n_j^*  \right] \\
-            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \mathbb{E} \left[ n_i n_j^* \right] \\
+            P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i[m]  \right|^2 \right] \\
+            = \mathbb{E} \left[ \left( \sum_{i=1}^{N} w_i n_i[m] \right)  \left( \sum_{i=1}^{N} w_i n_i[m] \right)^*  \right] \\
+            = \mathbb{E} \left[  \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* n_i[m] n_j[m]^*  \right] \\
+            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \mathbb{E} \left[ n_i[m] n_j[m]^* \right] \\
             = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \sigma^2 \delta_{ij} \\
             = \sum_{i=1}^{N} w_i w_i^* \sigma^2 \\
             = \sum_{i=1}^{N} |w_i|^2 \sigma^2 \\
@@ -655,18 +644,18 @@ Scegliendo accuratamente $w_i$ si può eliminare la parte immaginaria, quindi po
     \end{array}
 \]
 
-Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $hA/\sigma^2$, ovvero la forma valida per un semplice fading channel.
-L'espressione completa può essere analizzata sfruttando la disuguaglianza di Schwarz:
+% TODO: come si rimuovono i complessi?
+L'obiettivo è massimizzare il SNR, che si può quindi scrivere come:
 \[
-    \text{SNR} = \frac{\left(\sum_{i} w_i h_i \right)^2}{\sum_{i} |w_i|^2} \frac{A}{\sigma ^2} \leq \frac{\sum_{i} |h_i|^2 \sum_{j} \left| w_j \right|^2}{\sum_{i} |w_i|^2} \frac{A}{\sigma^2}
+    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left|\sum_{i=1}^{N} w_i h_i \right|^2}{\sum_{i=1}^{N} \left| w_i^2 \right|} \leq \frac{A}{\sigma^2} \frac{\sum_{i=1}^{N} |w_i|^2 \sum_{i=1}^{N} \left| h_i \right|^2}{\sum_{i=1}^{N} |w_i|^2} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
 \]
 
-
-Rispettando la condizione $w_i = h_i^*$ si ottiene:
-\[
-    \text{SNR} = \frac{\left(\sum_{i} \left| h_i \right|^2 \right)^2}{\sum_{i} |h_i|^2} \frac{A}{\sigma ^2} \leq \sum_{i} |h_i|^2 \frac{A}{\sigma^2}
+dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. Imponendo la condizione $w_i = h_i^*$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza:
+\[ 
+    \text{SNR} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
 \]
 
+Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\frac{A}{\sigma^2}h$, ovvero la forma valida per un semplice fading channel.
 
 Per quanto riguarda la configurazione con più antenne in trasmissione e singola antenna in ricezione, sistema MISO, si ottiene la stessa espressione con alcuni accorgimenti lato trasmettitore
 \[
