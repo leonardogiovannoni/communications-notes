@@ -768,40 +768,92 @@ L'utilizzo di un canale MIMO può incrementare la capacità del sistema, tuttavi
     \text{segnale ottenuto dopo combining lato ricevitore, non c'è alcuna sovrapposizione}
 \]
 
+
+% TODO: aggiungere considerazioni sull'aumento della capacità del sistema
+
+
 \section*{Frequency diversity}
 
 La formula di Shannon fornisce il massimo rate sostenibile su un dato canale di trasmissione:
 \[
     C = B \log_2 \left( 1 + \text{SNR} \right), \quad \text{SNR} = \frac{\left| H \right|^2 P}{\sigma^2}
 \]
-Dove $H$ è il gain del canale.
-In sistemi reali ci si può solo avvicinare al limite teorico e vi è una forte dipendenza, per quanto riguarda l'efficienza spettrale, del coding rate e modulation order, data dalla dimensione della costellazione di simbolim per cui esiste un trade-off tra capacità di trasmissione ed energia richiesta. Il rate di trasmissione reale può essere approssimato:
+Dove $H$ è il guadagno del canale.
+In sistemi reali ci si può solo avvicinare al limite teorico e vi è una forte dipendenza, per quanto riguarda l'efficienza spettrale, del coding rate e modulation order, data dalla dimensione della costellazione di simboli per cui esiste un trade-off tra capacità di trasmissione ed energia richiesta.
+In particolare $\log_2 \left( 1 + \text{SNR} \right)$ è l'efficienza spettrale.
+Il rate di trasmissione reale può essere approssimato:
 \[
     R_b = \log_2 M \  R \frac{1}{T}  \approx m R B
 \]
 
-Dove è $M$ è il numeri di simboli nella costenllazione, $R$ è il coding rate e $T$ è il simbol time, si fa l'approssimazione che $\frac{1}{T} \approx B$. 
+Dove è $M$ è il numeri di simboli nella costenllazione, $R$ è il coding rate \footnote{con $R_s$ indichiamo il symbol rate, ovvero $\frac{1}{T}$, mentre con $R$ il symbol rate} e $T$ è il symbol time, si fa l'approssimazione che $\frac{1}{T} \approx B$. 
 
 
-Per rispettare il limite di capacità si ha:
+Per rispettare il limite di capacità si deve avere:
 \[
-    R_b < B \quad \Rightarrow \quad mR < \log_2 (1 + \text{SNR})
-\] 
+    m R B < C \quad \Rightarrow \quad m R < \log_2 (1 + \text{SNR})
+\]
 Misurando il SNR è possibile adattare i valori di $m$ ed $R$, ad esempio in base alla posizone in una cella.
 I valori di $m$ ed $R$ che si possono utilizzare appartengono ad un insieme finito, non è possibile scegliere arbitrariamente.
 
-La qualità del canale in termini di SNR può essere espressa tramite \textbf{radio beared index} (1 - 15).
+\begin{table}[H]
+    \resizebox{\textwidth}{!}{
+        \centering
+        \begin{tabular}{|c|l|c|c|c|}
+        \hline
+        \textbf{Radio Bearer Index} & \textbf{Name} & \textbf{Modulation} & \textbf{Channel Coding Rate} & \textbf{Bearer Efficiency} ($\log_2(1+\text{SNR})$, bits/symbol) \\ \hline
+            1  & QPSK 1/12 & QPSK & 0.0761719 & 0.1523 \\ \hline
+            2  & QPSK 1/9  & QPSK & 0.117188  & 0.2344 \\ \hline
+            3  & QPSK 1/6  & QPSK & 0.188477  & 0.377  \\ \hline
+            4  & QPSK 1/3  & QPSK & 0.300781  & 0.6016 \\ \hline
+            5  & QPSK 1/2  & QPSK & 0.438477  & 0.877  \\ \hline
+            6  & QPSK 3/5  & QPSK & 0.587891  & 1.1758 \\ \hline
+            7  & 16QAM 1/3 & 16QAM & 0.369141  & 1.4766 \\ \hline
+            8  & 16QAM 1/2 & 16QAM & 0.478516  & 1.9141 \\ \hline
+            9  & 16QAM 3/5 & 16QAM & 0.601563  & 2.4063 \\ \hline
+            10 & 64QAM 1/2 & 64QAM & 0.455078  & 2.7305 \\ \hline
+            11 & 64QAM 1/2 & 64QAM & 0.553711  & 3.3223 \\ \hline
+            12 & 64QAM 3/5 & 64QAM & 0.650391  & 3.9023 \\ \hline
+            13 & 64QAM 3/4 & 64QAM & 0.753906  & 4.5234 \\ \hline
+            14 & 64QAM 5/6 & 64QAM & 0.852539  & 5.1152 \\ \hline
+            15 & 64QAM 11/12 & 64QAM & 0.925781  & 5.5547 \\ \hline
+        \end{tabular}
+    }
+\end{table}
+
+Come si evince dala tabella, in pratica c'è un mapping diretto tra SNR misurato (channel quality indicator, CQI) e lo specifico ordine di modulazione e coding rate di una trasmissione.
+La qualità del canale in termini di SNR può essere espressa tramite \textbf{radio beared index} ($\in [1, 15]$).
 Utilizzando la modulazione OFDM l'idea sarebbe adattare $m$ ed $R$ per ogni canale, distribuendo la potenza nel modo più efficace possibile per massimizzare il rate di trasmmissione. Questo problema è inidcato con il termine di \textbf{water-filling}, la potenza a disposizione è invece detta \textbf{power budget}. Nella pratica si tratta di un problema di ottimizzazione per il quale sono definiti alcuni vincoli da rispettare:
 
-
+% TODO: p non lo metterei, perché non è chiaro cosa rappresenti
 \[
     \begin{cases}
-       \underset{p}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}), \quad P_n \geq 0 \quad n = 1, \ldots, N \\
-       \sum_{n=1}^{N} P_n = P_0 \quad \text{(power budget)}
+       \underset{\mathbf{p}}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}), \quad P_n \geq 0 \quad n = 1, \ldots, N \\
+       \sum_{n=1}^{N} P_n = P_0 \quad \text{(power budget)} \\
+        P_n \geq 0 \quad n = 1, \ldots, N
     \end{cases}    
 \]
 
-Dove $\sigma_n^2 = \frac{\sigma^2}{\left| H_n \right| ^2}$. Il termine $B$ non appare nell'espressione in quanto costante per ogni canale, massimizzare il rate o l'efficienza spettrale genera lo stesso risultato.
+Dove $\sigma_n^2 = \frac{\sigma^2}{\left| \mathbf{H}_{n, n} \right| ^2}$. Il termine $B$ non appare nell'espressione in quanto costante per ogni canale, massimizzare il rate o l'efficienza spettrale genera lo stesso risultato.
+
+La lagrangiana del problema è:
+\[
+    \mathcal{L}(P_1, \hdots, P_N, \lambda ) = \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}) - \lambda \left( \sum_{n=1}^{N} P_n - P_0 \right)
+\]
+La derivata rispetto a $P_n$ è:
+\[
+    \frac{\partial \mathcal{L}}{\partial P_n} = \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_n}{\sigma_n^2}} \frac{1}{\sigma_n^2} - \lambda = 0
+\]
+\[
+    \nabla_{P_1, \hdots, P_N} \mathcal{L} = \begin{bmatrix}
+        \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_1}{\sigma_1^2}} \frac{1}{\sigma_1^2} - \lambda \\
+        \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_2}{\sigma_2^2}} \frac{1}{\sigma_2^2} - \lambda \\
+        \vdots \\
+        \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_N}{\sigma_N^2}} \frac{1}{\sigma_N^2} - \lambda \\
+\end{bmatrix} 
+\]
+
+
 \[
     P_n^* = \text{max} \{ 0, \mu - \sigma_n^2    \} = (\mu - \sigma_n^2)^+, \quad n = 1, \ldots, N
 \]
