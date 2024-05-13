@@ -608,7 +608,10 @@ Nel caso di sistemi con più antenne in trasmissione e ricezione tra ogni coppia
 \]
 
 Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e $\mathbf{H}$ è la matrice del canale. In questo caso, $M$ rappresenta il numero di antenne in trasmissione mentre $N$ il numero di antenne in ricezione.
-
+\paragraph*{Canale SIMO (Single Input Multiple Output)}
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{imgs/simo.jpg}
+\end{center}
 Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
 \[
     x_i[m] = h_i c_m + n_i[m] \quad i = 1, \ldots, N
@@ -647,19 +650,24 @@ dove $w_i$ sono i pesi assegnati alle varie antenne.
 % TODO: come si rimuovono i complessi?
 L'obiettivo è massimizzare il SNR, che si può quindi scrivere come:
 \[
-    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left|\sum_{i=1}^{N} w_i h_i \right|^2}{\sum_{i=1}^{N} \left| w_i^2 \right|} \leq \frac{A}{\sigma^2} \frac{\sum_{i=1}^{N} |w_i|^2 \sum_{i=1}^{N} \left| h_i \right|^2}{\sum_{i=1}^{N} |w_i|^2} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
+    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left|\sum_{i=1}^{N} w_i h_i \right|^2}{\sum_{i=1}^{N} \left| w_i \right|^2} \leq \frac{A}{\sigma^2} \frac{\sum_{i=1}^{N} |w_i|^2 \sum_{i=1}^{N} \left| h_i \right|^2}{\sum_{i=1}^{N} |w_i|^2} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
 \]
 
 dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. Imponendo la condizione $w_i = h_i^*$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza:
 \[ 
-    \text{SNR} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
+    \text{SNR} = \frac{A}{\sigma^2} \frac{\left(\sum_{i=1}^{N} \left| h_i \right|^2 \right)^2}{\sum_{i=1}^{N} \left| h_i^2 \right|} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
 \]
 
-Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\frac{A}{\sigma^2}h$, ovvero la forma valida per un semplice fading channel.
 
+% TODO: h è complesso? Nel caso vi vuole il modulo?
+Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\frac{A}{\sigma^2}h$, ovvero la forma valida per un semplice fading channel.
+\paragraph*{MISO (Multiple Input Single Output)}
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{imgs/miso.jpg}
+\end{center}
 Per quanto riguarda la configurazione con più antenne in trasmissione e singola antenna in ricezione, sistema MISO, si ottiene la stessa espressione con alcuni accorgimenti lato trasmettitore
 \[
-    x(m) = \sum_{i=1}^{N} h_i y_i(m) + n(m) \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
+    x[m] = \sum_{i=1}^{N} h_i y_i[m] + n[m] \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
 \]
 
 
@@ -667,19 +675,36 @@ La differenza sostanziale con il caso SIMO è che i vari segnali sono combinati 
 La scelta dei coefficienti non può essere effettuata lato ricevitore, ma deve essere il trasmettitore a scegliere stimando il canale, lato ricevitore la stima è ovviamente più complessa rispetto a quella che effettuerebbe il ricevitore per proprio conto.
 L'operazione effettuata dal trasmettitore è detta \textbf{spatial precoding} ed il simbolo è denominato \textbf{spatial pre-coded symbol}.
 \[
-    y_i(m) = b_i c(m) \quad \text{simbolo trasmesso sulla $i$-esima antenna}
+    y_i[m] = b_i c_m \quad \text{simbolo trasmesso sulla $i$-esima antenna}
 \]
 L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
 
-Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| h \| }$
+Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \| }$
 
 \[
-    x(m) = \sum_{i=1}^{N} h_i b_i c(m) + n(m) = \sum_{i=1}^{N} \frac{h_i h_i^*}{\| \mathbf{h} \|} c(m) + n(m) = \| \mathbf{h} \| c(m) + n(m) = \sum_{i=1}^{N} |h_i|^2 \frac{A}{\sigma^2}
+    x[m] = \sum_{i=1}^{N} h_i y_i[m]  = \sum_{i=1}^{N} h_i b_i c_m + n[m] = \sum_{i=1}^{N} \frac{h_i h_i^*}{\| \mathbf{h} \|} c_m + n[m] = \| \mathbf{h} \| c_m + n[m]
 \]
+\[
+    P = \|\mathbf{h} \|^2 \ \mathbb{E} \left[\left| c_m \right|^2 \right] = \|\mathbf{h} \|^2  A
+\]
+\[
+    P_N = \sigma^2  
+\]
+\[
+    \text{SNR} = \frac{P}{P_N} = \sum_{i=1}^{N} |h_i|^2 \frac{A}{\sigma^2}    
+\]
+% TODO: ma h_i è un parametro o una variabile aleatoria?
+La differenza tra il caso con singola antenna (sia lato trasmettitore che ricevitore) e il caso con più antenne (MISO/SIMO) è dato dal fattore $\| \mathbf{h} \| = \sum_{i=1}^{N} |h_i|^2$.
+Considerando i guadagni del canale come variabili aleatore con distribuzione di Rayleigh è possibile calcolare la distribuzione della somma come convoluzione delle PDF.
+\[
+    f_{\| \mathbf{h} \|^2} (x) = \frac{1}{D-1} x^{D-1} e^{-x}
+\]
+Il risultato dipende dal nnumero di antenne, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei gain verso destra (più potenza).
+Inoltre il \textbf{diversity gain} si manifesta riducendo notevolmente la probabilità di ottenere guadagni molto bassi.
+Ciò è visibile confrontando gli integrali delle due PDF.
 
-La differenza tra il caso con singola antenna (rx e tx) e il caso con più antenne (MISO/SIMO) è dato dal fattore $\| \mathbf{h} \| = \sum_{i} |h_i|^2$.
-Considerando i gain del canale come variabili aleatore con distribuzione di Rayleigh è possibile calcolare la distribuzione della somma come convoluzione delle PDF.
-Il risultato dipende dal nnumero di antenne, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei gain verso destra (più potenza). Inoltre il \textbf{diversity gain} si manisgesta riducendo notevolmente la probabilità di ottenere gain molto bassi. Ciò è visibile confrontando gli integrali delle due PDF.
+\paragraph*{MIMO (Multiple Input Multiple Output)}
+
 Il caso generale MIMO, ovvero con più antenne sia in trasmissione che ricezione, sfrutta una tecnica denominata \textbf{spatial multiplexing} ed è basata sulla decomposizione ai valori singolari (SVD) della matrice $\mathbf{H}$ che descrive il canale.
 
 \paragraph*{SVD (Singular Value Decomposition)}
