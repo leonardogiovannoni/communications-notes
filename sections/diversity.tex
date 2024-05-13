@@ -709,26 +709,27 @@ Il caso generale MIMO, ovvero con più antenne sia in trasmissione che ricezione
 
 \paragraph*{SVD (Singular Value Decomposition)}
 
-Data una matrice $\mathbf{A} \in \mathbb{C}^{N \times M}$, la SVD permette di scrivere la matrice come prodotto di tre matrici:
+Data una matrice $\mathbf{A} \in \mathbb{C}^{m \times n}$, con  $p = \text{rank} (\mathbf{A})$, la SVD permette di scrivere la matrice come prodotto di tre matrici:
 \[
     \mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H
 \]
-con $\mathbf{U} \in \mathbb{C}^{m \times p}$, $\mathbf{\Sigma} \in \mathbb{C}^{p \times p}$ e $\mathbf{V} \in \mathbb{C}^{n \times o}$,
-dove $\mathbf{U}$ e $\mathbf{V}$ sono matrici unitarie, mentre $\mathbf{\Sigma} = diag(\sigma_1, \ldots, \sigma_p)$ è una matrice diagonale con $\sigma_1 \geq \sigma_2 \geq \ldots \geq \sigma_p$. 
-\
-In un sistema MIMO, se il canale è sufficientemente multipath, la matrice $H$ ha rango pieno, dunque:
+con $\mathbf{U} \in \mathbb{C}^{m \times p}$, $\mathbf{\Sigma} \in \mathbb{C}^{p \times p}$ e $\mathbf{V} \in \mathbb{C}^{n \times p}$,
+dove $\mathbf{U}$ e $\mathbf{V}$ sono matrici unitarie, mentre $\mathbf{\Sigma} = diag(\sigma_1, \ldots, \sigma_p)$ è una matrice diagonale con $\sigma_1 \geq \sigma_2 \geq \ldots \geq \sigma_p$. In un sistema MIMO, se il canale è sufficientemente multipath, la matrice $\mathbf{H}$ ha rango pieno, dunque:
 \[
-    P = rank(H) = \min(N_R, N_T)
+    p = \text{rank}(H) = \min(N_R, N_T)
 \]
 
-La tecnica di \textbf{spatial multiplexing} consiste nell'effettuare sia un pre-coding lato trasmettitore, sia un combining lato ricevitore, dunque untilizzando due pesi differenti. In questo modo è possibile creare un certo numero di canali ortogonali indipendenti, detti \textbf{spatial channels}.
+La tecnica di \textbf{spatial multiplexing} consiste nell'effettuare sia un pre-coding lato trasmettitore, sia un combining lato ricevitore, dunque utilizzando due pesi differenti. In questo modo è possibile creare un certo numero di canali ortogonali indipendenti, detti \textbf{spatial channels}.
 \[
     \begin{array}{ll}
-        \mathbf{H} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H \quad \text{decomposizione SVF matrice del canale MIMO} \\
+        \mathbf{H} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H \quad \text{decomposizione SVD matrice del canale MIMO} \\
         \mathbf{B} = \mathbf{V} \quad \text{matrice pre-coder (Tx)} \\
         \mathbf{W} = \mathbf{U} \quad \text{matrice combiner (Rx)}
     \end{array}
 \]
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{imgs/mimo.jpg}
+\end{center}
 
 Scegliendo in questo modo le matrici si ottiene:
 \[
@@ -764,7 +765,7 @@ L'utilizzo di un canale MIMO può incrementare la capacità del sistema, tuttavi
         \end{bmatrix}
     \end{matrix}
     \quad 
-    \text{segnale ottenuto dopo combining lato ricevitore, non è alcuna sovrapposizione}
+    \text{segnale ottenuto dopo combining lato ricevitore, non c'è alcuna sovrapposizione}
 \]
 
 \section*{Frequency diversity}
