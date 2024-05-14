@@ -883,34 +883,9 @@ In sostanza la distribuzione favorisce i canali con miglior qualità, scartando 
 
 % TODO: aggiungere qualcosa sul waterfilling
 
-\subsection*{LTE physical layer}
-La tecnologia LTE è basata su OFDM.
+
 % TODO: la fft size è 2048 come il numero di subcarriers?
-\begin{center}
-    \begin{tabular}{|l|l|l|}
-        \hline
-        \textbf{Parameter} & \textbf{Value} & \textbf{Notes/Calculation} \\
-        \hline
-        Coding Rate ($R$) & $[0.0762, 0.9258]$ & Interval coding rate \\
-        \hline
-        Modulation Order ($M$) & 256 (8 bits/symbol) & Maximum modulation order, 256-QAM \\
-        \hline
-        Sampling Frequency ($f_s$) & 30.72 MHz & Given sampling time \\
-        \hline
-        Available Subcarriers (FFT size, $N$) & 2048 & \\
-        \hline
-        Used Subcarriers & 1200 & \\
-        \hline
-        0-level Guard Subcarriers & 848 & \\
-        \hline
-        OFDM Blocks per Slot & 7 & Number of OFDM blocks in a slot \\
-        \hline
-        Slot Duration & 0.5 ms & Duration of a slot \\
-        \hline
-        RB Sucarriers & 12 & Number of subcarriers per resource block \\
-        \hline
-    \end{tabular}
-\end{center}
+
 La banda di un singolo subcarrier è calcolata come:
 \[
     \Delta f = \frac{f_s}{N} = \frac{30.72 \text{ MHz}}{2048} = 15 \text{ kHz}
@@ -931,6 +906,7 @@ Il rate massimo per un canale SISO è:
 \[
     R_{1 \times 1} = 0.9258 \times 8 \times 14 \text{ MHz} \approx 100 \text{ Mb/s}
 \]
+Con il carrier aggregation: quando gli operatori comprano lo spettro di trasmissione, compratno chunks dello spettro che sono più larghi di 20 MHz, e possono essere aggreagati per un singolo utente
 Con un canale MIMO $4 \times 4$ si ha un massimo data rate di:
 \[
     R_{4 \times 4} = 4 \times 0.9258 \times 8 \times 14 \text{ MHz} \approx 400 \text{ Mb/s}
