@@ -1,6 +1,5 @@
 \section*{LTE (Long Term Evolution)}
 
-
 \begin{center}
     \begin{threeparttable}
         \begin{tabular}{|l|l|} 
@@ -32,6 +31,7 @@
         \end{tablenotes}
     \end{threeparttable}
 \end{center}
+
 Lo standard LTE è il primo ad adottare una modulazione OFDM, con i seguenti parametri:
 \[
     \begin{array}{ll}
@@ -40,8 +40,9 @@ Lo standard LTE è il primo ad adottare una modulazione OFDM, con i seguenti par
         \Delta f = \frac{f_s}{N} = 15 \text{ kHz} & \text{(banda di un singolo subcarrier)} \\
     \end{array}    
 \]
+% TODO: cos'è uno slot temporale e a cosa serve?
 L'allocazione delle risorse di banda agli utenti è indicata come OFDMA, ovvero FDMA basata su OFDM, per cui la banda assegnata è un multiplo intero della banda di un canale.
-L'allocazione minima per ciascun utente è un blocco, composto da 12 subcarrier, chiamato \textbf{Resource Block} (RB), che quindi occupa $12 \times 15 \text{ kHz} = 180 \text{ kHz}$.
+L'allocazione minima per ciascun utente è un blocco, composto da 12 subcarrier, chiamato \textbf{resource block} (RB), che quindi occupa $12 \times 15 \text{ kHz} = 180 \text{ kHz}$.
 Inoltre l'allocazione delle risorse richiede anche l'assegnamente di slot temporali, ovvero il tempo entro cui i blocchi di banda sono utilizzabili.
 L'unità minima è un slot composta da 7 blocchi OFDM (simboli) della durata di 0.5 ms.
 \begin{itemize}

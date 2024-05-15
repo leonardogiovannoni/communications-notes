@@ -46,15 +46,15 @@ In una comunicazione digitale l'informazione è codificata in sequenze di bit. S
 \]
 che occupa però una banda infinita.
 
-La modulazione PAM consiste nell'effettuare il mapping dei bit ed effettuare un filtraggio con un filtro passa basso avente risposta all'impulso \( g_T(t) \), ottenendo:
-\[ s_{PAM}(t) \coloneqq \sum_{k=-\infty}^{+\infty} a_k\cdot g_T(t - kT_s) \]
+La modulazione PAM consiste nell'effettuare la mappatura dei bit ed effettuare un filtraggio con un filtro passa basso avente risposta all'impulso \( g_T(t) \), ottenendo:
+\[ s_{PAM}(t) = \sum_{k=-\infty}^{+\infty} a_k\cdot g_T(t - kT_s) \]
 
 Una sequenza di bit può essere trattata come una variabile aleatoria con distribuzione uniforme:
 \[
-    P(d_k = 0) = P(d_k = 1) = \frac{1}{2} 
+    \mathbb{P}(d_k = 0) = \mathbb{P}(d_k = 1) = \frac{1}{2} 
 \]
 \[
-    \mathbb{E}\{d_k\} = 0\cdot P(d_k = 0) + 1\cdot P(d_k = 1) = \frac{1}{2}
+    \mathbb{E}\{d_k\} = 0\cdot \mathbb{P}(d_k = 0) + 1\cdot \mathbb{P}(d_k = 1) = \frac{1}{2}
 \]
 
 
