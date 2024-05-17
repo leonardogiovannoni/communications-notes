@@ -295,8 +295,8 @@ mostrando come la frequenza della portante sia alterata dalle frequenze del segn
         \begin{tikzpicture}
 
             % Axis
-            \draw[->] (0,0) -- (12,0) node[right, font=\small] {frequncy};
-            \draw[->] (0,0) -- (0,7.5) node[above, font=\small] {amplitude};
+            \draw[->] (0,0) -- (12,0) node[right, font=\small] {Frequency};
+            \draw[->] (0,0) -- (0,7.5) node[above, font=\small] {Amplitude};
         
         
             \foreach \x [count=\xi from 0] in {1.5,3,4.5,6,7.5,9,10.5} {
@@ -651,49 +651,3 @@ da cui:
     \tilde{m}[k] = \frac{1}{2\pi k_f T_s} \angle \left( \tilde{v}[k] \tilde{v}^*[k-1] \right)
 \]
 
-
-
-
-% Detailed steps of the RTL-SDR superheterodyne receiver chain
-The RTL-SDR device functions as a superheterodyne receiver, processing signals through the following steps:
-\begin{enumerate}
-    \item \textbf{Mixing to Intermediate Frequency:} Incoming signals are mixed down to an intermediate frequency (IF) of 3.57 MHz, which allows for easier signal processing and better selectivity and sensitivity.
-    \item \textbf{Sampling by ADC:} The IF signal is then sampled by a two-channel (I/Q) 28.8 MS/s 8-bit analog-to-digital converter (ADC), turning the analog signal into a digital format.
-    \item \textbf{Digital Downconversion:} The digitized I/Q data passes through parallel paths in a digital downconversion process that includes mixing, filtering, and decimating the input signal to a user-specified rate. The maximum sampling rate after decimation can reach approximately 2.8 MS/s.
-    \item \textbf{Data Transfer to Host:} Finally, the downconverted samples are transferred to the host computer via a standard USB connection for further processing and analysis.
-\end{enumerate}
-This process outlines the steps involved in the digital reception and conversion of RF signals in the RTL-SDR system.
-
-
-\section*{RTL-SDR Block Diagram}
-
-The process of converting an RF signal to a baseband signal in an RTL-SDR involves several steps, illustrated in the block diagram and detailed equations:
-\begin{enumerate}
-    \item The RF signal undergoes amplification and filtering, including active gain control and rejection of RF image frequencies.
-    \item The analog signal is mixed down to an intermediate frequency (IF) of 3.57 MHz to suit the ADC sampling rate.
-    \item The ADC samples the IF at 28.8 MS/s and then the signal is filtered and decimated.
-    \item Digital downconversion is performed using quadrature numerically-controlled oscillators (NCOs) to generate in-phase (I) and quadrature (Q) components.
-    \item The digitized I/Q data is then resampled and synchronized, outputting to the USB port at a lower rate (up to 2.8 MS/s) and passed to software like MATLAB/Simulink for further processing.
-\end{enumerate}
-This process effectively moves the signal from the RF spectrum into the digital domain, where it can be manipulated and analyzed with much greater flexibility.
-
-The RF signal is converted to baseband through the following mathematical steps:
-
-\begin{enumerate}
-    \item The received RF signal at frequency \( f_c \) is mixed with a local oscillator signal to shift its frequency down to the intermediate frequency (IF):
-    \[ S_{IF}(t) = S_{RF}(t) \cdot \cos(2\pi f_{LO} t) \]
-    where \( f_{LO} \) is the local oscillator frequency chosen such that \( f_{IF} = |f_{LO} - f_c| \).
-
-    \item The resulting IF signal is then sampled by an ADC at a sampling frequency \( f_s \):
-    \[ S_{ADC}(n) = S_{IF}(nT_s) \]
-    where \( T_s = \frac{1}{f_s} \) is the sampling period, and \( n \) is the discrete sample index.
-
-    \item The digitized signal undergoes digital downconversion (DDC), which includes mixing, filtering, and decimation to reduce the sample rate to a lower intermediate frequency:
-    \[ S_{DDC}(t) = S_{ADC}(t) \cdot e^{-j2\pi f_{IF} t} \]
-    followed by low-pass filtering to isolate the baseband component.
-
-    \item The complex baseband signal \( S_{BB}(t) \) is obtained:
-    \[ S_{BB}(t) = \text{LPF}\{S_{DDC}(t)\} \]
-    which represents the in-phase (I) and quadrature (Q) components of the original RF signal.
-\end{enumerate}
-These steps translate the high-frequency RF signal into a lower frequency baseband signal that can be further processed by software applications for various communication tasks.
