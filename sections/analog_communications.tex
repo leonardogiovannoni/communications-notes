@@ -319,7 +319,7 @@ I vantaggi della modulazione in frequenza includono:
 
 
 
-\subsection*{FM Signal with a Modulating Sinusoid}
+\subsection*{Segnale FM con una Sinusoide Modulante}
 
 % Modulating sinusoid
 Sia \( m(t) \) una sinusoide data da \( m(t) = V_m \cos(2\pi f_m t) \). Il segnale FM diventa:
@@ -345,8 +345,8 @@ L'inviluppo complesso sarà:
 La formula dell'integrale per trovare i coefficienti della serie di Fourier \( c_n \) del segnale \( x(t) \) su un periodo \( T_0 \) è data da:
 \[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
 
-Per la modulazione FM, dove \( f_0 = f_m \) (la frequenza di modulazione) e \( T_0 = \frac{1}{f_m} \), i coefficienti per l'inviluppo complesso \( \hat{s}_{FM}(t) \) diventano:
-\[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} A_c e^{j m_f \sin(2\pi f_m t)} e^{-j 2\pi f_m n t} dt \]
+Per la modulazione FM, dove \( f_0 = f_m \) (la frequenza di modulazione) e quindi \( T_0 = \frac{1}{f_m} \), i coefficienti per l'inviluppo complesso \( \hat{s}_{FM}(t) \) diventano:
+\[ c_n = \frac{1}{T_m} \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} A_c e^{j m_f \sin(2\pi f_m t)} e^{-j 2\pi f_m n t} dt \]
 
 Applicando l'espansione di Jacobi-Anger, sappiamo che:
 \[ e^{j z \sin \theta} = \sum_{k=-\infty}^\infty J_k(z) e^{j k \theta} \]
@@ -356,16 +356,16 @@ Quindi, con \( z = m_f \) e \( \theta = 2\pi f_m t \), otteniamo:
 
 
 Sostituendo l'espansione nell'integrale per \( c_n \):
-\[ c_n = \frac{A_c}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \sum_{k=-\infty}^\infty J_k(m_f) e^{j k 2\pi f_m t} e^{-j 2\pi f_m n t} dt \]
+\[ c_n = \frac{A_c}{T_m} \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} \sum_{k=-\infty}^\infty J_k(m_f) e^{j k 2\pi f_m t} e^{-j 2\pi f_m n t} dt \]
 
-Scambiando la somma e l'integrale (supponendo convergenza uniforme), e notando che \( e^{j (k-n) 2\pi f_m t} \) è periodico con periodo \( T_0 \), otteniamo:
-\[ c_n = \frac{A_c}{T_0} \sum_{k=-\infty}^\infty J_k(m_f) \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j (k-n) 2\pi f_m t} dt \]
+Scambiando la somma e l'integrale (supponendo convergenza uniforme), e notando che \( e^{j (k-n) 2\pi f_m t} \) è periodico con periodo \( T_m \), otteniamo:
+\[ c_n = \frac{A_c}{T_m} \sum_{k=-\infty}^\infty J_k(m_f) \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} e^{j (k-n) 2\pi f_m t} dt \]
 
 
 
 L'integrale:
-\[ \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j (k-n) 2\pi f_m t} dt \]
-è non nullo solo quando \( k = n \), in tal caso è uguale a \( T_0 \). Altrimenti è nullo a causa dell'ortogonalità delle funzioni esponenziali su un periodo completo.
+\[ \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} e^{j (k-n) 2\pi f_m t} dt \]
+è non nullo solo quando \( k = n \), in tal caso è uguale a \( T_m \). Altrimenti è nullo a causa dell'ortogonalità delle funzioni esponenziali su un periodo completo.
 
 
 Quindi:
@@ -717,6 +717,9 @@ Bisogna comunque tenere in considerazione che labanda limitata a 2.8 MHz non per
 
 
 \paragraph*{Ricezione radio FM}
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{imgs/fm_receiver_impl.jpg}
+\end{center}
 I simboli I/Q digitali ricevuti dal SDR richiedono una demodulazione per essere convertiti nell'informazione trasmessa. In particolare per la radio FM si considera
 \[
     m(t) = L(t) + R(t)
@@ -748,6 +751,6 @@ moltiplicando per il coniugato del campione precedente si ottiene
 
 da cui:
 \[
-    \tilde{m}[k] = \frac{1}{2\pi k_f T_s} \angle \left( \tilde{v}[k] \tilde{v}^*[k-1] \right)
+    \tilde{m}[k] = \frac{1}{2\pi k_f T_s} \angle \left( \tilde{v}[k] \ \tilde{v}^*[k-1] \right)
 \]
 
