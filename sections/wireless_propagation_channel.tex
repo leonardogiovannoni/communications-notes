@@ -261,7 +261,11 @@ Il canale di tramissione è modellato come un filtro LTI, la cui risposta impuls
     h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} \delta(t - \tau_{\ell})
 \]
 
-Dove \( A_{LS} \) è l'attenuazione dovuta al large scale fading (quindi path loss e shadowing), \( \alpha_{\ell} \) e \( \phi_{\ell} \) sono rispettivamente ampiezza e fase del segnale \(\ell\)-esimo, e \( \tau_{\ell} \) è il ritardo temporale. La risposta impulsiva del canale è la somma delle risposte impulsiva di ogni singolo percorso.
+Dove \( A_{LS} \) è l'attenuazione dovuta al large scale fading (quindi path loss e shadowing), \( \alpha_{\ell} \) e \( \phi_{\ell} \) sono rispettivamente ampiezza e fase del segnale \(\ell\)-esimo, e \( \tau_{\ell} \) è il ritardo temporale. 
+% TODO: questa frase sotto non è chiara
+% TODO: c'è una relazione tra phi_l e tau_l? 
+La diversa fase è dovuta al fatto che il segnale è modulato con la frequenza della portante, quindi se c'è una piccola differenza di tempo nell'arrivo, ci sarà anche una diversa rotazione dovuta alla frequenza della portante.
+La risposta impulsiva del canale è la somma delle risposte impulsiva di ogni singolo percorso.
 
 Per quanto riguarda i parametri delle varie repliche:
 \begin{itemize}
@@ -269,8 +273,9 @@ Per quanto riguarda i parametri delle varie repliche:
     \[
         \alpha e^{j\phi_i} = x_i + j y_i \quad \text{con } x_i, y_i \sim \mathcal{N}(0, \sigma^2)
     \]
+    % TODO: il primo passaggio sotto non torna
     \[
-        \|\alpha e^{j\phi_i}\| = \sqrt{x_i^2 + y_i^2} \sim \text{Rayleigh}(\sigma)
+        \alpha = \|\alpha e^{j\phi_i}\| = \sqrt{x_i^2 + y_i^2} \sim \text{Rayleigh}(\sigma)
     \]
 
     \begin{itemize}
