@@ -22,9 +22,9 @@ Super high frequency & SHF & 3 GHz - 30 GHz & Space wave \\
 Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraverso il canale, si indentificano i seguenti meccanismi di propagazione:
 
 \begin{itemize}
-    \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza.
-    \item \textbf{Sky wave} (1-10 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri.
-    \item \textbf{Space wave} (da 30 MHZ): le onde richiedono un line-of-sight per poter essere ricevute correttamente, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso.
+    \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza, ma i problemi che si pongono sono il dover utilizzare una frequenza sotto i 2 MHz e quindi antenne di dimensioni molto grandi. Per esempio sono utilizzate nella sincronizzazione di orologi atomici. Possono essere sfruttate per scopi militari.
+    \item \textbf{Sky wave} (1-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalemnte la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
+    \item \textbf{Space wave} (da 30 MHZ): le onde richiedono una linea di vista per poter essere ricevute correttamente, e in questo caso si parla di pochi chilometri, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso, che per esempio non sono presenti nelle sky wave, come edifici, alberi, ecc.
 \end{itemize}
 
 
@@ -44,7 +44,7 @@ Le space wave rappresentano il meccanismo più importante dato che la maggior pa
 
     
    
-    \item \textbf{Diffrazione}: quando il segnale è ostruito da oggetti con superfici taglienti, parte del segnale può modificare l'angolo con cui si propaga. Questo fenomeno permette in certe condizioni di ricevere un segnale anche in assenza di un line-of-sight a causa di un oggetto che crea una zona d'ombra, ovviamente l'energia ricevuta sarà minore rispetto a quella originaria del segnale.
+    \item \textbf{Diffrazione}: quando il segnale è ostruito da oggetti con superfici taglienti e irregolari, parte del segnale può modificare l'angolo con cui si propaga. Questo fenomeno permette in certe condizioni di ricevere un segnale anche in assenza di un line-of-sight a causa di un oggetto che crea una zona d'ombra, ovviamente l'energia ricevuta sarà minore rispetto a quella originaria del segnale.
     \begin{center}
         \begin{tikzpicture}
             \draw[thick] (-2,0) -- (-0.0625,0);
@@ -60,7 +60,7 @@ Le space wave rappresentano il meccanismo più importante dato che la maggior pa
 
 
     
-    \item \textbf{Scattering}: quando il segnale impatta con oggetti di piccola dimensione rispetto alla lunghezza d'onda si ha una propagazione in più direzioni del segnale.
+    \item \textbf{Scattering}: il segnale impatta con oggetti di piccola dimensione rispetto alla lunghezza d'onda si ha una propagazione in più direzioni del segnale, a differenza della diffrazione dove c'è più meno una direzione comune dove il segnale va.
     \begin{center}
         \begin{tikzpicture}
             \shade[ball color=black!40, opacity=0.4] (0,0) circle (0.15cm);
@@ -89,7 +89,7 @@ Le space wave rappresentano il meccanismo più importante dato che la maggior pa
 Gli effetti generati da questi fenomeni possono essere riassunti in due diversi tipi di attenuazione del segnale:
 \begin{itemize}
     \item \textbf{Small-scale fading}: modella fluttazioni rapide della potenza del segnale su lunghezze paragonabili a quella dell'onda.
-    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze.
+    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze. Contribuisce al valor medio della potenza del segnale per una distanza di circa 1 m, e quindi verrà considerato come costante per distanze di circa 1 m.
 \end{itemize}
 
 
@@ -128,19 +128,82 @@ Gli effetti generati da questi fenomeni possono essere riassunti in due diversi 
 Il LSF modella la variazione della potenza del segnale in base alla distanza fra trasmettitore e ricevitore, tipicamente variando per distanze nell'ordine del metro. Gli effetti sono modellati attraverso la combinazione di \textbf{path loss} e \textbf{shadowing}:
 
 \paragraph*{Path Loss}
-Il path loss rappresenta un'approssimazione delle equazioni di Maxwell.
+Il path loss è un valore deterministico che modella la media dell'attenuazione della potenza ricevuta, rappresenta un'approssimazione delle equazioni di Maxwell.
 \begin{equation}
     P_{RX} \approx P_{TX} \cdot \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n \quad \text{for } d > d_0
 \end{equation}
+dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda_0}{4 \pi d_0} \right)^2 \) rappresenta il termine di campo vicino, \( P_{TX} \) è la potenza trasmessa, \( d_0 \) è la distanza di riferimento e \( n \) è l'esponente del path loss. Quest'ultimo dipende dall'ambiente in cui ci si trova, ad esempio in un ambiente urbano il valore di \( n \) varia tra 2.7 e 3.5. 
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|>{\raggedright}p{4cm}|>{\centering\arraybackslash}p{2cm}|}
+    \hline
+    \textbf{Environment} & \textbf{Path Loss Exponent, \( n \)} \\
+    \hline
+    Free space & 2 \\
+    \hline
+    Urban area cellular radio & 2.7 -- 3.5 \\
+    \hline
+    Urban area cellular (obstructed) & 3 -- 5 \\
+    \hline
+    In-building line-of-sight & 1.6 -- 1.8 \\
+    \hline
+    Obstructed in-building & 4 -- 6 \\
+    \hline
+    Obstructed in-factories & 2 -- 3 \\
+    \hline
+  \end{tabular}
+  \caption{Esponenti del path loss per vari ambienti}
+\end{table}
 
-dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda}{4 \pi d_0} \right)^2 \) rappresenta il termine di campo vicino, \( P_{TX} \) è la potenza trasmessa, \( d_0 \) è la distanza di riferimento e \( n \) è l'esponente del path loss. Quest'ultimo dipende dall'ambiente in cui ci si trova, ad esempio in un ambiente urbano il valore di \( n \) varia tra 2.7 e 3.5. 
-
+Se abbiamo un'antenna, possiamo assumere che esista un'area di raggio $d_0$ centrata nell'antenna, che non è ostrutita, mentre $d$ rappresenta la distanza tra l'area di raggio $d_0$ e il ricevitore, lungo cui ci invece sono ostacoli. In questa area si calcola l'attenuazione utilizzando la regola come se si fosse nello spazio vuoto.
 Il valore di \( d_0 \) è scelto in modo da poter misurare o stimare con precisione il path loss in condizioni controllate, in modo da poter avere un punto di riferimento da cui calcolare le perdite aggiuntive a distanze maggiori.
 In reti cellulari che coprono aree estese si utilizza una distanza di riferimento di 1 km, mentre in reti progettate per aree più piccole e densamente popolate si utilizzano distanze di riferimento di 100 metri o anche 1 metro.
+
+\begin{center}
+    \resizebox{0.5\textwidth}{!}{
+        \begin{tikzpicture}[
+            thick,
+            txt/.style={circle, inner sep=1pt, fill=white, draw=black},  % Reduced text size for Tx and Rx
+            line/.style={thick, dashed, gray},
+            dotted2/.style={thick, dotted, gray},  % New style for dotted lines
+            label distance=3pt
+        ]
+            % Define central point
+            \coordinate (O) at (0,0);
+
+            % Drawing the outer "obstructed" area with light gray fill and horizontal lines
+            \draw[fill=gray!50] (O) circle[radius=5cm];
+            % Labeling the outer circle
+            \node at (0,4) {OBSTRUCTED};  % Reduced text size and positioned within the circle
+
+            % Drawing the inner "unobstructed" area with darker gray fill
+            \draw[fill=gray!10] (O) circle[radius=1.75cm];
+            % Labeling the inner circle
+            \node at (0,0.675) {UNOBSTRUCTED};  % Reduced text size and positioned within the circle
+
+            % Central transmitter node
+
+            % Dashed line indicating radius
+            \draw[dotted] (O) -- (1.75,0) node[midway, below] {$d_0$};
+
+            % Dotted line replacing the second dashed line
+            \draw[dashed] (1.75,0) -- (5,0) node[midway, below] {$d$};
+
+            \node[txt] at (O) {Tx}; % Shifted below the center
+            % Arrow indicating receiver
+            \node[txt] at (5,0) {Rx}; % Shifted below the line end
+
+        \end{tikzpicture}
+    }
+\end{center}
+
 La formula, deterministica, che fornisce il valore di attenuazione dato dal path loss è:
 \[
     A_{PL} = \frac{P_{RX}}{P_{TX}} = \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n
 \] 
+\[
+    A_{PL}^{dB} = P_{RX}^{dB} - P_{TX}^{dB}
+\]
 \[
     A_{PL}^{dB} = 10 \cdot \log_{10}(A_{PL}) = \Gamma(f_0, d_0)_{dB} + n \cdot 10 \cdot \log_{10}(d_0) - n \cdot 10 \cdot \log_{10}(d)
 \]
@@ -153,17 +216,22 @@ Nel vuoto l'attenuazione del segnale in base alla distanza è data dalla relazio
 dove \( A \) è l'area dell'antenna in ricezione, che tipicamente è \( A = \lambda^2 \) dove \( \lambda \) è la lunghezza d'onda del segnale.
 
 
-Per frequenze inferiori ai 6GHz l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
+Per frequenze inferiori ai 6 GHz l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
 
-Nella progettazione di sistemi di comunicazione wireless è essenziale tenere in considerazione il rapportarto tra frequenza utilizzata e distanza copribile da una singola antenna.
-
+Nella progettazione di sistemi di comunicazione wireless è essenziale tenere in considerazione il rapporto tra frequenza utilizzata e distanza copribile da una singola antenna.
+Per avere una copertura maggiore è meglio utilizzare frequenze portanti minori (si avranno celle grandi), ma per avere capacità maggiori si usano frequenze più alte perché lo spettro disponibile è maggiore (si avranno celle piccole).
 \paragraph*{Shadowing}
 
-Dati due punti alla stessa distanza dal trasmettitore, se si considerasse unicamente il path loss, si avrebbe la stessa attenuazione, tuttavia nella realtà vi è una componente aleatoria da dover considerare, modellabile tramite shadowing. La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto. La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri espressi in dB, ovvero la PDF è:
+Dati due punti alla stessa distanza dal trasmettitore, se si considerasse unicamente il path loss, si avrebbe la stessa attenuazione, 
+tuttavia nella realtà vi è una componente aleatoria da dover considerare, modellabile tramite shadowing. 
+La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto. 
+La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri ($A_S$ e $\sigma_S$) espressi in dB, 
+ovvero la PDF è:
 \[
     f_{A_s}(a_S) = \frac{1}{\sqrt{2\pi \sigma_S}} e^{-\frac{a_S^2}{2\sigma_S^2}}
 \]
 
+Tipicamente $\sigma_S$ varia tra 0 e 9 dB.
 
 
 
@@ -177,7 +245,9 @@ Gli effetti del path loss e dello shadowing sono sommati per ottenere le variazi
 \]
 
 
-Il path loss è deterministico e dipende dall'esponente scelto in base all'ambiente circostante e dalla distanza tra trasmettitore e ricevitore, mentre lo shadowing è aleatorio e distribuito come una log-normale. Entrambi gli eggetti contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
+Il path loss è deterministico e dipende dall'esponente scelto in base all'ambiente circostante e dalla distanza tra trasmettitore e ricevitore, 
+mentre lo shadowing è aleatorio e distribuito come una log-normale. 
+Entrambi contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
 
 \begin{center}
 \includegraphics[width=0.675\textwidth]{imgs/fading_sum.jpg}
