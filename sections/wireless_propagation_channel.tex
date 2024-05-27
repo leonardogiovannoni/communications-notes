@@ -388,13 +388,16 @@ Definiamo dei parametri che ci permettano di capire la gravità dell'ISI. Il del
 \end{minipage}
 
 
-In entrambi i casi il canale è detto \textbf{multipath} (TODO: non ha senso questo discorso) in quanto la ricezione del segnale avviene attraverso più replichem poi si aggiunge una classificazione ulteriore dovuta al delay spread.
-Il delay spread in frequenza è espresso tramite la \textbf{coherence bandwidth}, definita come l'intervallo di frequenze per cui la risposta del canale è circa costante:
+In entrambi i casi il canale è detto \textbf{multipath} (TODO: non ha senso questo discorso) in quanto la ricezione del segnale avviene attraverso più repliche, a cui poi si aggiunge una classificazione ulteriore dovuta al delay spread.
+Nel caso flat fading essendo le repliche molto vicine è ragionevole l'approssimazione a una sola replica e quindi siamo in una situazione con una piccola ISI, nel caso invece multipath questa assunzione non vale e l'ISI è grande.
+Invece che utilizzare il delay spread si può utilizzare, in frequenza, la \textbf{coherence bandwidth}, definita come l'intervallo di frequenze per cui la risposta in frequenza del canale è circa costante:
 \[
     B_c \approx \frac{1}{5\sigma_\tau}
 \]
 Se $B_c > B_S \approx \frac{1}{T}$, ovvero la banda del segnale trasmesso, non si avrà alcune distorsione, il canale risulta \textbf{flat fading}. In caso contrario, se $B_c < B_S$ il canale è detto \textbf{frequency selective}.
-
+\begin{center}
+    \includegraphics[width=0.875\textwidth]{imgs/coherence_bandwidth.png}
+\end{center}
 La coherence bandwidth può essere determinata considerando la densità spettrale di potenza.
 TODO questa parte non è chiara.
 Quando $\sigma_{\tau} < T$ vale $B_c > B_s$ e il canale è flat fading, altrimenti se $\sigma_{\tau} > T$ vale $B_c < B_s$ e il canale è frequency selective.
@@ -470,6 +473,8 @@ Se il ricevitore di un segnale è in movimento il modello di canale risulta più
 Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente anche per distanze paragonabili alla lunghezza d'onda, le quali possono essere nell'ordine del centimetro.
 Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsive, ma nel caso di ricevitore mobile vi è una dipendenza dal tempo.
 Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
+
+% TODO: inserire considerazione sulla BER
 
 \[
     h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(\tau - \tau_{\ell})
