@@ -579,19 +579,24 @@ Lo studio della funzione di autocrrelazione del canale wireless nel caso del mod
 \[
     R_D (\tau) = J_0(2\pi f_d \tau) \quad \text{funzione di autocorrelazione time varying channel}
 \]
-Per $x=\frac{1}{2}$ si ha che $J_0(2\pi x) \approx 0$, quindi il canale può considerarsi incorrelato per $f_d T_c = \frac{1}{2}$.
+Per $x=\frac{1}{2}$ si ha che $J_0(2\pi x) = 0$, quindi il canale può considerarsi incorrelato per $\tau = T_c = \frac{1}{2f_d}$.
 
 dove $J_0$ è la funzione di bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
 
 \[
     f_d T_c = \frac{1}{2} \quad \Rightarrow \quad  T_c = \frac{1}{2 f_d} = \frac{1}{2} \frac{c}{f_c v} \quad \text{coherence time}
 \]
+Quindi $T_c$ rappresenta il tempo entro cui il canale può essere considerato costante, ovvero un sistema LTI.
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{imgs/coherence_time.png}
+\end{center}
+
 
 Lo stesso concetto può essere espresso anche in termini di distanza, molto importante per l'utilizzo di antenne direzionali.
 \[
     d_c = v T_c = \frac{1}{2} v \frac{c}{f_c v} = \frac{\lambda}{2}
 \]
-Questo implica che segnali ricevuti a distanze nell'ordine di metà lunghezza d'onda possono essere considerati incorrelati (?).
+Questo implica che segnali ricevuti a distanze nell'ordine di metà lunghezza d'onda possono essere considerati incorrelati (TODO?).
 Se $T < T_c$ si può asssumere che il canale sia modellabile come LTI in quanto la risposta risulta costante nel tempo per almeno $T_c$, inferiore al tempo dei simboli.
 Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare il canale come LTI, tuttavia si rischia di incorrere in un canale frequency selective per cui sono necessarie contromisure per contrastare l'ISI generato.
 
@@ -651,6 +656,7 @@ Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare i
     \item \textbf{Slow fading}: l'effetto doppler è trascurabile ($B_S \gg f_d$, $T_c \gg T$)
     \item \textbf{Fast fading}: l'effetto doppler distorce notevolemnte il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
 \end{itemize}
+Dove $T$ è il symbol time, $B_S$ è la banda del segnale, $f_d$ è il doppler shift, $T_c$ è il tempo di coerenza del canale.
 Se la banda del segnale è maggiore del doppler shift la convoluzione genera un comportamento non molto significativo.
 
 In generale gli effeti LSF determinano la dimensione della cella di copertura, considerando anche la frequenza di trasmissione.
@@ -661,9 +667,9 @@ Come esempio, consideriamo il caso di trasmissione di un segnale a una frequenza
 Per la trasmissione, la banda del segnale è \( B_s = 2 \si{MHz} \), da cui possiamo approssimare \( T \) come \( T \approx \frac{1}{B_s} = 500 \si{ns} \), rappresentando la durata di un simbolo nella trasmissione dei dati.
 Un importante aspetto di questo scenario è il Doppler spread, calcolato utilizzando \( f_d = \frac{f_c v}{c} = \frac{2.1 \times 10 ^9 \si{Hz} \cdot 25 \si{m/s}}{3 \times 10^8 \si{m/s}} = 175\si{Hz}\).
 Il tempo di coerenza del canale \( T_c \) è quindi derivato da \( T_c = \frac{1}{2f_d} \approx 3 \si{ms}\), descrivendo il periodo di tempo durante il quale le condizioni del canale sono relativamente costanti.
-Inoltre, la banda di coerenza del canale \( B_c \) è calcolata dal delay spread \( \sigma_\tau \), risultando in \( B_c = \frac{1}{\sigma_\tau} = 500 \si{kHz} \). Questa banda misura l'intervallo di frequenze su cui la risposta del canale rimane uniforme.
-Il canale è quindi definibile come \textit{slow} poiché \( B_s \gg f_d \) (\( T \ll T_c \)), indicando che i cambiamenti nel canale dovuti agli effetti Doppler sono relativamente lenti rispetto alla larghezza di banda del segnale e al tempo di simbolo.
-Il canale è anche definibile come \textit{frequency-selective} a causa di \( B_s > B_c \) (\( T < \sigma_\tau \)), implicando che diversi segmenti della larghezza di banda possono subire variazioni delle caratteristiche di fading.
+Inoltre, la banda di coerenza del canale \( B_c \) è calcolata dal delay spread \( \sigma_\tau \), risultando in \( B_c = \frac{1}{5\sigma_\tau} = 100 \si{kHz} \). Questa banda misura l'intervallo di frequenze su cui la risposta del canale rimane uniforme.
+Il canale è quindi definibile come \textit{slow} poiché \( B_s \gg f_d \) (ovvero \( T \ll T_c \)), indicando che i cambiamenti nel canale dovuti agli effetti Doppler sono relativamente lenti rispetto alla larghezza di banda del segnale e al tempo di simbolo.
+Il canale è anche definibile come \textit{frequency-selective} a causa di \( B_s > B_c \) (ovvero \( T < \sigma_\tau \)), implicando che diversi segmenti della larghezza di banda possono subire variazioni delle caratteristiche di fading.
 
 
 
@@ -671,9 +677,42 @@ Il canale è anche definibile come \textit{frequency-selective} a causa di \( B_
 
 
 
+\begin{center}
+\textbf{Small-Scale Fading} \\
+\textit{(Based on multipath time delay spread)}
+
+\bigskip
+
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Flat Fading} & \textbf{Frequency Selective Fading} \\ \hline
+BW of signal $<$ BW of channel & BW of signal $>$ BW of channel \\
+Delay spread $<$ Symbol period & Delay spread $>$ Symbol period \\ \hline
+\end{tabular}
+\end{center}
 
 
 
+\begin{center}
+\textbf{Small-Scale Fading} \\
+\textit{(Based on Doppler spread)}
 
+\bigskip
 
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Fast Fading} & \textbf{Slow Fading} \\ \hline
+High Doppler spread & Low Doppler spread \\
+Coherence time $<$ Symbol period & Coherence time $>$ Symbol period \\
+Channel variations faster than baseband signal variations & Channel variations slower than baseband signal variations \\ \hline
+\end{tabular}
+\end{center}
 
+\bigskip
+
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{imgs/recap_ssf1.png}
+\end{center}
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{imgs/recap_ssf2.png}
+\end{center}
