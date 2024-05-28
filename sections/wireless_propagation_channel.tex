@@ -468,6 +468,7 @@ Valori tipici di delay spread sono:
 
 Per esempio, in un'area urbana con dealy spread $\sigma_\tau = 4 \mu s$, avremo una coherence bandwidth di $B_c \approx \frac{1}{5 \sigma_\tau} = \frac{1}{20 \mu s} = 50 \text{kHz}$.
 TODO: two path channels and comparison between awgn, flat fading and frequency selective BER.
+
 \section*{Time varying channel}
 Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai guadagni e alle fasi alle varie repliche.
 Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente anche per distanze paragonabili alla lunghezza d'onda, le quali possono essere nell'ordine del centimetro.
@@ -475,13 +476,14 @@ Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare l
 Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
 
 % TODO: inserire considerazione sulla BER
-
+% TODO: \delta(t - \tau) o \delta(\tau - \tau_l
 \[
-    h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(\tau - \tau_{\ell})
+    h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
 \]
 
-
-Per il ritardo non si aggiunge dipendenza dal tempo in quanto, rispetto ai guadagni e alla fase, varia molto più lentamente, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
+% TODO: mediato?
+Dove abbiamo aggiunto la dipendenza dal tempo alle ampiezze e alle fasi delle repliche. Dato che il large scale fading è mediato su una distanza nell'ordine del metro, lo possiamo considerare costante (avendo un rate con cui varia molto più lento).
+Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'esso molto più lentamente rispetto a guadagni e fasi, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
 
 
 
@@ -530,27 +532,31 @@ dove:
 \end{itemize}
 
 
-Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando. Nel nostro caso, si assume che il ricevitore si stia muovendo lontano dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
-(TODO: controllare se effettivamente il segno è corretto e se il ricevitore si sta allontanando)
-Il segnale ricevuto in $y$ risulta avere una frequenza inferiore a quello in $x$. Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce. In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
-In generale il doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$.
+Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando. 
+Nel nostro caso, si assume che il ricevitore si stia allontanando dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
+Il segnale ricevuto in $y$ risulta avere una frequenza inferiore a quello in $x$.
+Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce.
+In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
+% TODO: theta è una variabile aleatoria?
+Il doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$. 
+Viene descritto come un processo aleatorio a media nulla e se ne studia autocorrelazione e densità spettrale di potenza.
 Esistono diversi modelli utilizzati per descrivere lo spreading in frequenza,
 che si verifica quando le varie repliche del segnale vengono aggregate al ricevitore.
 
-Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna repliche che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico}) (TODO: è corretto dire che è scattering isotropico).
+Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna repliche che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico}) (TODO: è corretto dire che è scattering isotropico per intendere lo uniform scattering).
 L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomeno introdotto dal canale.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.875\textwidth]{imgs/jakes.jpg}
     \captionsetup{width=.5\textwidth}
+    % TODO: nella figura in alto a sinistra, cosa è rappresentato?
     \caption*{Spettro doppler di Jakes:
         per il segnale $s$ vale \( S_S(f) = \frac{1}{2} \delta \left(f - f_c \right) + \frac{1}{2} \delta \left(f + f_c\right) \),
         mentre per il segnale $y$ vale \( S_Y(f) = S_D(f) \ast S_S(f) \).
     }
 \end{figure}
 
-% include image imgs/jakes.jpg
 \[
     S_D(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f}{f_d}\right)^2}}
 \]
@@ -559,7 +565,8 @@ Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effet
 \[
     y(t) = s(t) d(t)
 \]
-dove $s(t)$ è il segnale trasmesso e $a(t)$ è il Jokes' doppler spectrum. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
+% TODO da dove deriva la radice quadrata al denominatore considerando v cos(theta) / c
+dove $s(t)$ è il segnale trasmesso e $d(t)$ è il Jokes' doppler spectrum. Quando $f_d$ è trascurabile (e quindi circa 0), $S_D(f)$ diventa circa una delta, e quindi $S_Y(f) = S_S(f)$. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
 
 \[
     S_Y(f) = S_S(f) \ast S_D(f)
@@ -568,11 +575,11 @@ dove $s(t)$ è il segnale trasmesso e $a(t)$ è il Jokes' doppler spectrum. In f
 Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jakes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
 
 
-(TODO: tau o t?)
+(TODO:  data che l'autocorrelazione generalmente si indica con tau, tau o t?)
 \[
     R_D (\tau) = J_0(2\pi f_d \tau) \quad \text{funzione di autocorrelazione time varying channel}
 \]
-Per $x=\frac{1}{2}$ si ha che $j_0(2\pi x) \approx 0$, quindi il canale può considerarsi incorrelato per $f_d T_c = \frac{1}{2}$.
+Per $x=\frac{1}{2}$ si ha che $J_0(2\pi x) \approx 0$, quindi il canale può considerarsi incorrelato per $f_d T_c = \frac{1}{2}$.
 
 dove $J_0$ è la funzione di bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
 
