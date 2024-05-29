@@ -36,6 +36,113 @@ L'idea base consiste nel suddividere il segnale originale da trasmettere, caratt
 I segnali in cui è stato suddiviso l'originale non saranno affetti da ISI.
 
 Per effettuare una trasmissione parallela dei veri segnali si potrebbe utilizzare filtri passa banda in parallelo, tuttavia nella pratica cioè non è possibile a causa della mancanza di un filtro ideale, la cui rappresentazione in frequenza sarebbe una perfetta rect. Inoltre l'utilizzo di molti filtri sarebbe molto costoso.
+
+
+\begin{center}
+    \resizebox{0.5\textwidth}{!}{
+        \begin{tikzpicture}[
+                block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
+                node distance=1cm and 1cm,
+                auto,
+                every node/.style={align=center}
+            ]
+            \newcommand{\signalshapee}{
+                \draw (-0.5, -0.25) -- (-0.35, -0.25) -- (-0.35, 0.25) -- (-0.25, 0.25) -- (-0.25, -0.25) -- (0.5, -0.25); 
+            }
+
+
+            \newcommand{\signalshape}{
+                    \draw (-0.5, -0.25) -- (-0.25, -0.25) -- (-0.25, 0.25) -- (-0.15, 0.25) -- (-0.15, -0.25) -- (0.5, -0.25); 
+            }
+            \newcommand{\signalshapeeee}{
+                \draw (-0.5, -0.25) -- (0.15, -0.25) -- (0.15, 0.25) -- (0.25, 0.25) -- (0.25, -0.25) -- (0.5, -0.25); 
+            }
+
+            \newcommand{\signalshapeee}{
+                \draw (-0.5, -0.25) -- (0.25, -0.25) -- (0.25, 0.25) -- (0.35, 0.25) -- (0.35, -0.25) -- (0.5, -0.25);
+            }
+        
+            \node[block] (encoder) {Source};
+            \node[block, right=of encoder, inner sep=0pt, minimum size=0pt] (interp) {};
+
+            \node[above=2cm of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
+            \node[above=4cm of dummy1, inner sep=0pt, minimum size=0pt] (dummy2) {};
+            \node[below=2cm of interp, inner sep=0pt, minimum size=0pt] (dummy_1) {};
+            \node[below=4cm of dummy_1, inner sep=0pt, minimum size=0pt] (dummy_2) {};
+
+            \node[block, right=1.5cm of dummy1, path picture={ % Use path picture to embed another TikZ graphic
+            \begin{scope}[shift={(path picture bounding box.center)}]
+                \signalshape
+            \end{scope}
+            }] (p1) {};
+            \node[block, right=1.5cm of dummy2, path picture={ % Use path picture to embed another TikZ graphic
+            \begin{scope}[shift={(path picture bounding box.center)}]
+                \signalshapee
+            \end{scope}
+            }] (p2) {};
+            \node[block, right=1.5cm of dummy_1, path picture={ % Use path picture to embed another TikZ graphic
+            \begin{scope}[shift={(path picture bounding box.center)}]
+                \signalshapeeee
+            \end{scope}
+            }] (p_1) {};
+            \node[block, right=1.5cm of dummy_2, path picture={ % Use path picture to embed another TikZ graphic
+            \begin{scope}[shift={(path picture bounding box.center)}]
+                \signalshapeee
+            \end{scope}
+            }] (p_2) {};
+
+            % create a dotted line between p1 and p_1
+            \draw[line width=1pt,dash pattern=on 1pt off 15pt] (p1) -- (p_1);
+
+            \node[draw, circle, right=2cm of p1] (m1) {\(\times\)}; 
+            \node[draw, circle, right=2cm of p2] (m2) {\(\times\)};
+            \node[draw, circle, right=2cm of p_1] (m_1) {\(\times\)};
+            \node[draw, circle, right=2cm of p_2] (m_2) {\(\times\)};
+
+            \draw[->] (p1) -- (m1);
+            \node[below=of m1] (cos) {$e^{j2\pi (f_1 + \Delta f) t}$};
+            \draw[->] (cos) -- (m1);
+
+            \draw[->] (p2) -- (m2);
+            \node[below=of m2] (sin) {$e^{j2\pi f_1 t}$};
+            \draw[->] (sin) -- (m2);
+
+            \draw[->] (p_1) -- (m_1);
+            \node[below=of m_1] (coss) {$e^{j2\pi (f_1 + (N - 2) \Delta f) t}$};
+            \draw[->] (coss) -- (m_1);
+
+
+            \draw[->] (p_2) -- (m_2);
+            \node[below=of m_2] (sinn) {$e^{j2\pi (f_1 + (N - 1) \Delta f) t}$};
+            \draw[->] (sinn) -- (m_2);
+
+            \node[right=2cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
+            \node[right=2cm of m2, inner sep=0pt, minimum size=0pt] (dummy4) {};
+
+            
+            \node[draw, circle, right=7.5cm of interp] (sum) {\(+\)};
+
+            \draw[->] (m1) -| (sum);
+            \draw[->] (m2) -| (sum);
+            
+            \draw[->] (m_1) -| (sum);
+            \draw[->] (m_2) -| (sum);
+
+            \node[right=2cm of sum] (dummy5) {};
+            \draw[->] (sum) -- node[midway, above] {$s(t)$} (dummy5) {};
+
+
+            \draw[->] (interp) |- node[midway, above] {} (p1);
+            \draw[->] (interp) |- node[midway, below] {} (p2);
+            \draw[->] (interp) |- node[midway, above] {} (p_1);
+            \draw[->] (interp) |- node[midway, below] {} (p_2);
+
+            \draw[->] (encoder) -- (interp) node[midway,above] {};
+
+
+        \end{tikzpicture}
+    }
+\end{center}
 Per poter analizzare una modulazione multi-carrier è necessaria una rappresentazione alternativa, ma equivalente, del canale di trasmissione, ottenuto campionando il segnale con frequenza $\frac{1}{T}$. La rappresentazione ottenuta risulta valida solo nella banda del segnale trasmesso, ma non è un problema dato che non si ha interesse nell'analizzare il canali in altri punti.
 
 Considerando l'inviluppo complesso risulta chiaro che la condizione di Nyquist\footnote{\label{nyquist_cond} La condizione di Nyquist garantisce l'assenza di aliasing per segnali campionati, ovvero dato l'intervallo di campionamento $T_s$ e la banda $B$ del segnale da campionare, deve valere $T_s \leq \frac{1}{2B}$, ovvero $f_s \geq 2B$} è rispettata con frequenza di campionamente $\frac{1}{T}$.
