@@ -16,7 +16,7 @@ Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene 
     \item \textbf{Rayleigh fading}: l'attenuazione delle repliche ha una distribuzione di Rayleigh.
 \end{itemize}
 
-I metodo principali per ridurre gli effetti di un fading di tali tipologie sono le diversity techniques, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
+I metodi principali per ridurre gli effetti di un fading di tali tipologie sono le diversity techniques, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
 Le principali tecniche di diversity sono:
 \begin{itemize}
     \item \textbf{Time diversity}: relative al coherence time. Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. Slow fading channels potrebbero non garantire una diversity sufficiente. Il canale deve variare sufficientemente in maniera veloce.
@@ -622,7 +622,7 @@ Ogni segnale ha il proprio rumore e distorsione da parte del canale.
 
 L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale.
 Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
-% TODO: i w_i sono reali o complessi 
+% TODO: i %w_i sono reali o complessi 
 \[
     z[m] = \sum_{i=1}^{N} w_i x_i[m] = \sum_{i=1}^{N} w_i h_i c_m + \sum_{i=1}^{N} w_i n_i[m]
 \]
@@ -670,7 +670,6 @@ Per quanto riguarda la configurazione con più antenne in trasmissione e singola
     x[m] = \sum_{i=1}^{N} h_i y_i[m] + n[m] \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
 \]
 
-
 La differenza sostanziale con il caso SIMO è che i vari segnali sono combinati ``naturalmente" durante la trasmissione e ricevuti quindi già aggregati. 
 La scelta dei coefficienti non può essere effettuata lato ricevitore, ma deve essere il trasmettitore a scegliere stimando il canale, lato ricevitore la stima è ovviamente più complessa rispetto a quella che effettuerebbe il ricevitore per proprio conto.
 L'operazione effettuata dal trasmettitore è detta \textbf{spatial precoding} ed il simbolo è denominato \textbf{spatial pre-coded symbol}.
@@ -693,7 +692,7 @@ Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \|
 \[
     \text{SNR} = \frac{P}{P_N} = \sum_{i=1}^{N} |h_i|^2 \frac{A}{\sigma^2}    
 \]
-% TODO: ma h_i è un parametro o una variabile aleatoria?
+
 La differenza tra il caso con singola antenna (sia lato trasmettitore che ricevitore) e il caso con più antenne (MISO/SIMO) è dato dal fattore $\| \mathbf{h} \| = \sum_{i=1}^{N} |h_i|^2$.
 Considerando i guadagni del canale come variabili aleatore con distribuzione di Rayleigh è possibile calcolare la distribuzione della somma come convoluzione delle PDF.
 \[

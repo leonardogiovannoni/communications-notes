@@ -66,9 +66,9 @@ Per effettuare una trasmissione parallela dei veri segnali si potrebbe utilizzar
             \node[block, right=of encoder, inner sep=0pt, minimum size=0pt] (interp) {};
 
             \node[above=2cm of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
-            \node[above=4cm of dummy1, inner sep=0pt, minimum size=0pt] (dummy2) {};
+            \node[above=3.5cm of dummy1, inner sep=0pt, minimum size=0pt] (dummy2) {};
             \node[below=2cm of interp, inner sep=0pt, minimum size=0pt] (dummy_1) {};
-            \node[below=4cm of dummy_1, inner sep=0pt, minimum size=0pt] (dummy_2) {};
+            \node[below=3.5cm of dummy_1, inner sep=0pt, minimum size=0pt] (dummy_2) {};
 
             \node[block, right=1.5cm of dummy1, path picture={ % Use path picture to embed another TikZ graphic
             \begin{scope}[shift={(path picture bounding box.center)}]
@@ -159,6 +159,8 @@ Considerando l'inviluppo complesso risulta chiaro che la condizione di Nyquist\f
 \[
     y(t) = h_{eq}(t) \ast s(t) = \sum_{\ell=0}^{L-1} h\left[\ell\right] s(t - \ell T) \quad \text{inviluppo complesso del segnale ricevuto}
 \]
+
+Dove $h_{eq}$ è la rappresentazione equivalente del canale, che si può sempre ottenere dalla formula del canale $ h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} \delta(t - \tau_{\ell})$, dove nella versione equivalente il segnale è campionato a multipli di $T$.
 
 Il segnale ricevuto è identico al segnale ottenuto utilizzando la rappresentazione fisica del canale, ma la forma permette un'analisi più semplice.
 
@@ -256,6 +258,8 @@ Introducendo il prefisso nel blocco tramesso in uscita dal canale si ottiene un 
 \[
     \mathbf{y} = \mathbf{\overline{H}} \mathbf{s}
 \]
+La lunghezza del canale equivalente è $L$.
+
 Invece di aggiungere elementi al vettore $\mathbf{s}$, ottentendo un vettore $\mathbf{\overline{s}}$, si modifica la matrice $\mathbf{H}$.
 \[ 
 \begin{bmatrix} y[0] \\ y[1] \\ \vdots \\ y[N-1] \end{bmatrix} 
@@ -275,7 +279,7 @@ Invece di aggiungere elementi al vettore $\mathbf{s}$, ottentendo un vettore $\m
 
 
 La nuova matrice risulta ancora essere del tipo Toeplitz, ma in aggiunta è anche \textbf{circolante}, dato che ogni riga è ottenuta tramite uno shift circolare verso destra della riga precedente (vale anche per le colonne, shiftando verso il basso).
-
+% TODO: ma quanto è grande %N_{CP}
 Una matrice circolante può essere diagonalizzata, cioè può essere espressa come:
 \[
     \overline{\mathbf{H}} = \mathbf{F}^H \mathbf{H} \mathbf{F}
@@ -385,6 +389,9 @@ Un simbolo OFMD corrisponde alla sovrapposizione di $N$ segnali nell'intervallo 
 \[
     s_n(t) = \frac{1}{\sqrt{N}} S(n) e^{j2\pi n \Delta f t}, \quad n = 0, \ldots, N-1 \quad \text{segnali analogici sovrapposti}
 \]
+
+% Considerando che l'ISI viene eliminata tramite la modulazione, non abbiamo più bisogno del coseno rialzato o della rect??
+
 \[
     S_{s_n}(f) = \frac{A}{N} \text{sinc}^2 ((f-n\Delta f)N T_s) \quad \text{PSD segnale sull'$n$-esima subcarrier}
 \]
@@ -402,6 +409,7 @@ Per quanto riguarda il symbol time, in OFDM si ha la relazione:
 \]  
 % TODO: cos'è L?
 Dove $L$ non è noto a priori.
+% TODO: ma quindi non utilizziamo nyquist?
 Da questo valore si ottiene:
 \[
     T_s < \sigma_{\tau} \ll T_{OFDM}, \quad B_s > B_c \gg \Delta f
@@ -556,7 +564,7 @@ L'espressione della variabile decisionale è confrontabile con quella di un sist
     \mathbf{N}'_{m} \sim \mathcal{CN}(0, \frac{\sigma}{\mathbf{H}_{m, m}})
 \]
 Questo permette di applicare le solite considerazioni per la probabilità di errore:
-% TODO: probabilmente non è H_{m, m}
+% TODO: probabilmente non % è H_{m, m}
 \[
     \mathbb{P}(e \mid \mathbf{H}_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
 \]

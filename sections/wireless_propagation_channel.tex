@@ -263,7 +263,7 @@ Il canale di tramissione è modellato come un filtro LTI, la cui risposta impuls
 
 Dove \( A_{LS} \) è l'attenuazione dovuta al large scale fading (quindi path loss e shadowing), \( \alpha_{\ell} \) e \( \phi_{\ell} \) sono rispettivamente ampiezza e fase del segnale \(\ell\)-esimo, e \( \tau_{\ell} \) è il ritardo temporale.
 % TODO: questa frase sotto non è chiara
-% TODO: c'è una relazione tra phi_l e tau_l? 
+% TODO: c'è una relazione tra %phi_l e tau_l? 
 La diversa fase è dovuta al fatto che il segnale è modulato con la frequenza della portante, quindi se c'è una piccola differenza di tempo nell'arrivo, ci sarà anche una diversa rotazione dovuta alla frequenza della portante.
 La risposta impulsiva del canale è la somma delle risposte impulsiva di ogni singolo percorso.
 
@@ -323,7 +323,7 @@ Sebbene quindi si scelga un filtro che rispetti la condizione di Nyquist, gli ef
 Definiamo dei parametri che ci permettano di capire la gravità dell'ISI. Il delay spread permette di misurare la dispersione temporale introdotta dal canale:
 \begin{itemize}
     \item $\sigma_\tau \ll T$: delay spread inferiore al symbol time, il canale è detto \textbf{flat fading}  e l'effetto dell'ISI è trascurabile in quanto le varie repliche ricevute fanno tutte riferimento allo stesso simbolo.
-    \item $\sigma_\tau > T$: delay spread maggiore del symbol time, il canale è detto \textbf{multipath} e l'effetto dell'ISI non è più trascurabile in quanto le varie repliche, appartenti a simboli differenti, interferiscono tra loro.
+    \item $\sigma_\tau > T$: delay spread maggiore del symbol time, il canale è detto \textbf{frequency selective} e l'effetto dell'ISI non è più trascurabile in quanto le varie repliche, appartenti a simboli differenti, interferiscono tra loro.
 \end{itemize}
 
 \begin{center}
@@ -476,7 +476,7 @@ Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare l
 Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
 
 % TODO: inserire considerazione sulla BER
-% TODO: \delta(t - \tau) o \delta(\tau - \tau_l
+% TODO: %\delta(t - \tau) o \delta(\tau - \tau_l
 \[
     h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
 \]
@@ -543,7 +543,7 @@ Viene descritto come un processo aleatorio a media nulla e se ne studia autocorr
 Esistono diversi modelli utilizzati per descrivere lo spreading in frequenza,
 che si verifica quando le varie repliche del segnale vengono aggregate al ricevitore.
 
-Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna repliche che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico}) (TODO: è corretto dire che è scattering isotropico per intendere lo uniform scattering).
+Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna repliche che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico})
 L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomeno introdotto dal canale.
 
 \begin{figure}[ht]
