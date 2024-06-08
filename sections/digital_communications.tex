@@ -1078,7 +1078,7 @@ ovvero:
 \[
     P_e^{(M, QAM)} \leq 2 \ P_e^{(\sqrt{M}, PAM)}
 \]
-
+Facciamo quindi un'approssimazione che si chiama \textit{union bound}.
 
 
 
@@ -1091,7 +1091,7 @@ ovvero:
 \]
 
 Adesso le regioni associate a un simbolo sono porzioni del piano complesso, lungo 2 direzioni,
-Per quanto riguarda l'errore sul bit, adottando la codifica di Gray, si ottiene:
+Per quanto riguarda l'errore sul bit, adottando la codifica di Gray, che vale quando abbiamo un SNR alto, si ottiene:
 \[
     P_e^{(M-QAM, b)} = \lim_{N^{(b)} \to +\infty} \frac{N_e^{(b)}}{N^{(b)}} \approx \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{\log_2(M) N^{(s)}} = \frac{1}{\log_2(M)} P_e^{(M-QAM)} 
 \]

@@ -73,7 +73,6 @@ Sebbene la componente negativa possa essere trascurata adesso la traslazione del
 \end{center}
 
 
-
 Il segnale \( s_{DSB}(t) \) dopo essere stato filtrato dal filtro passa-banda (BPF) conserva la sua forma.
 La rilevazione coerente è implementata moltiplicando \( s_{DSB}(t) \) con una portante sincronizzata \( 2\cos(2\pi f_c t) \).
 Questo comporta la presenza di una componente ad alta frequenza a \( 2f_c \) che viene rimossa dal filtro passa-basso (LPF), lasciando solo il segnale messaggio \( m(t) \).
@@ -90,9 +89,9 @@ Il segnale è pari (in modulo) a causa della simmetria hermitiana, infatti essen
 
 La ricostruzione del segnale originario richiede tre step:
 \begin{itemize}
-  \item Filtraggio passa-banda: il segnale ricevuto è filtrato tramite un filtro passa-anda, centrato in \( f_c \), per rimuovere le componenti fuori banda.
-  \item Demodulazione: il segnale modulato viene moltiplicato per un secondo coseno, ottenendo oltre al segnale originario anche due contributi in \(\pm 2f_c \)
-  \item Filtraggio passa-basso: il segnale demodulato viene filtrato con un filtro passa basso di ampiezza W, per rimuovere la componente ad alta frequenza.
+  \item \textbf{Filtraggio passa-banda}: il segnale ricevuto è filtrato tramite un filtro passa-banda, centrato in \( f_c \), per rimuovere le componenti fuori banda.
+  \item \textbf{Demodulazione}: il segnale modulato viene moltiplicato per un secondo coseno, ottenendo oltre al segnale originario anche due contributi in \(\pm 2f_c \)
+  \item \textbf{Filtraggio passa-basso}: il segnale demodulato viene filtrato con un filtro passa basso di ampiezza W, per rimuovere la componente ad alta frequenza.
 \end{itemize}
 
 \begin{equation*}
@@ -157,7 +156,7 @@ La mancanza di simmetria rispetto a $f_c$ implica la non esistenza di un segnale
 Sebbene questa mancanza non precluda l'utilizzo della modulazione QAM, nella pratica risulta più semplice lo studio di un segnale in banda base.
 \begin{itemize}
     \item La carrier frequency \( f_c \) non aggiunge informazione al segnale, ma viene utilizzata per traslare il segnale in frequenza.
-    \item Il criterio di Nyquist richiede un comportamente ad una frequnza doppia rispetto alla banda del segnale, quindi nel caso di segnale passa-banda tale valore può essere molto elevato. Nel caso di segnale in banda base la frquenza di campionamente può essere nettamente inferiore.
+    \item Il criterio di Nyquist richiede un compionamento ad una frequnza doppia rispetto alla banda del segnale, quindi nel caso di segnale passa-banda tale valore può essere molto elevato. Nel caso di segnale in banda base la frequenza di campionamento può essere nettamente inferiore.
 \end{itemize}
 
 Il criterio di Nyquist stabilisce che \( T \leq \frac{1}{2B} \), dove \( T \) è il periodo di campionamento e \( B \) è la banda del segnale, e quindi \( f_s \geq 2B \). Quindi nel nostro caso, $f_s \geq 2(f_c + W)$.
@@ -188,14 +187,14 @@ La sincronizzazione del clock tra trasmettitore e ricevitore è cruciale per una
 L'inviluppo complesso rappresenta un modello equivalente in banda base che facilita l'analisi e l'elaborazione dei segnali in banda passante come se fossero segnali in banda base, offrendo numerosi vantaggi:
 \begin{itemize}
     \item Il modello in banda base è più semplice da studiare, poiché elimina gli effetti della frequenza portante dal modello del segnale, semplificando l'analisi matematica e la comprensione delle proprietà del segnale.
-    \item La simulazione numerica di un modello in banda base richiede meno risorse computazionali rispetto a un modello in banda passante, grazie alla minor larghezza di banda necessaria, riducendo quindi i costi computazionali.
+    \item La simulazione numerica di un modello in banda base richiede meno risorse computazionali rispetto a un modello in banda passante, grazie alla minor larghezza di banda necessaria.
     \item Di conseguenza, anche la frequenza di campionamento è inferiore per i modelli in banda base, il che si traduce in tassi di trasmissione dati ridotti, vantaggioso per l'elaborazione e lo stoccaggio del segnale digitale.
     \item Il modello in banda base è spesso la base per un'implementazione digitale di un sistema di comunicazione in banda passante, facilitando l'applicazione delle tecniche di elaborazione del segnale digitale, fondamentali nelle comunicazioni moderne.
 \end{itemize}
 
 \section*{Modulazione di Frequenza (FM)}
 
-Nella modulazione di frequenza (FM), il messaggio è incorporato nella fase del segnale \( \phi(t) \). Il segnale FM \( S_{FM}(t) \) può essere espresso come:
+Nella modulazione di frequenza (FM), il messaggio è incorporato nella fase del segnale \( \phi(t) \). Il segnale FM \( s_{FM}(t) \) può essere espresso come:
 \begin{equation}
     s_{FM}(t) = A_c \cos\left(2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau \right)
 \end{equation}
@@ -210,14 +209,16 @@ L'indice di modulazione \( m_f \) è definito come il rapporto tra la deviazione
     m_f = \frac{\Delta f}{B_m}
 \end{equation}
 
+%Δ𝑓 = max |𝑓7 (𝑡)| = 𝑘) max 𝑚(𝑡)
+Dove $\Delta f = \max |f(t)| = k_f \max m(t)$.
 La rappresentazione complessa del segnale FM può essere ottenuta utilizzando la formula di Eulero:
 \begin{equation}
-    \tilde{s}_{FM}(t) = A_c e^{j\phi(t)}
+    s_{FM}(t) = \Re \left\{ A_c e^{j\phi(t)} \right\} = \Re \left\{ A_c e^{j2\pi f_c t} e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau} \right\} = \Re \left\{ \tilde{s}_{FM} (t) e^{j2\pi f_c t} \right\}
 \end{equation}
 
-Espandendo \( \phi(t) \) otteniamo:
+E quindi:
 \begin{equation}
-    \tilde{s}_{FM}(t) = A_c e^{j\left(2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau\right)}
+    \tilde{s}_{FM}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
 \end{equation}
 
 Questa rappresentazione è particolarmente utile per l'analisi dei segnali FM nel contesto del trattamento digitale dei segnali.
