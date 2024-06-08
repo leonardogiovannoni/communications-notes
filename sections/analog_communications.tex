@@ -378,12 +378,12 @@ Quindi:
 
 La rappresentazione in serie di Fourier dello spettro dell'inviluppo complesso del segnale FM è quindi data da:
 \[
-\hat{S}_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
+\hat{s}_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
 \]
 % FM signal spectrum representation
 Il segnale FM può essere rappresentato come:
 \[
-s_{FM}(t) = \text{Re}\{ \hat{S}_{FM}(t) e^{j 2\pi f_c t} \} = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + n f_m) t)
+s_{FM}(t) = \text{Re}\{ \hat{s}_{FM}(t) e^{j 2\pi f_c t} \} = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + n f_m) t)
 \]
 mostrando come la frequenza della portante sia alterata dalle frequenze del segnale di modulazione, con l'ampiezza di ciascuna componente data dai valori della funzione di Bessel.
 \begin{center}
@@ -509,19 +509,19 @@ Che può quindi essere demodulato differenziando la fase di \( \hat{v}(t) \):
 
 Supponiamo che a causa della differenza tra trasmettitore e ricevitore ci sia adesso una frequenza $\Delta f$ (per esempio potrebbe essere anche solo 10 Hz)
 \[
-    v(t) = e^{j2\pi \Delta f t + j2 \pi K_f \int_{-\infty}^{t} m(\tau) d\tau}
+    v(t) = e^{j2\pi \Delta f t + j2 \pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
 \]
 
 e quindi la fase sarà:
 \[
-    \angle v(t) = 2\pi \Delta f t + 2\pi K_f \int_{-\infty}^{t} m(\tau) d\tau
+    \angle v(t) = 2\pi \Delta f t + 2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau
 \]
 da cui:
 \[
-    \frac{1}{2\pi K_f}  \frac{d}{dt} \angle v(t) = \frac{\Delta f}{K_f} + m(t)
+    \frac{1}{2\pi k_f}  \frac{d}{dt} \angle v(t) = \frac{\Delta f}{k_f} + m(t)
 \]
 
-e da come possiamo notare, $\frac{\Delta f}{K_f}$ è solo una costante aggiunta al segnale. Come tale, sta sulla frequenza 0 che non può essere udita dall'orecchio umano. Quando la costante $\Delta f$ è grande, comunque, quando vogliamo prendere l'energia del segnale, parte del segnale potrebbe essere filtrate.% (TODO: Perché?).
+e da come possiamo notare, $\frac{\Delta f}{k_f}$ è solo una costante aggiunta al segnale. Come tale, sta sulla frequenza 0 che non può essere udita dall'orecchio umano. Quando la costante $\Delta f$ è grande, comunque, quando vogliamo prendere l'energia del segnale, parte del segnale potrebbe essere filtrata.% (TODO: Perché?).
 
 
 \section*{Software Defined Radio (SDR)}
@@ -530,7 +530,7 @@ Le recenti innovazioni tecnologiche hanno permesso di implementare tali componen
 All'interno di un ricevitore SDR il segnale in arrivo è convertito in formato digitale per essere processato.
 La componente software permette una semplice riprogrammazione, in tal modo è possibile modificare l'elaborazione del segnale senza dover cambiare componenti fisiche del sistema.
 La tecnica SDR deriva dal campo delle trasmissioni militari in cui è necessario equipaggiare i soldati con molte componenti radio per gestire le numerose comunicazioni da realizzare.
-L'introduzione del SDR ha permesso di semplificare l'equipaggiamento, riducendo il numero di dispositivi necessari pper supportare i protocolli radio militari.
+L'introduzione del SDR ha permesso di semplificare l'equipaggiamento, riducendo il numero di dispositivi necessari per supportare i protocolli radio militari.
 
 Il campo in cui le tecniche SDR hanno portato innumerevoli vantaggi è quello della ricerca e sviluppo, perché il passaggio da design hardware a programmazione ha permesso di velocizzare i tempi di sviluppo di nuove tecnologie.
 
@@ -664,8 +664,8 @@ The signal processing range for this system is from 25MHz to 1.75GHz with a samp
 
 
 Il processo di eterodinazione è essenziale per convertire le frequenze radio più alte in frequenze più basse, più facili da amplificare e processare.
-Nel disegno, $f_{LO}$ rappresenta la frequenza dell'oscillatore locale, mentre $f_{IF}$ (ovvero 3.57 Mz) è la frequenza intermedia a cui il segnale viene convertito, in cui avvengono anche una serie di filtraggi e amplificazioni.
-Successivamente avverrà anche la conversione analogico-digitale con campionamento a 28.8 MS/s, dunque rispettamendo abbondantemente il teorema di Nyquist ($f_s > 2 (f + B)$) fino a una banda di $14.4$ MHz, in quanto \( 28.8 MS/s > 2 \times (3.57 MHz + B) \) (TODO: ultima affermazione da controllare).
+Nel disegno, $f_{LO}$ rappresenta la frequenza dell'oscillatore locale, mentre $f_{IF}$ (ovvero 3.57 MHz) è la frequenza intermedia a cui il segnale viene convertito, in cui avvengono anche una serie di filtraggi e amplificazioni.
+Successivamente avverrà anche la conversione analogico-digitale con campionamento a 28.8 MS/s, dunque rispettamendo abbondantemente il teorema di Nyquist ($f_s > 2 (f + B)$) fino a una banda di $14.4$ MHz, in quanto \( 28.8 \si{MS/s} > 2 \times (3.57 \si{MHz} + B) \).% (TODO: ultima affermazione da controllare).
 
 Campionando $\cos(2\pi f_{IF} t)$ si ottiene:
 \[
@@ -709,11 +709,11 @@ La frequenza di campionamento determina la massima banda estraibile dal segnale,
 % TODO: cos'è il mixer?
 Nella figura è rappresentato il segnale in uscita dal mixer, con frequenza intermedia $f_{IF} = 3.57$ MHz e banda $W = 1.4$ MHz.
 
-Ogni sample è composto da 8 bit. Isample sel segnale campionato seguono un percorso parallelo per estrarre la commponente in fase e in quadratura. Entrambi i rami effettuano la conversione da media a frequenza a banda base.
+Ogni sample è composto da 8 bit. I sample del segnale campionato seguono un percorso parallelo per estrarre la commponente in fase e in quadratura. Entrambi i rami effettuano la conversione da media a frequenza a banda base.
 Avvengono una serie di operazioni che permettono di estrarre la banda che sarà rappresentata dai sample I/Q in uscita da ques'ultima fase tramite interfaccia USB.
 La fase di decimation permette di adattare il campionamente  del segnale al valore richiesto dell'utente. Il rate massimo è circa 2.8 MS/s.
 Lo spettro di frequenza in grado di essere captato dal dispositivo risulta approssimativamente (TODO).
-Bisogna comunque tenere in considerazione che labanda limitata a 2.8 MHz non permette di estrarre informazioni di modulazioni che richiedano una banda superiore, ad esempio il Wi-Fi.
+Bisogna comunque tenere in considerazione che la banda limitata a 2.8 MHz non permette di estrarre informazioni di modulazioni che richiedano una banda superiore, ad esempio il Wi-Fi.
 
 
 \paragraph*{Ricezione radio FM}
@@ -727,7 +727,7 @@ I simboli I/Q digitali ricevuti dal SDR richiedono una demodulazione per essere 
 segnale FM mono, normalizzato ad 1, ovvero $\max{m(t)} = 1$ e quindi $\Delta f = k_f$.
 
 
-L'inviluppo complesso del segnale ricevuta assume la forma:
+L'inviluppo complesso del segnale ricevuto assume la forma:
 
 \[
     \tilde{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
