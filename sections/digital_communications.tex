@@ -115,7 +115,7 @@ Gli \( M \) valori \( (M \geq 2) \) che costituiscono l'alfabeto \( A_s = \{ \al
               \mathbb{E}\left[ s(t) \right] = 0 \quad \forall t
           \end{equation*}
           \begin{equation*}
-              \mathbb{E} \left[ \sum_{k=-\infty}^{+\infty} a[k] \ p(t-kT_s) \right] = \sum_{k=-\infty}^{+\infty} \mathbb{E}\left[a[k]\right]\ p(t-kT_s) = 0
+              \mathbb{E} \left[ \sum_{k=-\infty}^{+\infty} a[k] \ g_T(t-kT_s) \right] = \sum_{k=-\infty}^{+\infty} \mathbb{E}\left[a[k]\right]\ g_T(t-kT_s) = 0
           \end{equation*}
           \begin{equation*}
               \mathbb{E}\left[a[k]\right] = \frac{1}{M} \sum_{i=1}^{M} \alpha_i \mathbb{P}\{\alpha_i\} = \frac{1}{M} \sum_{i=1}^{M} (2i - 1 - M)
@@ -208,10 +208,19 @@ Si ottiene:
     \sigma_a^2 = \frac{M^2 - 1}{3}
 \]
 
+
 \[
     P_s = \frac{\sigma_a^2 E_{g_T}}{T_s} = \frac{M^2 - 1}{3} \frac{E_{g_T}}{T_s}
 \]
 
+
+In banda passante invece si ha che:
+\[
+    \sigma_a^2 = \frac{M^2 - 1}{6}
+\]
+\[
+    P_s = \frac{M^2 - 1}{6} \frac{E_{g_T}}{T_s}
+\]
 
 Come sarà dimostrato più avanti, $R_s \propto B$, dove $B$ è la banda del segnale $s_{PAM}(t)$. 
 Per $R_s$ valgono le seguenti equivalenze:
@@ -846,6 +855,16 @@ Per una 4-PAM la probabilità di errore è:
 
 \[ 
     P^{\text{4-PAM}}_e = \frac{1}{4} \sum_{i=1}^{4} \mathbb{P}(e \mid a^{(i)}) = \frac{1}{4} \cdot 2 \left[ \mathbb{P}(e \mid a^{(i)} = 1) + \mathbb{P}(e \mid a^{(i)} = 3) \right] = \frac{1}{2} \left[ 2 Q\left( \frac{1}{\sigma} \right) + Q\left( \frac{1}{\sigma} \right) \right] = \frac{3}{2} Q\left( \frac{1}{\sigma} \right)
+\]
+
+Considerando che per la banda passante $E_s = \frac{M^2 - 1}{6}$, possiamo trovare la relazione:
+\[
+    1 = \frac{6 E_s}{(M^2 - 1)}
+\]
+Mentre ricordando che la varianza del rumore è $\sigma_n^2 = N_0$, possiamo esprimere la probabilità di errore in funzione della SNR ($\frac{E_s}{N_0}$):
+
+\[
+    P_e^{\text{M-PAM}} = \frac{2(M - 1)}{M} Q\left(\sqrt{\frac{6 E_s}{(M^2 - 1) N_0}}\right)
 \]
 
 

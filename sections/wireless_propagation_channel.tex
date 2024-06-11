@@ -405,21 +405,21 @@ I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere p
 
 
 \[
-    \overline{\tau} = \mathbb{E} \left[\tau\right] = \int_{0}^{+\infty} \tau f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}
+    \overline{\tau} = \mathbb{E} \left[\tau\right] = \int_{-\infty}^{+\infty} \tau f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}
 \]
 
 Per quanto riguarda la varianza:
 \[
-    \sigma_\tau^2 = \mathbb{E}\left[({\tau - \overline{\tau}})^2\right] \approx \overline{\tau^2} - \overline{\tau}^2, \quad \overline{\tau^2} = \mathbb{E} \left[\tau^2\right] = \int_{0}^{+\infty} \tau^2 f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}^2
+    \sigma_\tau^2 = \mathbb{E}\left[({\tau - \overline{\tau}})^2\right] \approx \overline{\tau^2} - \overline{\tau}^2, \quad \overline{\tau^2} = \mathbb{E} \left[\tau^2\right] = \int_{-\infty}^{+\infty} \tau^2 f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}^2
 \]
 
 Per modellare gli effetti di small scale fading si utilizza il parametro $\sigma_\tau$, ovvero il delay spread che dipende dall'ambiente in cui avviene la trasmissione. Il modello ottenuto risulta piuttosto semplice da utilizzare e secgliendo accuratamente i parametri può essere utilizzato per modellare diversi scenari di trasmissione. L'accuratezza ottenuta non è sempre fedele al caso reale, ma nella maggior parte dei casi non è richiesto, considerando anche che il canale è soggetto a cambiamenti repentini.
 
-Il ber a parità di rumore dipende fortemente dalla distorsione introdotta nel canale:
+Il BER a parità di rumore dipende fortemente dalla distorsione introdotta nel canale:
 \begin{itemize}
-    \item \textbf{No fading}: aumentando il rapporto SNR è possibile ridurre drasticamente il BER con una potenza di trasmission contenuta.
+    \item \textbf{No fading}: aumentando il rapporto SNR è possibile ridurre drasticamente il BER con una potenza di trasmissione contenuta.
     \item \textbf{Flat fading}: aumentando il rapporto SNR è ancora possibile ridurre il BER, ma sarà necessaria una potenza di trasmissione maggiore.
-    \item \textbf{Frequency selective}: il BER non è riducibile oltre una certa soglia nonostante l'increment del SNR, principalemnte a causa delle interferenze generate dall'ISI.
+    \item \textbf{Frequency selective}: il BER non è riducibile oltre una certa soglia nonostante l'incremento del SNR, principalemente a causa delle interferenze generate dall'ISI.
 \end{itemize}
 
 Per quanto riguarda le decision variables:
@@ -435,8 +435,8 @@ Per quanto riguarda le decision variables:
     x\left[m\right] = c_m g(0) + \sum_{\substack{k \neq m,\\ k=-\infty}}^{+\infty} c_{k} g\left[m-k\right] + n\left[m\right] \quad \text{frequency selective}
 \]
 
-Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la potenza di rasmissione si ottengono miglioramente nel BER, tuttavia così facendo si incrementa anche l'energia dei simboli finendo in una zona in cui è l'ISI a dominare.
-Il trend delle nuove generazioni radio è quello di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
+Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la potenza di trasmissione si ottengono miglioramenti nel BER, tuttavia così facendo si incrementa anche l'energia dei simboli finendo in una zona in cui è l'ISI a dominare.
+La tendenza delle nuove generazioni radio è quello di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
 
 
 Le misurazioni del canale dipendono dalla frequenza del segnale e dall'ambiente in cui avviene la trasmissione.
@@ -491,7 +491,7 @@ Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'e
 
 
 \subsection*{Effeto doppler}
-L'effetto doppler, considerando un qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
+L'effetto doppler, considerando una qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
 In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allontana sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore.
 Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{doppler shift} ($f_d$).
 Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
