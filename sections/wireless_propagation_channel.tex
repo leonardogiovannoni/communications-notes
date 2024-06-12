@@ -561,7 +561,7 @@ L'assunzione non è del tutto realistica, ma più che la forma dello spread è i
 \end{figure}
 
 \[
-    S_D(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f}{f_d}\right)^2}}
+    S_D(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f - f_c}{f_d}\right)^2}}
 \]
 Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effetto prodotto è l'allargamento dello spettro occupato (\textbf{Doppler spread}), derivante dal fatto che il segnale stocastico ricevuto assume la forma:
 
@@ -606,8 +606,6 @@ Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare i
 
 
 \begin{center}
-
-
     \begin{tikzpicture}
         \begin{axis}[
                 title={Receiving Power vs. Distance},
