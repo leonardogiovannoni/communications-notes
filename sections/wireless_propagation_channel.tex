@@ -480,7 +480,6 @@ Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
 \[
     h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
 \]
-
 % TODO: mediato?
 Dove abbiamo aggiunto la dipendenza dal tempo alle ampiezze e alle fasi delle repliche. Dato che il large scale fading è mediato su una distanza nell'ordine del metro, lo possiamo considerare costante (avendo un rate con cui varia molto più lento).
 Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'esso molto più lentamente rispetto a guadagni e fasi, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
@@ -490,10 +489,14 @@ Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'e
 
 
 
-\subsection*{Effeto doppler}
-L'effetto doppler, considerando una qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
+\subsection*{Effeto Doppler}
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{imgs/doppler.png}
+\end{center}
+    
+L'effetto Doppler, considerando una qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
 In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allontana sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore.
-Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{doppler shift} ($f_d$).
+Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{Doppler shift} ($f_d$).
 Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
 \[
     d = vt \quad \text{distanza tra $x$ e $y$}
@@ -533,13 +536,13 @@ dove:
 
 
 Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando. 
-Nel nostro caso, si assume che il ricevitore si stia allontanando dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
+Nell'esempio si assume che il ricevitore si stia allontanando dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
 Il segnale ricevuto in $y$ risulta avere una frequenza inferiore a quello in $x$.
 Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce.
-In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{doppler spread}.
+In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{Doppler spread}.
 % TODO: theta è una variabile aleatoria?
-Il doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$. 
-Viene descritto come un processo aleatorio a media nulla e se ne studia autocorrelazione e densità spettrale di potenza.
+Il Doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$. 
+Il segnale ricevuto invece viene descritto come un processo aleatorio a media nulla e se ne studia autocorrelazione e densità spettrale di potenza.
 Esistono diversi modelli utilizzati per descrivere lo spreading in frequenza,
 che si verifica quando le varie repliche del segnale vengono aggregate al ricevitore.
 
@@ -551,7 +554,7 @@ L'assunzione non è del tutto realistica, ma più che la forma dello spread è i
     \includegraphics[width=0.875\textwidth]{imgs/jakes.jpg}
     \captionsetup{width=.5\textwidth}
     % TODO: nella figura in alto a sinistra, cosa è rappresentato?
-    \caption*{Spettro doppler di Jakes:
+    \caption*{Spettro Doppler di Jakes:
         per il segnale $s$ vale \( S_S(f) = \frac{1}{2} \delta \left(f - f_c \right) + \frac{1}{2} \delta \left(f + f_c\right) \),
         mentre per il segnale $y$ vale \( S_Y(f) = S_D(f) \ast S_S(f) \).
     }
@@ -566,7 +569,7 @@ Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effet
     y(t) = s(t) d(t)
 \]
 % TODO da dove deriva la radice quadrata al denominatore considerando v cos(theta) / c
-dove $s(t)$ è il segnale trasmesso e $d(t)$ è il Jokes' doppler spectrum. Quando $f_d$ è trascurabile (e quindi circa 0), $S_D(f)$ diventa circa una delta, e quindi $S_Y(f) = S_S(f)$. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
+dove $s(t)$ è il segnale trasmesso e $d(t)$ è il Jokes' Doppler spectrum. Quando $f_d$ è trascurabile (e quindi circa 0), $S_D(f)$ diventa circa una delta, e quindi $S_Y(f) = S_S(f)$. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
 
 \[
     S_Y(f) = S_S(f) \ast S_D(f)
@@ -575,13 +578,12 @@ dove $s(t)$ è il segnale trasmesso e $d(t)$ è il Jokes' doppler spectrum. Quan
 Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jakes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
 
 
-(TODO:  data che l'autocorrelazione generalmente si indica con tau, tau o t?)
 \[
     R_D (\tau) = J_0(2\pi f_d \tau) \quad \text{funzione di autocorrelazione time varying channel}
 \]
-Per $x=\frac{1}{2}$ si ha che $J_0(2\pi x) = 0$, quindi il canale può considerarsi incorrelato per $\tau = T_c = \frac{1}{2f_d}$.
 
-dove $J_0$ è la funzione di bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
+dove $J_0$ è la funzione di Bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
+Per $x=\frac{1}{2}$ si ha che $J_0(2\pi x) = 0$, quindi il canale può considerarsi incorrelato per $\tau = T_c = \frac{1}{2f_d}$.
 
 \[
     f_d T_c = \frac{1}{2} \quad \Rightarrow \quad  T_c = \frac{1}{2 f_d} = \frac{1}{2} \frac{c}{f_c v} \quad \text{coherence time}
@@ -653,11 +655,11 @@ Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare i
 
 
 \begin{itemize}
-    \item \textbf{Slow fading}: l'effetto doppler è trascurabile ($B_S \gg f_d$, $T_c \gg T$)
-    \item \textbf{Fast fading}: l'effetto doppler distorce notevolemnte il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
+    \item \textbf{Slow fading}: l'effetto Doppler è trascurabile ($B_S \gg f_d$, $T_c \gg T$)
+    \item \textbf{Fast fading}: l'effetto Doppler distorce notevolemnte il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
 \end{itemize}
-Dove $T$ è il symbol time, $B_S$ è la banda del segnale, $f_d$ è il doppler shift, $T_c$ è il tempo di coerenza del canale.
-Se la banda del segnale è maggiore del doppler shift la convoluzione genera un comportamento non molto significativo.
+Dove $T$ è il symbol time, $B_S$ è la banda del segnale, $f_d$ è il Doppler shift, $T_c$ è il tempo di coerenza del canale.
+Se la banda del segnale è maggiore del Doppler shift la convoluzione genera un comportamento non molto significativo.
 
 In generale gli effeti LSF determinano la dimensione della cella di copertura, considerando anche la frequenza di trasmissione.
 
