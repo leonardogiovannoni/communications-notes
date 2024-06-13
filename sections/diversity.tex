@@ -4,17 +4,23 @@
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.675\textwidth]{imgs/diversity_graph.jpg}
+    \includegraphics[width=0.675\textwidth]{imgs/bers.png}
 \end{figure}
 
 
 Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene modulazioni come OFDM siano in grado di ridurre l'effetto del multipath fading, tuttavia lo \textbf{slow flat Rayleigh fading} non può essere contrastato nello stesso modo.
 
 \begin{itemize}
-    \item \textbf{Slow fading}: coherence time $>$ symbol period (Doppler spread)
-    \item \textbf{Flat fading}: delay spread $<$ symbol period (multipath time delay spread)
+    \item \textbf{Slow fading}: $T_c > T$ (Doppler spread)
+    \item \textbf{Flat fading}: $\sigma_{\tau}<T$  (multipath time delay spread)
     \item \textbf{Rayleigh fading}: l'attenuazione delle repliche ha una distribuzione di Rayleigh.
 \end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.675\textwidth]{imgs/diversity_graph.jpg}
+\end{figure}
+
 
 I metodi principali per ridurre gli effetti di un fading di tali tipologie sono le diversity techniques, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
 Le principali tecniche di diversity sono:
