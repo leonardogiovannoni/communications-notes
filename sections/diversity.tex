@@ -249,16 +249,16 @@ Una trasmissione di $N$ codewords implica la trasmissione di $n \cdot N$ bits, o
 Poiché ogni codeword è funzione anche di $L-1$ input word precedenti, la sequenza può essere codificata considerandola solo nella sua interezza. 
 Il decoder dovrà scegliere la sequenza più "vicina" rispetto a quella ricevuta tra tutte le possibili sequenza, ovvero $2^{k \cdot N}$
 \[
-    \hat{d} = \text{argmin}_d \left\{\text{distance}(d, \hat{x})\right\}
+    \hat{d} = \underset{d}{\text{argmin}} \left\{\text{distance}(d, \hat{x})\right\}
 \]
-Dove d è una possibile sequenza, $\hat{x}$ è la sequenza ricevuta e $\hat{d}$ è la sequenza in uscita dal decoder.
+Dove $d$ è una possibile sequenza, $\hat{x}$ è la sequenza ricevuta e $\hat{d}$ è la sequenza in uscita dal decoder.
 L'utilizzo nella pratica di codici convoluzionali è stata resa possibile solo dall'introduzione dell'algoritmo di Viterbi, in grado di applicare una decodifica con complessità lineare e non più esponenziale.
 
 \paragraph*{Algoritmo di Viterbi}
 L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevuta:
 
 \[
-    \hat{d} = \text{argmin}_d \left( d_H \left(\tilde{d}, \hat{x}\right) \right)
+    \hat{d} = \underset{d}{\text{argmin}} \left( d_H \left(\tilde{d}, \hat{x}\right) \right)
 \]
 Le possibili sequenza $\tilde{d}$ sono viste come sequene di $N$ blocchi, ciascuna composta da 
 $n$ bit, ovver i bit prodotti a partire dai $k$ bit di informaione in ingresso all'encoder.
