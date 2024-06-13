@@ -239,6 +239,15 @@ L'encoder si comporta come $n$ filtri lineari in parallelo, i parametri che lo c
 \end{itemize}
 
 La dimensione della finestra corrisponde a $L-k$, quindi si considererà $L-1$. Il codice generato, oltre alla word, è anche funzione dei bit di input precedenti. Ogni bit generato è ottenuto dalla convoluzione in GF(2) con una risposta impulsiva rappresentata da un diverso generatore $g$, di dimensione $kL$.
+Possiamo considerare come analogia in $\mathbb{R}$ la convoluzione tra un segnale e la risposta impulsiva di un filtro la cui espressione è:
+\[
+    y\left[k\right] = \sum_{m=0}^{M-1} g\left[m\right] \cdot x\left[k-m\right]
+\]
+Per i codici convoluzionali, che operano in GF(2), similmente scriveremo:
+\[
+    d_j^{\left(i\right)} = \sum_{\ell=0}^{L-1} g_j\left(\ell\right) \cdot u^{\left( i - \ell \right)}
+\]
+
 I bit in uscita sono quindi un flusso continuo e non organizzati in blocchi.
 
 Trattandosi di sistemi con memoria, l'encoder può essere rappresentato come una macchina a stati finiti.
@@ -253,6 +262,52 @@ Il decoder dovrà scegliere la sequenza più "vicina" rispetto a quella ricevuta
 \]
 Dove $d$ è una possibile sequenza, $\hat{x}$ è la sequenza ricevuta e $\hat{d}$ è la sequenza in uscita dal decoder.
 L'utilizzo nella pratica di codici convoluzionali è stata resa possibile solo dall'introduzione dell'algoritmo di Viterbi, in grado di applicare una decodifica con complessità lineare e non più esponenziale.
+
+\paragraph*{Codice convoluzionale (2, 1, 3)}
+
+In un codice convoluzionale (2, 1, 3), ovvero con parametri $n=2$, $k=1$ e $L=3$, supponiamo di avere come generatori (che si possono dimostrare essere ottimi):
+\[
+    g_1 = \begin{bmatrix}1 & 1 & 1\end{bmatrix}, \quad g_2 = \begin{bmatrix}1 & 0 & 1\end{bmatrix}
+\]
+
+Come si può notare, la dimensione dei generatori è $kL = 1 \cdot 3 = 3$, il code rate è $R = \frac{k}{n} = \frac{1}{2}$, mentre la memoria è $L - 1 = 3 - 1 = 2$.
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{imgs/213code.png}
+\end{center}
+
+Nella figura è possibile notare come siano presenti 2 elementi di memoria (i due rettangoli bianchi), ovvero i $k(L-1)$ elementi di memoria che sono sufficienti a rappresentare lo stato dell'encoder.
+Le codeword di output, applicando quindi la convoluzione tra i bit di input e i generatori, sono:
+\[
+    d_1^{\left(i\right)} = \sum_{\ell=0}^{2} g_1\left(\ell\right) \cdot u^{\left( i - \ell \right)} = u^{\left(i\right)} + u^{\left(i-1\right)} + u^{\left(i-2\right)}
+\]
+
+\[
+    d_2^{\left(i\right)} = \sum_{\ell=0}^{2} g_2\left(\ell\right) \cdot u^{\left( i - \ell \right)} = u^{\left(i\right)} + u^{\left(i-2\right)}
+\]
+
+Possiamo definire una macchina a stati fatta nella seguente maniera:
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt, node distance=3cm, on grid, auto]
+   \node[state] (q_11)   {11};
+   \node[state] (q_10) [below left=of q_11] {10};
+   \node[state] (q_01) [below right=of q_11] {01};
+   \node[state] (q_00) [below right=of q_10] {00};
+
+    \path[->]
+    (q_11) edge [loop above] node {1/10} ()
+          edge [bend left=15] node {0/01} (q_01)
+    (q_10) edge [bend right=15] node [above] {1/00} (q_01)
+          edge [bend left=15] node [right] {1/01} (q_11)
+    (q_01) edge [bend left=15] node [right] {0/11} (q_00)
+          edge [bend right=15] node [above] {0/10} (q_10)
+    (q_00) edge [loop below] node {0/00} ()
+          edge [bend left=15] node {1/11} (q_10);
+\end{tikzpicture}
+\end{center}
+    
+
+
 
 \paragraph*{Algoritmo di Viterbi}
 L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevuta:
