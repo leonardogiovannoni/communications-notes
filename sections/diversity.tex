@@ -305,9 +305,23 @@ Possiamo definire una macchina a stati fatta nella seguente maniera:
           edge [bend left=15] node {1/11} (q_10);
 \end{tikzpicture}
 \end{center}
-    
 
 
+Dove i nodi rappresentano lo stato dell'encoder, ovvero i bit di memoria, mentre gli archi rappresentano separati dallo slash rispettivamente il bit di input e l'output.
+La macchina a stati è ricavabile col seguente codice:
+
+\begin{minted}{python3}
+G1 = [True, True, True]
+G2 = [True, False, True]
+
+G = [G1, G2]
+
+def next_state(input_bit: bool, state: Tuple[bool, bool]):
+    d = [(g[0] & input_bit) ^ (g[1] & state[0]) ^ (g[2] & state[1]) for g in G]
+    return (input_bit, state[0]), (d[0], d[1])
+\end{minted}
+
+La funzione \textit{next\_state} prende in input il bit da codificare e lo stato corrente dell'encoder, restituendo lo stato successivo, ottenuto con una sorta di shift, e i bit di output.
 
 \paragraph*{Algoritmo di Viterbi}
 L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevuta:
