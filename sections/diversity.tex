@@ -380,7 +380,7 @@ def viterbi_algorithm(sequence: List[bool]) -> List[bool]:
     return get_decoded_sequence(matrix, final_state)
 \end{minted}
 
-La funzione \textit{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di input. Il numero di riga corrisponde al possibile stato.
+La funzione \textit{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di output. Con il termine output indicheremo l'output dell'encoder che abbiamo ricevuto e quindi che dovremo, sfruttano anche lo stato del sistema, trasformare nel bit di input originario, ovvero l'$i$-esimo bit della sequenza che effettivamente si voleva trasmettere. Il numero di riga corrisponde al possibile stato.
 \begin{minted}{python3}
 def populate_matrix(outputs: List[int]) -> List[List[Optional[ViterbiCell]]]:
     matrix: List[List[Optional[ViterbiCell]]] = empty_matrix(rows=4, cols=len(outputs) + 1)
