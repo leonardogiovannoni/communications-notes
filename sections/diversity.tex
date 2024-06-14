@@ -373,27 +373,28 @@ Per quanto riguarda invece l'algoritmo di Viterbi, esso può essere definito per
 
 \begin{minted}{python3}
 def viterbi_algorithm(sequence: List[bool]) -> List[bool]:
-    chunks: List[int] = bit_pairs_to_integers(sequence)
-    matrix: List[List[Optional[ViterbiCell]]] = populate_matrix(chunks)
+    # [a_0, a_1, a_2, a_3, ...] -> [a_0 * 2 + a_1, a_2 * 2 + a_3, ...]
+    outputs: List[int] = bit_pairs_to_integers(sequence)
+    matrix: List[List[Optional[ViterbiCell]]] = populate_matrix(outputs)
     final_state = get_last_state(matrix)
     return get_decoded_sequence(matrix, final_state)
 \end{minted}
 
-La funzione \textit{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di input.
-
+La funzione \textit{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di input. Il numero di riga corrisponde al possibile stato.
 \begin{minted}{python3}
-def populate_matrix(chunks: List[int]) -> List[List[Optional[ViterbiCell]]]:
-    matrix: List[List[Optional[ViterbiCell]]] = empty_matrix(rows=4, cols=len(chunks) + 1)
+def populate_matrix(outputs: List[int]) -> List[List[Optional[ViterbiCell]]]:
+    matrix: List[List[Optional[ViterbiCell]]] = empty_matrix(rows=4, cols=len(outputs) + 1)
     matrix[0][0] = ViterbiCell(prev_state=0, global_distance=0, input_bit=False)
 
-    for col in range(len(chunks)):
+    for col in range(len(outputs)):
+        target_output = outputs[col]
         for row in range(4):
             current_cell = matrix[row][col]
             if current_cell is None:
                 continue
             for input_bit in [False, True]:
                 output, next_state = state_machine(row, input_bit)
-                new_distance = current_cell.global_distance + hamming_distance(output, chunks[col])
+                new_distance = current_cell.global_distance + hamming_distance(output, target_output)
                 next_cell = matrix[next_state][col + 1]
                 if next_cell is None or next_cell.global_distance > new_distance:
                     matrix[next_state][col + 1] = ViterbiCell(
@@ -401,16 +402,17 @@ def populate_matrix(chunks: List[int]) -> List[List[Optional[ViterbiCell]]]:
                     )
     return matrix
 \end{minted}
+
 La funzione \textit{get\_last\_state} trova lo stato finale con la distanza globale minima nell'ultima colonna della matrice.
 \begin{minted}{python3}
 def get_last_state(matrix: List[List[Optional[ViterbiCell]]]) -> int:
     min_distance = float('inf')
     final_state = None
-    for i in range(4):
-        last_row_cell = matrix[i][-1]
-        if last_row_cell and last_row_cell.global_distance < min_distance:
-            min_distance = last_row_cell.global_distance
-            final_state = i
+    last_column = [matrix[i][-1] for i in range(4)]
+    for row, cell in enumerate(last_column):
+        if cell and cell.global_distance < min_distance:
+            min_distance = cell.global_distance
+            final_state = row
     return final_state
 \end{minted}
 La funzione \textit{get\_decoded\_sequence} ricostruisce la sequenza decodificata risalendo dalla matrice a partire dallo stato finale.
