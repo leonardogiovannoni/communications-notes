@@ -504,7 +504,7 @@ I codici convoluzionali risultano adatti per canali memoryless con errori random
 Tuttavia un canale fading è tipicamente suggetto a \textbf{bursty errors}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. 
 Quando il canale è in \textbf{deep fade} ci sono delle dipendenze statistiche tra errori consecutivi.
 L'idea dell'interleaving consiste nel far sembrare il canale memoryless dal punto di vista del decoder, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti dell'encoder prima di effettuare la trasmissione.
-Lato ricevitore prima del decoder si effettuare un'operazione di de-interleaving per ripristinare l'ordine originale.
+Lato ricevitore prima del decoder verrà effettuata un'operazione di de-interleaving per ripristinare l'ordine originale.
 Il costo delle operazioni di (de-)interleaving è pagato in termini di latenza in quanto sia lato ricevitore che lato trasmettitore è necessario avere un intero blocco di dati prima di poter effettuare le operazioni. 
 Esiste un trade-off tra latenza e decorrelazione ottenibile, basata sulla profondità $k$ dell'interleaver, ovvero la dimensione del blocco sul quale si effettua l'operazione di rimescolamento.
 
@@ -551,14 +551,14 @@ Per esempio disponendo una sequenza dentro una matrice, possiamo ottenere un int
 
 
 \paragraph*{Turbo code e LDPC (Low Density Parity Check)}
-Nella formula della capacità del canale di Shannon\footnote{$C=B\log_2(1+\text{SNR}) \si{b/s}$} il rate $R = \frac{k}{n}$ prevede sia $k$ che $n$ tendenti all'infinito, tuttavia la lunghezza del codice nei sistemi reali è finito, quindi ciò che si ottiene è una performance lontana da quella teorica.
+Nella formula della capacità del canale di Shannon\footnote{$C=B\log_2(1+\text{SNR}) \si{b/s}$} il rate $R = \frac{k}{n}$ prevede sia $k$ che $n$ tendenti all'infinito, tuttavia la lunghezza del codice nei sistemi reali è finito, quindi ciò che si ottiene è una performance lontana da quella teorica. 
 Negli anni sono stati introdotti nuovi codici, sempre più efficienti, tra cui turbo code e LDPC, i quali si avvicinano al limite teorico imposto dalla formula di Shannon.
 
 
 Più nel dettaglio abbiamo lato trasmettitore da eseguire i seguenti passi:
 
 \begin{center}
-    \includegraphics[width=0.5\textwidth]{imgs/codes_and_shannon_bound.png}
+    \includegraphics[width=0.75\textwidth]{imgs/codes_and_shannon_bound.png}
 \end{center}
 \paragraph*{Turbo code (error correction)}
 
@@ -577,11 +577,7 @@ In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes
 
 
 \begin{center}
-
-    \begin{figure}[h!]
-        \centering
         \begin{tikzpicture}
-    
             % Draw blocks
             \node[draw, rectangle] (RSC1) at (3,2) {RSC1};
             % dummy node for alignment
@@ -594,17 +590,13 @@ In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes
             \draw[->] (Interleaver) -- (RSC2);
             \draw[->] (RSC2) -- (5,0) node[midway, above]{$d^{(2)} = p_2$}; 
             \draw[->] (-1,1) -- (5,1) node[midway, above, xshift=63, yshift=2] {$d^{(0)} = u$};
-            \draw[-] (Interleaver) -- (0, 2) node[midway, left] {}; 
+            \draw[<-] (Interleaver) -- (0, 2) node[midway, left] {}; 
             \node at (-0.2,1.2) {$u$};
             
         \end{tikzpicture}
-        \caption{}
-       
-        \label{fig:turbo_encoder}
-    \end{figure}
 \end{center}
 \begin{enumerate}
-    \item I bit di informazione (e.g. $01101$) entrano nel trasmettitore e vengono copiati negli encoder RSC1 RSC2. Prima di entrare in RSC2, i bit di informazione vengono rimescolati dall'interleaver (e.g. $10011$).
+    \item I bit di informazione (e.g. $01101$) entrano nel trasmettitore e vengono copiati negli encoder RSC1 e RSC2, che corrispondono a codici diversi. Prima di entrare in RSC2, i bit di informazione vengono rimescolati dall'interleaver (e.g. $10011$).
     \item Ogni encoder genera una stringa di bit di correzione di errore (bit di parità) eseguendo una serie di calcoli sui bit di dati che riceve (e.g. rispettivamente, $10110$ e $11100$).
     \item I bit di informazione e le due stringhe di bit di parità sono combinati in un unico blocco e inviati sul canale, dove il rumore può causare errori nella trasmissione.
 \end{enumerate}
@@ -615,20 +607,18 @@ Per quanto rigurda la ricezione, il processo è il seguente:
     \begin{tikzpicture}[node distance=1.5cm, auto, >=Stealth, minimum height=1cm, minimum width=1.5cm]
 
         \node[draw, rectangle] (D1) at (3,0) {D1};
-        \node[draw, rectangle] (I) at (6,0) {I};
+        \node[draw, rectangle] (I) at (6,0) {Interleaver};
         \node[draw, rectangle] (D2) at (9,0) {D2};
-        \node[draw, rectangle] (InvI) at (6,2) {Inv(I)};
+        \node[draw, rectangle] (InvI) at (6,2) {Inv(Interleaver)};
 
         \draw[->] (0,0) -- (2.25, 0) node[midway, above] {$\hat{p}_1$};
         \draw[->] (0,-0.875) -| (D1) node[midway, below] {$\hat{u}$};
-        \draw[->] (0,-1.75) -| (I) node[midway, below] {$\hat{p}_2$};
+        \draw[->] (0,-1.75) -| (D2) node[midway, below] {$\hat{p}_2$};
         \draw[->] (3,-0.875) -| (5.675, -0.5) node[midway, below] {};
         \draw[->] (D1) -- (I) node[midway, above] {Le12};
         \draw[->] (I) -- (D2);
         \draw[->] (D2) |- (InvI) node[midway, right] {Le21};
         \draw[->] (InvI) -| (D1);
-        % TODO: a cosa serve la seconda freccia?
-        %\draw[->] (6.25, -0.5) -- ++(0,-0.875) -| (D2);
     \end{tikzpicture}
 \end{center}
 
@@ -636,8 +626,8 @@ Per quanto rigurda la ricezione, il processo è il seguente:
 
 \begin{enumerate}
     \item Al segnale (campionato) viene associata una lista di interi (e.g. $[7, -5, 5, 2, -4; \ 6, 5, 7 -2, \textcolor{red}{-2}; \ 3, 8, 1, -5, -3]$, dove $\hat{p}_1$, $\hat{u}$ e $\hat{p}_2$ sono stati separati da un punto e virgola, mentre il rosso è idicata una predizione sbagliata), 
-    i cui elementi indicano quanto è probabile che un bit sia 0 o 1. Ad esempio, -7 significa che il bit è quasi certamente un 0; +7 significa che è quasi certamente un 1. Notare che un errore è avvenuto nel quinto bit del blocco: originariamente un 1, ora ha un valore negativo, che suggerisce un 0 logico.
-    \item Ogni decoder prende la lista contenente l'informazione con rumore e la rispettiva lista di parità e calcola quanto è sicuro di ciascun bit decodificato. I due decoder scambiano queste informazioni di confidenza ripetutamente e dopo un certo numero di iterazioni, tipicamente da quattro a dieci, iniziano ad essere d'accordo su tutti i bit decodificati. 
+    i cui elementi indicano quanto è probabile che un bit sia 0 o 1. Ad esempio, -7 significa che il bit è quasi certamente uno 0, mentre +7 significa che è quasi certamente un 1. Notare che un errore è avvenuto nel quinto bit del blocco: originariamente un 1, ora ha un valore negativo, che suggerisce uno 0 logico.
+    \item Ogni decoder prende la lista contenente l'informazione con rumore e la rispettiva lista di parità e calcola quanto è sicuro di ciascun bit decodificato (\textit{reliability values}). La lista di affidabilità in uscita dal primo decoder è sfruttata dall'interleaver. I due decoder scambiano queste informazioni di affidabilità ripetutamente e dopo un certo numero di iterazioni, tipicamente da quattro a dieci, iniziano ad essere d'accordo su tutti i bit decodificati. Nella prima iterazione il primo decodere usa i bit sistematici, dalla seconda userà i bit di affidabilità.
     \item I dati decodificati sono la somma della lista contenente l'informazione (con rumore, e.g. $[6, 5, 7 -2, \textcolor{red}{-2}]$) più le due liste finali contenti i valori di confidenza(e.g. $[-5, 3, 7, -6, 5]$ e $[-3, 4, 2, -4, 3]$). L'output ($[-14, 12, 16, -12, 6]$) viene convertito nuovamente in bit binari ($[0, 1, 1, 0, 1]$,  da cui si può notare che il quinto bit ora ha il valore corretto).
 \end{enumerate}
 
@@ -653,7 +643,7 @@ In figura viene mostrata la convergenza con $K=2048$, $R=1/2$ e un numero di ite
 
 \section*{Space diversity}
 
-In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di gain differenti:
+In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
 \begin{itemize}
     \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
     \item \textbf{Diversity gain}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati. 
@@ -711,9 +701,8 @@ Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da
 dove $w_i$ sono i pesi assegnati alle varie antenne.
 
 
-% TODO: ma anche qui si moltiplica per l'opposto della fase?
 \[
-    P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c_m  \right|^2 \right] = \mathbb{E} \left[  |c_m|^2  \right] \left| \sum_{i=1}^{N} w_i h_i \right|^2 =  A \left| \sum_{i=1}^{N} w_i h_i \right|^2
+    P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c_m  \right|^2 \right] = \mathbb{E} \left[  |c_m|^2  \right] \left| \sum_{i=1}^{N} w_i h_i \right|^2 = A \left| \sum_{i=1}^{N} w_i h_i \right|^2 = A \left| \mathbf{w}^T \mathbf{h} \right|^2
 \]
 
 \[
@@ -725,20 +714,24 @@ dove $w_i$ sono i pesi assegnati alle varie antenne.
             = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \sigma^2 \delta_{ij} \\
             = \sum_{i=1}^{N} w_i w_i^* \sigma^2 \\
             = \sum_{i=1}^{N} |w_i|^2 \sigma^2 \\
-            = \sigma^2 \sum_{i=1}^{N} |w_i|^2 
+            = \sigma^2 \sum_{i=1}^{N} |w_i|^2 = \sigma^2 \|\mathbf{w}\|^2
     \end{array}
 \]
-
+Dove la delta di Kronecker è dovuta al fatto che i rumori sono incorrelati, ovvero:
+\[
+    \mathbb{E} \left[ n_i[m] n_j[m]^* \right] = \mathbb{E} \left[ n_i[m] \right] \mathbb{E} \left[ n_j[m]^* \right]
+\]
 % TODO: come si rimuovono i complessi?
 L'obiettivo è massimizzare il SNR, che si può quindi scrivere come:
+
 \[
-    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left|\sum_{i=1}^{N} w_i h_i \right|^2}{\sum_{i=1}^{N} \left| w_i \right|^2} \leq \frac{A}{\sigma^2} \frac{\sum_{i=1}^{N} |w_i|^2 \sum_{i=1}^{N} \left| h_i \right|^2}{\sum_{i=1}^{N} |w_i|^2} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
+    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left| \mathbf{w}^T \mathbf{h} \right|^2}{\|\mathbf{w}\|^2} \leq \frac{A}{\sigma^2} \frac{\|\mathbf{w}\|^2 \|\mathbf{h}\|^2}{\|\mathbf{w}\|^2} = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 =  \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
 \]
 
-dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. Imponendo la condizione $w_i = h_i^*$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza:
-\[ 
-    \text{SNR} = \frac{A}{\sigma^2} \frac{\left(\sum_{i=1}^{N} \left| h_i \right|^2 \right)^2}{\sum_{i=1}^{N} \left| h_i^2 \right|} = \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
-\]
+
+
+
+dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. Imponendo la condizione $w_i = h_i^*$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza.
 
 
 % TODO: h è complesso? Nel caso vi vuole il modulo?
@@ -749,7 +742,7 @@ Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\
 \end{center}
 Per quanto riguarda la configurazione con più antenne in trasmissione e singola antenna in ricezione, sistema MISO, si ottiene la stessa espressione con alcuni accorgimenti lato trasmettitore
 \[
-    x[m] = \sum_{i=1}^{N} h_i y_i[m] + n[m] \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
+    x[m] = \sum_{i=1}^{N} h_i y_i[m] + n[m] = \mathbf{h}^T \mathbf{y}[m] + n[m] \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
 \]
 
 La differenza sostanziale con il caso SIMO è che i vari segnali sono combinati ``naturalmente" durante la trasmissione e ricevuti quindi già aggregati. 
@@ -758,12 +751,20 @@ L'operazione effettuata dal trasmettitore è detta \textbf{spatial precoding} ed
 \[
     y_i[m] = b_i c_m \quad \text{simbolo trasmesso sulla $i$-esima antenna}
 \]
-L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
-
-Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \| }$
 
 \[
-    x[m] = \sum_{i=1}^{N} h_i y_i[m]  = \sum_{i=1}^{N} h_i b_i c_m + n[m] = \sum_{i=1}^{N} \frac{h_i h_i^*}{\| \mathbf{h} \|} c_m + n[m] = \| \mathbf{h} \| c_m + n[m]
+    \mathbf{y}[m] = c_m \mathbf{b} 
+\]
+
+L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
+
+Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \| }$, ovvero $\mathbf{b} = \frac{1}{\| \mathbf{h} \|} \mathbf{h}^*$.
+
+%\[
+%    x[m] = \sum_{i=1}^{N} h_i y_i[m]  = \sum_{i=1}^{N} h_i b_i c_m + n[m] = \sum_{i=1}^{N} \frac{h_i h_i^*}{\| \mathbf{h} \|} c_m + n[m] = \| \mathbf{h} \| c_m + n[m]
+%\]
+\[
+    x[m] = \mathbf{h}^T \mathbf{y}[m] + n[m] = c_m \mathbf{h}^T \mathbf{b} + n[m] = c_m \frac{1}{\|\mathbf{h}\|} \mathbf{h}^H \mathbf{h} + n[m] = \| \mathbf{h} \| c_m + n[m]
 \]
 \[
     P = \|\mathbf{h} \|^2 \ \mathbb{E} \left[\left| c_m \right|^2 \right] = \|\mathbf{h} \|^2  A
@@ -772,7 +773,7 @@ Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \|
     P_N = \sigma^2  
 \]
 \[
-    \text{SNR} = \frac{P}{P_N} = \sum_{i=1}^{N} |h_i|^2 \frac{A}{\sigma^2}    
+    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2}  \sum_{i=1}^{N} |h_i|^2
 \]
 
 La differenza tra il caso con singola antenna (sia lato trasmettitore che ricevitore) e il caso con più antenne (MISO/SIMO) è dato dal fattore $\| \mathbf{h} \| = \sum_{i=1}^{N} |h_i|^2$.
@@ -780,7 +781,7 @@ Considerando i guadagni del canale come variabili aleatore con distribuzione di 
 \[
     f_{\| \mathbf{h} \|^2} (x) = \frac{1}{D-1} x^{D-1} e^{-x}
 \]
-Il risultato dipende dal nnumero di antenne, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei gain verso destra (più potenza).
+Il risultato dipende dal numero di antenne, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei gain verso destra (più potenza).
 Inoltre il \textbf{diversity gain} si manifesta riducendo notevolmente la probabilità di ottenere guadagni molto bassi.
 Ciò è visibile confrontando gli integrali delle due PDF.
 
@@ -790,7 +791,7 @@ Il caso generale MIMO, ovvero con più antenne sia in trasmissione che ricezione
 
 \paragraph*{SVD (Singular Value Decomposition)}
 
-Data una matrice $\mathbf{A} \in \mathbb{C}^{m \times n}$, con  $p = \text{rank} (\mathbf{A})$, la SVD permette di scrivere la matrice come prodotto di tre matrici:
+Data una matrice $\mathbf{A} \in \mathbb{C}^{m \times n}$, con  $p = \text{rank} (\mathbf{A})$, il SVD permette di scrivere la matrice come prodotto di tre matrici:
 \[
     \mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H
 \]
