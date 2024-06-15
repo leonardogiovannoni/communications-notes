@@ -1,0 +1,38 @@
+\documentclass{standalone}
+
+\usepackage{tikz,pgf} %and any other packages or tikzlibraries your picture needs
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    % Axis
+    \draw[->] (0,0) -- (12,0) node[right, font=\small] {Frequency};
+    \draw[->] (0,0) -- (0,7.5) node[above, font=\small] {Amplitude};
+
+
+    \foreach \x [count=\xi from 0] in {1.5,3,4.5,6,7.5,9,10.5} {
+            \pgfmathsetmacro{\mu}{6}  % Median of the x values
+            \pgfmathsetmacro{\sigma}{2}  % Standard deviation (you can adjust this value)
+            \pgfmathsetmacro{\A}{6}  % Amplitude (scaling factor)
+
+            \pgfmathsetmacro{\y}{\A * exp(-((\x - \mu)^2) / (2 * \sigma^2))}
+
+            % Draw the line
+            \draw (\x,0) -- (\x,{\y}) node[above] {};
+        }
+
+    % Frequency labels
+    \node[below, font=\small] at (1.5,0) {$f_c - 3f_m$};
+    \node[below, font=\small] at (3,0) {$f_c - 2f_m$};
+    \node[below, font=\small] at (4.5,0) {$f_c - f_m$};
+    \node[below, font=\small] at (6,0) {$f_c$};
+    \node[below, font=\small] at (7.5,0) {$f_c + f_m$};
+    \node[below, font=\small] at (9,0) {$f_c + 2f_m$};
+    \node[below, font=\small] at (10.5,0) {$f_c + 3f_m$};
+
+    % fm arrow
+    \draw[<->, red] (6,0.75) -- node[above, font=\small] {\textcolor{red}{$f_m$}} (7.5,0.75);
+
+\end{tikzpicture}
+\end{document}

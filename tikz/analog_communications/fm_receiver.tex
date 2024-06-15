@@ -1,0 +1,45 @@
+\documentclass{standalone}
+
+\usepackage{tikz,pgf} %and any other packages or tikzlibraries your picture needs
+
+\begin{document}
+
+ \begin{tikzpicture}[
+            block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
+            node distance=1cm and 1cm,
+            auto
+        ]
+        % Blocks
+        \node[inner sep=0pt, minimum size=0pt] (source) {};
+        \node[block, right=of source] (encoder) {$\angle$};
+        \node[block, right=of encoder] (interp) {$\frac{d}{dt}$};
+
+        % create a node which is above interp
+        \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
+        \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
+
+
+
+
+        \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
+
+        \draw[->] (interp) -- (m1);
+        \node[below=of m1] (cos) {};
+        \draw[->] (cos) -- (m1) node[midway, right] {$\frac{1}{2\pi k_f}$};
+
+
+        \node[right=1cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
+
+
+        \draw[->] (m1) -- (dummy3) node[midway, above] {$\hat{m}(t)$};
+
+
+
+        %\draw[->] (interp) -- node[midway, above] {$x_c[n]$} (p1);
+
+        \draw[->] (source) -- (encoder) node[midway,above] {$\tilde{v}(t)$};
+        \draw[->] (encoder) -- (interp) node[midway,above] {};
+
+
+    \end{tikzpicture}
+\end{document}

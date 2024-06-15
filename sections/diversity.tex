@@ -910,7 +910,7 @@ Utilizzando la modulazione OFDM l'idea sarebbe adattare $m$ ed $R$ per ogni cana
 % TODO: p non lo metterei, perché non è chiaro cosa rappresenti
 \[
     \begin{cases}
-       \underset{\mathbf{p}}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}), \quad P_n \geq 0 \quad n = 1, \ldots, N \\
+       \underset{\mathbf{p}}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2})
        \sum_{n=1}^{N} P_n = P_0 \quad \text{(power budget)} \\
         P_n \geq 0 \quad n = 1, \ldots, N
     \end{cases}    
@@ -922,17 +922,17 @@ La lagrangiana del problema è:
 \[
     \mathcal{L}(P_1, \hdots, P_N, \lambda ) = \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}) - \lambda \left( \sum_{n=1}^{N} P_n - P_0 \right)
 \]
-La derivata rispetto a $P_n$ posta a 0 per la condizione di stazionarietà è:
+La derivata rispetto a $P_k$ posta a 0 per la condizione di stazionarietà è:
 \[
-    \frac{\partial \mathcal{L}}{\partial P_n} = \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_n}{\sigma_n^2}} \frac{1}{\sigma_n^2} - \lambda = 0, \quad n = 1, \ldots, N
+    \frac{\partial \mathcal{L}}{\partial P_k} = \frac{1}{\ln(2)} \frac{1}{\sigma_k^2 + P_k} - \lambda = 0, \quad k = 1, \ldots, N
 \]
-overro il gradiente:
+ovvero il gradiente:
 \[
     \nabla_{P_1, \hdots, P_N} \mathcal{L} = \begin{bmatrix}
-        \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_1}{\sigma_1^2}} \frac{1}{\sigma_1^2} - \lambda \\
-        \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_2}{\sigma_2^2}} \frac{1}{\sigma_2^2} - \lambda \\
+        \frac{1}{\ln(2)} \frac{1}{\sigma_1^2 + P_1} - \lambda \\
+        \frac{1}{\ln(2)} \frac{1}{\sigma_2^2 + P_2} - \lambda \\
         \vdots \\
-        \frac{1}{\ln(2)} \frac{1}{1 + \frac{P_N}{\sigma_N^2}} \frac{1}{\sigma_N^2} - \lambda \\
+        \frac{1}{\ln(2)} \frac{1}{\sigma_N^2 + P_N} - \lambda
 \end{bmatrix} = \mathbf{0}
 \]
 

@@ -1,0 +1,37 @@
+\documentclass{standalone}
+
+\usepackage{tikz,pgf} %and any other packages or tikzlibraries your picture needs
+
+\usepackage{pgfplots}
+
+\usepackage[utf8]{inputenc}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usetikzlibrary{positioning, arrows.meta, fit, shapes}
+\begin{document}
+\begin{tikzpicture}[
+        block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
+        node distance=1cm and 1cm,
+        auto
+    ]
+
+    \tikzstyle{tri} = [draw, isosceles triangle, isosceles triangle apex angle=60, shape border rotate=360, minimum height=2em]
+    \node[inner sep=0pt, minimum size=0pt] (source) {};
+
+
+    \node[tri, right=of source] (encoder) {};
+    \node[block, right=of encoder] (interp) {BPF};
+    \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
+    \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
+    \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
+    \draw[->] (interp) -- (m1);
+    \node[below=of m1] (cos) {};
+    \draw[->] (cos) -- (m1) node[midway, right] {$\cos(2\pi(f_{LO} - f_{IF})t)$};
+    \node[tri, right=of m1] (dummy3) {};
+    \draw[->] (m1) -- (dummy3) node[midway, above] {};
+    \node[right=1cm of dummy3, inner sep=0pt, minimum size=0pt] (dummy4) {};
+    \draw[->] (dummy3) -- (dummy4) node[midway, above] {};
+    \draw[->] (source) -- (encoder) node[midway,above] {};
+    \draw[->] (encoder) -- (interp) node[midway,above] {};
+
+\end{tikzpicture}
+\end{document}

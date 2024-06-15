@@ -1,0 +1,42 @@
+\documentclass{standalone}
+
+\usepackage{tikz,pgf} %and any other packages or tikzlibraries your picture needs
+
+\usepackage{pgfplots}
+
+\usepackage[utf8]{inputenc}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usetikzlibrary{positioning, arrows.meta, fit, shapes}
+\begin{document}
+
+
+\begin{tikzpicture}[
+        block/.style={rectangle, draw, minimum height=2em, minimum width=3em},
+        line/.style={draw, -Latex}
+    ]
+        \node[block, align=center] (rfFrontEnd) {Flexible RF \\ Front End};
+        \node[block, right=0.5cm of rfFrontEnd, align=center] (adConverter) {A/D Converter};
+        \node[block, right=0.5cm of adConverter, align=center] (demod) {Demodulation \\ to Bband};
+        \node[block, right=0.5cm of demod, align=center] (decimation) {Decimation \\ Filtering};
+        \node[block, right=0.5cm of decimation, align=center] (carrierSync) {Carrier \& Timing \\ Synchronisation};
+        \node[block, right=0.5cm of carrierSync, align=center] (baseband) {Baseband \\ Processing};
+        \node[inner sep=0pt, outer sep=0pt, above left=0.25cm and 0.05cm of rfFrontEnd] (antenna) {\includegraphics[width=1cm]{imgs/antenna.pdf}};
+
+        \draw[line] (rfFrontEnd) -- (adConverter);
+        \draw[line] (adConverter) -- (demod);
+        \draw[line] (demod) -- (decimation);
+        \draw[line] (decimation) -- (carrierSync);
+        \draw[line] (carrierSync) -- (baseband);
+        \draw (rfFrontEnd.west) -- ++(-0.5, 0) -- ++(0,0.5);
+
+        \node[draw, dashed, fit=(rfFrontEnd) (adConverter) (demod) (decimation), inner sep=0.2cm, label=above:RTL-SDR Hardware] (hardware) {};
+        \node[draw, dashed, fit=(carrierSync) (baseband), inner sep=0.2cm, label=above:MATLAB / Simulink design (running on computer)] (software) {};
+
+        \node[align=left, below=0.5cm of hardware.south] (freqRange) {Range: \\ 25MHz -- 1.75GHz};
+        \node[align=left, below=0.5cm of software.south] (samplingFreq) {Sampling frequency (\(f_s\)): \\ up to around 2.8MHz};
+
+        \node[inner sep=0pt, outer sep=0pt, right=0.5cm of baseband] (output) {\includegraphics[width=1cm]{imgs/notes.pdf}};
+        \draw[line] (baseband) -- (output);
+    \end{tikzpicture}
+
+\end{document}

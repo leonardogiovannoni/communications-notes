@@ -1,12 +1,12 @@
 \section*{Comunicazioni analogiche}
 
-Amplitude Modulation Dual Side Band (AM-DSB) è generalmente utilizzata per trasmettere solo la voce. 
+Amplitude Modulation Dual Side Band (AM-DSB) è generalmente utilizzata per trasmettere solo la voce.
 
 
 Il segnale \( s_{DSB}(t) \) è definito come:
 
 \begin{equation*}
-s_{DSB}(t) = A_c m(t) \cos(2\pi f_c t)
+    s_{DSB}(t) = A_c m(t) \cos(2\pi f_c t)
 \end{equation*}
 
 \begin{center}
@@ -29,47 +29,18 @@ dove:
 La modulazione AM-DSB è caratterizzata da due sideband, ciascuno localizzato tra \( f_c \pm W \) e \( -f_c \pm W \), dove \( W \) è la banda del segnale modulante. Questi sideband trasportano la stessa informazione, da cui il termine \textbf{dual sideband}.
 
 Effettuando la trasformata di Fourier\footnote{$X(f) \triangleq \int_{-\infty}^{+\infty} x(t) e^{-j2\pi ft} dt$} di \( s_{DSB}(t) \), otteniamo la rappresentazione nel dominio delle frequenze \( S_{DSB}(f) \). Ciò è calcolabile come segue:
-\[  
+\[
     S_{DSB}(f) = A_c \ \mathcal{F}\{m(t)\} (f)  \ast \mathcal{F}\{\cos(2\pi f_c t) \}(f) = A_c M(f) \ast \frac{\delta(f - f_c) + \delta(f + f_c)}{2} =
 \]
 
 \[
-= \frac{1}{2} A_c [M(f - f_c) + M(f + f_c)]
+    = \frac{1}{2} A_c [M(f - f_c) + M(f + f_c)]
 \]
-Sebbene la componente negativa possa essere trascurata adesso la traslazione del segnale alla frequenza $f_c \gg W$ comporta un'occupazione di banda di $2W$ per ogni lato, ma ciò comporta uno spreco in quanto si ha duplicazione di informazione. 
+Sebbene la componente negativa possa essere trascurata adesso la traslazione del segnale alla frequenza $f_c \gg W$ comporta un'occupazione di banda di $2W$ per ogni lato, ma ciò comporta uno spreco in quanto si ha duplicazione di informazione.
 
 \begin{center}
-    \begin{tikzpicture}
-    \begin{axis}[
-        title={AM-DSB Modulation},
-        xlabel={Time},
-        ylabel={Amplitude},
-        axis lines=middle,
-        ymax=2,
-        ymin=-2,
-        xtick=\empty,
-        ytick=\empty,
-        clip=false,
-        no markers,
-        width=10cm,
-        height=5cm
-    ]
-    \addplot [domain=0:2*pi, samples=100, name path=m] {sin(deg(x))};
-    \addlegendentry{$m(t)$}
-
-    \addplot [domain=0:2*pi, samples=100, name path=carrier] {1.5*cos(deg(5*x))};
-    \addlegendentry{$A_c \cos(2\pi f_c t)$}
-
-    \addplot [domain=0:2*pi, samples=100, red, name path=am] {1.5*sin(deg(x))*cos(deg(5*x))};
-    \addlegendentry{$s_{DSB}(t)$}
-
-    \addplot [domain=0:2*pi, samples=100, dashed, name path=upper] {1.5*sin(deg(x))};
-    \addplot [domain=0:2*pi, samples=100, dashed, name path=lower] {-1.5*sin(deg(x))};
-
-    \addplot[fill=gray!30] fill between[of=upper and lower];
-
-    \end{axis}
-    \end{tikzpicture}
+    \tikzsetnextfilename{am}
+    \input{tikz/analog_communications/am.tex}
 \end{center}
 
 
@@ -89,9 +60,9 @@ Il segnale è pari (in modulo) a causa della simmetria hermitiana, infatti essen
 
 La ricostruzione del segnale originario richiede tre step:
 \begin{itemize}
-  \item \textbf{Filtraggio passa-banda}: il segnale ricevuto è filtrato tramite un filtro passa-banda, centrato in \( f_c \), per rimuovere le componenti fuori banda.
-  \item \textbf{Demodulazione}: il segnale modulato viene moltiplicato per un secondo coseno, ottenendo oltre al segnale originario anche due contributi in \(\pm 2f_c \)
-  \item \textbf{Filtraggio passa-basso}: il segnale demodulato viene filtrato con un filtro passa basso di ampiezza W, per rimuovere la componente ad alta frequenza.
+    \item \textbf{Filtraggio passa-banda}: il segnale ricevuto è filtrato tramite un filtro passa-banda, centrato in \( f_c \), per rimuovere le componenti fuori banda.
+    \item \textbf{Demodulazione}: il segnale modulato viene moltiplicato per un secondo coseno, ottenendo oltre al segnale originario anche due contributi in \(\pm 2f_c \)
+    \item \textbf{Filtraggio passa-basso}: il segnale demodulato viene filtrato con un filtro passa basso di ampiezza W, per rimuovere la componente ad alta frequenza.
 \end{itemize}
 
 \begin{equation*}
@@ -130,7 +101,7 @@ Per raddoppiare la quantità di informazioni trasmesse all'interno della stessa 
 
 Il segnale composto QAM \( s(t) \) può essere rappresentato come la somma di due segnali modulati DSB, uno modulato con un coseno (la componente in fase) e l'altro con un seno (la componente in quadratura):
 \begin{equation}
-s_{QAM}(t) = A_{c} m_1(t) \cos(2\pi f_c t) - A_{c} m_2(t) \sin(2\pi f_c t)
+    s_{QAM}(t) = A_{c} m_1(t) \cos(2\pi f_c t) - A_{c} m_2(t) \sin(2\pi f_c t)
 \end{equation}
 
 Dove:
@@ -160,7 +131,7 @@ Sebbene questa mancanza non precluda l'utilizzo della modulazione QAM, nella pra
 \end{itemize}
 
 Il criterio di Nyquist stabilisce che \( T \leq \frac{1}{2B} \), dove \( T \) è il periodo di campionamento e \( B \) è la banda del segnale, e quindi \( f_s \geq 2B \). Quindi nel nostro caso, $f_s \geq 2(f_c + W)$.
-Un segnale è definito in passa banda quando la propria energia è concentrata all'interno di una banda $2W$ centrata attorno a una carrier frequency $f_c$, con il vincolo $f_c \gg W$.  
+Un segnale è definito in passa banda quando la propria energia è concentrata all'interno di una banda $2W$ centrata attorno a una carrier frequency $f_c$, con il vincolo $f_c \gg W$.
 
 \subsection*{Inviluppo Complesso di un Segnale in Banda Passante}
 \begin{center}
@@ -235,113 +206,25 @@ I vantaggi della modulazione in frequenza includono:
 
 \begin{center}
     \resizebox{0.5\textwidth}{!}{
-        \begin{tikzpicture}[align=center]
-            \begin{groupplot}[
-                group style={
-                    group size=1 by 3,
-                    vertical sep=1cm
-                },
-                width=14cm,
-                height=5cm
-            ]
-           
-            \nextgroupplot[
-                xmin=0, xmax=12,
-                ymin=-1.5, ymax=1.5,
-                axis lines=middle,
-                xtick=\empty,
-                ytick=\empty,
-                xlabel={},
-                ylabel={},
-                title={Carrier ($f_c$)} 
-            ]
-            \addplot[thick, domain=0:12, samples=200] {sin(deg(2*3.14*x))};
-            \nextgroupplot[
-                xmin=0, xmax=12,
-                ymin=-1.5, ymax=1.5,
-                axis lines=middle,
-                xtick=\empty,
-                ytick=\empty,
-                xlabel={},
-                ylabel={},
-                title={Baseband Input ($f_m$)}
-            ]
-            \addplot[thick, domain=0:12, samples=200] {sin(deg(0.3*3.14*(x - 1.57)))};
-           
-            \draw[dashed] (axis cs:1.57,25) -- (axis cs:1.57,-25);
-            \draw[dashed] (axis cs:3.235,25) -- (axis cs:3.235,-25);
-            \draw[dashed] (axis cs:4.9,25) -- (axis cs:4.9,-25);
-            \draw[dashed] (axis cs:6.565,25) -- (axis cs:6.565,-25);
-            \draw[dashed] (axis cs:8.23,25) -- (axis cs:8.23,-25);
-            \draw[dashed] (axis cs:9.895,25) -- (axis cs:9.895,-25);
-            \draw[dashed] (axis cs:11.56,25) -- (axis cs:11.56,-25);
-        
-            \nextgroupplot[
-                xmin=0, xmax=12,
-                ymin=-2, ymax=1.5,
-                axis lines=middle,
-                xtick=\empty,
-                ytick=\empty,
-                xlabel={},
-                ylabel={},
-                title={FM waveform}
-            ]
-            \addplot[thick, domain=0:12, samples=200] {sin(deg(2*3.14*(x-0.5*sin(deg(0.3*3.14*(x))))))};
-            \draw[dashed] (axis cs:1.57,25) -- (axis cs:1.57,-25);
-            \draw[dashed] (axis cs:3.235,25) -- (axis cs:3.235,-25);
-            \draw[dashed] (axis cs:4.9,25) -- (axis cs:4.9,-25);
-            \draw[dashed] (axis cs:6.565,25) -- (axis cs:6.565,-25);
-            \draw[dashed] (axis cs:8.23,25) -- (axis cs:8.23,-25);
-            \draw[dashed] (axis cs:9.895,25) -- (axis cs:9.895,-25);
-            \draw[dashed] (axis cs:11.56,25) -- (axis cs:11.56,-25);
-        
-            \draw[->, thick] (axis cs:0.1,-1.4) -- (axis cs:1.47,-1.4) node[midway, below] {f. increase};
-            \draw[->, thick] (axis cs:1.67,-1.4) -- (axis cs:3.135,-1.4) node[midway, below] {f. increase};
-            \draw[->, thick] (axis cs:3.335,-1.4) -- (axis cs:4.8,-1.4) node[midway, below] {f. decrease};
-            \draw[->, thick] (axis cs:5,-1.4) -- (axis cs:6.465,-1.4) node[midway, below] {f. decrease};
-            \draw[->, thick] (axis cs:6.665,-1.4) -- (axis cs:8.13,-1.4) node[midway, below] {f. increase};
-            \draw[->, thick] (axis cs:8.33,-1.4) -- (axis cs:9.795,-1.4) node[midway, below] {f. increase};
-            \draw[->, thick] (axis cs:9.895,-1.4) -- (axis cs:11.56,-1.4) node[midway, below] {f. decrease};
-        \end{groupplot}
-            
-        \end{tikzpicture}
+        \tikzsetnextfilename{fm_waveform}
+        \input{tikz/analog_communications/fm_waveform.tex}
     }
-
 \end{center}
-
-
-
-
-
-
-
-
-
-
-
 
 \subsection*{Segnale FM con una Sinusoide Modulante}
 
-% Modulating sinusoid
 Sia \( m(t) \) una sinusoide data da \( m(t) = V_m \cos(2\pi f_m t) \). Il segnale FM diventa:
 \[
-s_{FM}(t) = A_c \cos \left( 2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} V_m \cos(2\pi f_m \tau) d\tau \right)
+    s_{FM}(t) = A_c \cos \left( 2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} V_m \cos(2\pi f_m \tau) d\tau \right)
 \]
 che si semplifica in:
 \[
-s_{FM}(t) = A_c \cos \left(2\pi f_c t + m_f \sin(2\pi f_m t) \right)
+    s_{FM}(t) = A_c \cos \left(2\pi f_c t + m_f \sin(2\pi f_m t) \right)
 \]
-% Complex envelope
 L'inviluppo complesso sarà:
 \[
-\hat{s}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
+    \hat{s}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
 \]
-
-
-
-
-%The integral formula to find the Fourier series coefficients \( c_n \) of the signal \( x(t) \) over one period \( T_0 \) is given by:
-%\[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
 
 La formula dell'integrale per trovare i coefficienti della serie di Fourier \( c_n \) del segnale \( x(t) \) su un periodo \( T_0 \) è data da:
 \[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
@@ -362,68 +245,32 @@ Sostituendo l'espansione nell'integrale per \( c_n \):
 Scambiando la somma e l'integrale (supponendo convergenza uniforme), e notando che \( e^{j (k-n) 2\pi f_m t} \) è periodico con periodo \( T_m \), otteniamo:
 \[ c_n = \frac{A_c}{T_m} \sum_{k=-\infty}^\infty J_k(m_f) \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} e^{j (k-n) 2\pi f_m t} dt \]
 
-
-
 L'integrale:
 \[ \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} e^{j (k-n) 2\pi f_m t} dt \]
 è non nullo solo quando \( k = n \), in tal caso è uguale a \( T_m \). Altrimenti è nullo a causa dell'ortogonalità delle funzioni esponenziali su un periodo completo.
-
 
 Quindi:
 \[ c_n = A_c J_n(m_f) \]
 
 
-
-
-
 La rappresentazione in serie di Fourier dello spettro dell'inviluppo complesso del segnale FM è quindi data da:
 \[
-\hat{s}_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
+    \hat{s}_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
 \]
 % FM signal spectrum representation
 Il segnale FM può essere rappresentato come:
 \[
-s_{FM}(t) = \text{Re}\{ \hat{s}_{FM}(t) e^{j 2\pi f_c t} \} = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + n f_m) t)
+    s_{FM}(t) = \text{Re}\{ \hat{s}_{FM}(t) e^{j 2\pi f_c t} \} = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + n f_m) t)
 \]
 mostrando come la frequenza della portante sia alterata dalle frequenze del segnale di modulazione, con l'ampiezza di ciascuna componente data dai valori della funzione di Bessel.
 \begin{center}
     \includegraphics[width=0.625\textwidth]{imgs/bessel1.png}
 \end{center}
 
-
 \begin{center}
     \resizebox{0.75\textwidth}{!}{
-        \begin{tikzpicture}
-
-            % Axis
-            \draw[->] (0,0) -- (12,0) node[right, font=\small] {Frequency};
-            \draw[->] (0,0) -- (0,7.5) node[above, font=\small] {Amplitude};
-        
-        
-            \foreach \x [count=\xi from 0] in {1.5,3,4.5,6,7.5,9,10.5} {
-                \pgfmathsetmacro{\mu}{6}  % Median of the x values
-                \pgfmathsetmacro{\sigma}{2}  % Standard deviation (you can adjust this value)
-                \pgfmathsetmacro{\A}{6}  % Amplitude (scaling factor)
-                
-                \pgfmathsetmacro{\y}{\A * exp(-((\x - \mu)^2) / (2 * \sigma^2))}
-                
-                % Draw the line
-                \draw (\x,0) -- (\x,{\y}) node[above] {};
-            }
-
-            % Frequency labels
-            \node[below, font=\small] at (1.5,0) {$f_c - 3f_m$};
-            \node[below, font=\small] at (3,0) {$f_c - 2f_m$};
-            \node[below, font=\small] at (4.5,0) {$f_c - f_m$};
-            \node[below, font=\small] at (6,0) {$f_c$};
-            \node[below, font=\small] at (7.5,0) {$f_c + f_m$};
-            \node[below, font=\small] at (9,0) {$f_c + 2f_m$};
-            \node[below, font=\small] at (10.5,0) {$f_c + 3f_m$};
-            
-            % fm arrow
-            \draw[<->, red] (6,0.75) -- node[above, font=\small] {\textcolor{red}{$f_m$}} (7.5,0.75);
-            
-        \end{tikzpicture}
+        \tikzsetnextfilename{bessel2}
+        \input{tikz/analog_communications/bessel2.tex}
     }
 \end{center}
 
@@ -442,68 +289,30 @@ La banda di Carson approssima la larghezza di banda del segnale FM a:
 \[
     \Delta f \coloneqq \text{max} \{ | f_d(t) | \} = k_f \cdot \text{max} \{ | m(t) | \}
 \]
-% TODO: qual è la differenza tra % f_{max} e f_m e B?
 Dove \( \Delta f \) è la deviazione massima della frequenza, \( f_{m} \) è la frequenza massima del segnale modulante e \( m_f \) è l'indice di modulazione.
 Questa regola stima la banda in cui è concentrata la maggior parte dell'energia del segnale FM.
 Ogni segnale modulato in frequenza ha un numero infinito di bande laterali e quindi una banda infinita. Ma la maggior parte dell'energia (98\% o più) è concentrata all'interno della banda definita dalla regola di Carson. Per la radio FM mono commerciale:
 \begin{align*}
-f_m &= 15 \text{ kHz (high quality audio)}, \\
-\Delta f &= 75 \text{ kHz}, \\
-m_f &= 5, \\
-B_{FM} &\approx 180 \text{ kHz}.
+    f_m      & = 15 \text{ kHz (high quality audio)}, \\
+    \Delta f & = 75 \text{ kHz},                      \\
+    m_f      & = 5,                                   \\
+    B_{FM}   & \approx 180 \text{ kHz}.
 \end{align*}
 
 \paragraph*{Ricevitore FM}
 Trascurando il rumore, il segnale ricevuto assume la forma:
 \[
-\hat{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
+    \hat{v}(t) = A_c e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau}
 \]
 Che può quindi essere demodulato differenziando la fase di \( \hat{v}(t) \):
 \[
-\hat{m}(t) = \frac{1}{2\pi k_f} \frac{d}{dt} \angle \hat{v}(t)
+    \hat{m}(t) = \frac{1}{2\pi k_f} \frac{d}{dt} \angle \hat{v}(t)
 \]
 
 
 \begin{center}
-
-    \begin{tikzpicture}[
-            block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
-            node distance=1cm and 1cm,
-            auto
-        ]
-        % Blocks
-        \node[inner sep=0pt, minimum size=0pt] (source) {};
-        \node[block, right=of source] (encoder) {$\angle$};
-        \node[block, right=of encoder] (interp) {$\frac{d}{dt}$};
-
-        % create a node which is above interp
-        \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
-        \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
-
-
-
-
-        \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
-
-        \draw[->] (interp) -- (m1);
-        \node[below=of m1] (cos) {};
-        \draw[->] (cos) -- (m1) node[midway, right] {$\frac{1}{2\pi k_f}$};
-
-
-        \node[right=1cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
-
-
-        \draw[->] (m1) -- (dummy3) node[midway, above] {$\hat{m}(t)$};
-
-
-
-        %\draw[->] (interp) -- node[midway, above] {$x_c[n]$} (p1);
-
-        \draw[->] (source) -- (encoder) node[midway,above] {$\tilde{v}(t)$};
-        \draw[->] (encoder) -- (interp) node[midway,above] {};
-
-
-    \end{tikzpicture}
+    \tikzsetnextfilename{fm_receiver}
+    \input{tikz/analog_communications/fm_receiver.tex}
 \end{center}
 
 
@@ -542,12 +351,11 @@ Con il passaggio al software è possibile modificare l'elaborazione del segnale 
 % TODO: quali sono le connessioni notevoli tra le varie componenti?
 % includi immagine in pdf chiamata imgs/sdr.pdf
 \begin{center}
-   % include sdr.pdf image
-    \includegraphics[width=0.8\textwidth]{imgs/sdr.png} 
+    \includegraphics[width=0.8\textwidth]{imgs/sdr.png}
 \end{center}
 
 
-Il RTL-SDR è un dispositivo inizialmente ideato per ricevere segnale TV su un PC, che è possibile hackerare settando un bit di debug nel driver, così che invierà tutti i campioni I/Q ricevuti dall'antenna. 
+Il RTL-SDR è un dispositivo inizialmente ideato per ricevere segnale TV su un PC, che è possibile hackerare settando un bit di debug nel driver, così che invierà tutti i campioni I/Q ricevuti dall'antenna.
 Il compito dell'RTL-SDR è prendere un chunk dello spettro del segnale ricevuto e convertirlo in banda base, che potrà poi essere processato dal software.
 % Detailing the components of RTL-SDR
 
@@ -561,42 +369,14 @@ Le componenti principali sono:
     \item \textbf{USB 2.0 Interface:} permette la connessione con i computer per l'elaborazione successiva.
     \item Componenti aggiuntive come un \textbf{LED di alimentazione}, un \textbf{diodo ESD} e un \textbf{sensore IR} per l'interfacciamento con l'utente e la protezione del dispositivo.
 \end{itemize}
-% insert a piacture.png
 
 Il dispositivo implementa un ricevitore super heterodyne, in cui il segnale in banda è prima trasformato in media frequenza (IF) e dopo alcune trasformazioni in banda base.
 Questa doppia trasformazione è necessaria per ottimizzare l'amplificazione del segnale, più semplice a media frequenza rispetto al segnale in banda base.
 
 \begin{center}
-    \begin{tikzpicture}[
-        block/.style={rectangle, draw, minimum height=2em, minimum width=3em},
-        line/.style={draw, -Latex}
-    ]
-        \node[block, align=center] (rfFrontEnd) {Flexible RF \\ Front End};
-        \node[block, right=0.5cm of rfFrontEnd, align=center] (adConverter) {A/D Converter};
-        \node[block, right=0.5cm of adConverter, align=center] (demod) {Demodulation \\ to Bband};
-        \node[block, right=0.5cm of demod, align=center] (decimation) {Decimation \\ Filtering};
-        \node[block, right=0.5cm of decimation, align=center] (carrierSync) {Carrier \& Timing \\ Synchronisation};
-        \node[block, right=0.5cm of carrierSync, align=center] (baseband) {Baseband \\ Processing};
-        \node[inner sep=0pt, outer sep=0pt, above left=0.25cm and 0.05cm of rfFrontEnd] (antenna) {\includegraphics[width=1cm]{imgs/antenna.pdf}};
-        
-        \draw[line] (rfFrontEnd) -- (adConverter);
-        \draw[line] (adConverter) -- (demod);
-        \draw[line] (demod) -- (decimation);
-        \draw[line] (decimation) -- (carrierSync);
-        \draw[line] (carrierSync) -- (baseband);
-        \draw (rfFrontEnd.west) -- ++(-0.5, 0) -- ++(0,0.5);
-        
-        \node[draw, dashed, fit=(rfFrontEnd) (adConverter) (demod) (decimation), inner sep=0.2cm, label=above:RTL-SDR Hardware] (hardware) {};
-        \node[draw, dashed, fit=(carrierSync) (baseband), inner sep=0.2cm, label=above:MATLAB / Simulink design (running on computer)] (software) {};
-        
-        \node[align=left, below=0.5cm of hardware.south] (freqRange) {Range: \\ 25MHz -- 1.75GHz};
-        \node[align=left, below=0.5cm of software.south] (samplingFreq) {Sampling frequency (\(f_s\)): \\ up to around 2.8MHz};
-    
-        \node[inner sep=0pt, outer sep=0pt, right=0.5cm of baseband] (output) {\includegraphics[width=1cm]{imgs/notes.pdf}};
-        \draw[line] (baseband) -- (output);
-    \end{tikzpicture}
+    \tikzsetnextfilename{rtl_chain}
+    \input{tikz/analog_communications/rtl_chain.tex}
 \end{center}
-% Explanation of the SDR block diagram for FM reception
 The block diagram for an FM receiver using RTL-SDR hardware typically involves the following processing stages:
 \begin{enumerate}
     \item \textbf{RF Antenna:} Captures the FM signal from the air.
@@ -615,53 +395,10 @@ The signal processing range for this system is from 25MHz to 1.75GHz with a samp
 
 \section*{RTL-SDR Receiving Steps}
 
-
-
-
 \begin{center}
-
-    \begin{tikzpicture}[
-            block/.style={rectangle, draw, minimum height=1cm, minimum width=1.5cm},
-            node distance=1cm and 1cm,
-            auto
-        ]
-
-        \tikzstyle{tri} = [draw, isosceles triangle, isosceles triangle apex angle=60, shape border rotate=360, minimum height=2em]
-        % Blocks
-        \node[inner sep=0pt, minimum size=0pt] (source) {};
-
-
-        \node[tri, right=of source] (encoder) {};
-        \node[block, right=of encoder] (interp) {BPF};
-
-        % create a node which is above interp
-        \node[above=of interp, inner sep=0pt, minimum size=0pt] (dummy1) {};
-        \node[below=of interp, inner sep=0pt, minimum size=0pt] (dummy2) {};
-
-        \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
-
-        \draw[->] (interp) -- (m1);
-        \node[below=of m1] (cos) {};
-        \draw[->] (cos) -- (m1) node[midway, right] {$\cos(2\pi(f_{LO} - f_{IF})t)$};
-
-
-        %\node[right=1cm of m1, inner sep=0pt, minimum size=0pt] (dummy3) {};
-        \node[tri, right=of m1] (dummy3) {};
-
-        \draw[->] (m1) -- (dummy3) node[midway, above] {};
-        \node[right=1cm of dummy3, inner sep=0pt, minimum size=0pt] (dummy4) {};
-        \draw[->] (dummy3) -- (dummy4) node[midway, above] {};
-
-        %\draw[->] (interp) -- node[midway, above] {$x_c[n]$} (p1);
-
-        \draw[->] (source) -- (encoder) node[midway,above] {};
-        \draw[->] (encoder) -- (interp) node[midway,above] {};
-
-
-    \end{tikzpicture}
+    \tikzsetnextfilename{sdr_receiver}
+    \input{tikz/analog_communications/sdr_receiver.tex}
 \end{center}
-
-
 
 Il processo di eterodinazione è essenziale per convertire le frequenze radio più alte in frequenze più basse, più facili da amplificare e processare.
 Nel disegno, $f_{LO}$ rappresenta la frequenza dell'oscillatore locale, mentre $f_{IF}$ (ovvero 3.57 MHz) è la frequenza intermedia a cui il segnale viene convertito, in cui avvengono anche una serie di filtraggi e amplificazioni.
@@ -675,36 +412,8 @@ Campionando $\cos(2\pi f_{IF} t)$ si ottiene:
 La frequenza di campionamento determina la massima banda estraibile dal segnale, ovvero 2.8 MHz
 
 \begin{center}
-    \begin{tikzpicture}
-        \begin{axis}[
-            axis lines=middle,
-            width=\textwidth,
-            height=8cm,
-            xlabel={$f$},
-            ylabel={},
-            xtick={-3,-2,-1,0,1,2,3},
-            xticklabels={$-f_{IF}-W$, $-f_{IF}$, $-f_{IF}+W$, $0$, $f_{IF}-W$, $f_{IF}$, $f_{IF}+W$},
-            ytick=\empty,
-            xmin=-4,
-            xmax=4,
-            ymin=0,
-            ymax=1,
-            clip=false
-        ]
-
-        \pgfmathsetmacro{\fIF}{2}
-        \pgfmathsetmacro{\W}{1}
-
-        \addplot[domain=-\fIF-\W:-\fIF+\W, samples=100, black, thick] 
-            ({x}, {((sqrt(-15129*(x+\fIF)^2 + 1968*(x+\fIF)*sin(deg(15*(x+\fIF)))^3 - 64*sin(deg(15*(x+\fIF)))^6 + 14400))/(120))} - 0.269 );
-        \addplot[domain=\fIF-\W:\fIF+\W, samples=100, black, thick] 
-            ({x}, {((sqrt(-15129*(x-\fIF)^2 + 1968*(x-\fIF)*sin(deg(15*(x-\fIF)))^3 - 64*sin(deg(15*(x-\fIF)))^6 + 14400))/(120))} - 0.269 );
-
-        \draw[->,thick] (axis cs:-4,0) -- (axis cs:4,0) node[right] {};
-        \draw[->,thick] (axis cs:0,0) -- (axis cs:0,1);
-
-        \end{axis}
-    \end{tikzpicture}
+    \tikzsetnextfilename{mixer_output}
+    \input{tikz/analog_communications/mixer_output.tex}
 \end{center}
 % TODO: cos'è il mixer?
 Nella figura è rappresentato il segnale in uscita dal mixer, con frequenza intermedia $f_{IF} = 3.57$ MHz e banda $W = 1.4$ MHz.
@@ -745,12 +454,10 @@ che può essere approssimato in
 
 moltiplicando per il coniugato del campione precedente si ottiene
 \[
-  \tilde{v}[k] \ \tilde{v}^*[k-1] \approx A_c^2 e^{j2\pi k_f \sum_{\ell = -\infty}^{k} m[\ell] \ T_s} e^{-j2\pi k_f \sum_{\ell = -\infty}^{k-1} m[\ell] \ T_s} = A_c^2 e^{j2\pi k_f m[k] \ T_s}
+    \tilde{v}[k] \ \tilde{v}^*[k-1] \approx A_c^2 e^{j2\pi k_f \sum_{\ell = -\infty}^{k} m[\ell] \ T_s} e^{-j2\pi k_f \sum_{\ell = -\infty}^{k-1} m[\ell] \ T_s} = A_c^2 e^{j2\pi k_f m[k] \ T_s}
 \]
-
 
 da cui:
 \[
     \tilde{m}[k] = \frac{1}{2\pi k_f T_s} \angle \left( \tilde{v}[k] \ \tilde{v}^*[k-1] \right)
 \]
-

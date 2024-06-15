@@ -1,0 +1,40 @@
+\documentclass{standalone}
+
+\usepackage{tikz,pgf} %and any other packages or tikzlibraries your picture needs
+
+\begin{document}
+
+
+
+\begin{tikzpicture}
+    \begin{axis}[
+        title={AM-DSB Modulation},
+        xlabel={Time},
+        ylabel={Amplitude},
+        axis lines=middle,
+        ymax=2,
+        ymin=-2,
+        xtick=\empty,
+        ytick=\empty,
+        clip=false,
+        no markers,
+        width=10cm,
+        height=5cm
+    ]
+    \addplot [domain=0:2*pi, samples=100, name path=m] {sin(deg(x))};
+    \addlegendentry{$m(t)$}
+
+    \addplot [domain=0:2*pi, samples=100, name path=carrier] {1.5*cos(deg(5*x))};
+    \addlegendentry{$A_c \cos(2\pi f_c t)$}
+
+    \addplot [domain=0:2*pi, samples=100, red, name path=am] {1.5*sin(deg(x))*cos(deg(5*x))};
+    \addlegendentry{$s_{DSB}(t)$}
+
+    \addplot [domain=0:2*pi, samples=100, dashed, name path=upper] {1.5*sin(deg(x))};
+    \addplot [domain=0:2*pi, samples=100, dashed, name path=lower] {-1.5*sin(deg(x))};
+
+    \addplot[fill=gray!30] fill between[of=upper and lower];
+
+    \end{axis}
+\end{tikzpicture}
+\end{document}

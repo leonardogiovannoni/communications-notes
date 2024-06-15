@@ -11,18 +11,19 @@
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
 \usepackage{mathtools} 
 \usepackage{forest}
+\usepackage{standalone}
 \usepackage{pgfplots}
 \usepackage{graphicx}
 \usepackage{svg}
 \usepackage{array}
 \usepackage{pgfplots}
 \usepackage{tikz}
-%\usepackage{minted}
 \usepackage[outputdir=build]{minted}
-
 \usepackage{tikz} 
 \usetikzlibrary{trees}
 \usetikzlibrary{automata, positioning}
+\usetikzlibrary{external}
+\tikzexternalize[prefix=build/]
 \usepackage{siunitx}
 \usepackage{tablefootnote}
 \usepackage{threeparttable}
@@ -38,11 +39,11 @@
 \usetikzlibrary{arrows,positioning,shapes.geometric}
 \pgfplotsset{compat=newest}
 \usetikzlibrary{positioning, arrows.meta, fit, calc, shapes}
-
 \title{Appunti di sistemi di comunicazione}
 \author{Leonardo Giovannoni}
-
 \begin{document}
+%\tikzsetexternalprefix{tikz}
+
 \maketitle
 \include{sections/communications_introduction}
 \include{sections/analog_communications}
