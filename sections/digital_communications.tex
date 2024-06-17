@@ -731,15 +731,27 @@ Le soglie sono date dal punto medio tra i due simboli adiacenti:
     Z^{(i)} = \left\{ x \mid d(x, a^{(i)}) < d(x, a^{(j)}), j \neq i, j = 1, \ldots, M \right\}
 \]
 
-
 % include image in img/regions.jpg
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.875\textwidth]{imgs/regions.png}
-    \caption*{Regioni di decisione per un sistema PAM}
-\end{figure}
+%\begin{figure}[ht]
+%    \centering
+%    \includegraphics[width=0.875\textwidth]{imgs/regions.png}
+%    \caption*{Regioni di decisione per un sistema PAM}
+%\end{figure}
 
+\begin{center}
+    \tikzsetnextfilename{2PAM_decisor}
+    \input{tikz/digital_communications/2PAM_decisor.tex}
+\end{center}
 
+\begin{center}
+    \tikzsetnextfilename{4PAM_decisor}
+    \input{tikz/digital_communications/4PAM_decisor.tex}
+\end{center}
+
+\begin{center}
+    \tikzsetnextfilename{8PAM_decisor}
+    \input{tikz/digital_communications/8PAM_decisor.tex}
+\end{center}
 
 
 
