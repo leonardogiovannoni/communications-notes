@@ -144,7 +144,7 @@ Per effettuare una trasmissione parallela dei veri segnali si potrebbe utilizzar
         \end{tikzpicture}
     }
 \end{center}
-Per poter analizzare una modulazione multi-carrier è necessaria una rappresentazione alternativa, ma equivalente, del canale di trasmissione, ottenuto campionando il segnale con frequenza $\frac{1}{T}$. La rappresentazione ottenuta risulta valida solo nella banda del segnale trasmesso, ma non è un problema dato che non si ha interesse nell'analizzare il canali in altri punti.
+Per poter analizzare una modulazione multi-carrier è necessaria una rappresentazione alternativa, ma equivalente, del canale di trasmissione, ottenuta campionando il segnale con frequenza $\frac{1}{T}$. La rappresentazione ottenuta risulta valida solo nella banda del segnale trasmesso, ma non è un problema dato che non si ha interesse nell'analizzare il canali in altri punti.
 
 Considerando l'inviluppo complesso risulta chiaro che la condizione di Nyquist\footnote{\label{nyquist_cond} La condizione di Nyquist garantisce l'assenza di aliasing per segnali campionati, ovvero dato l'intervallo di campionamento $T_s$ e la banda $B$ del segnale da campionare, deve valere $T_s \leq \frac{1}{2B}$, ovvero $f_s \geq 2B$} è rispettata con frequenza di campionamente $\frac{1}{T}$.
 
@@ -587,3 +587,50 @@ Questo permette di applicare le solite considerazioni per la probabilità di err
 \]
 
 % TODO: qualcosa su OFDMA
+
+
+\subsection*{WiFi – IEEE 802.11a/g/n/ac}
+
+Una trasmissione WiFi occupa una larghezza di banda \( B = 20 \text{ MHz} \), che è divisa in \( N = 64 \) sotto-portanti spaziate di \( \Delta f = 312.5 \text{ kHz} \). 
+La specifica 802.11a/g utilizza 48 sotto-portanti per i dati, 4 per i pilot e 12 come sotto-portanti nulle, mentre la specifica 802.11n/ac utilizza 52 sotto-portanti per i dati, 4 per i pilot e 8 come sotto-portanti nulle.
+
+Il blocco OFDM è composto da \( N = 64 \) campioni e \( N_{CP} = 16 \) campioni di prefisso ciclico (CP). La durata di ogni campione è:
+\[
+T = \frac{1}{B} = \frac{1}{20 \times 10^6} = 50 \text{ ns}
+\]
+Pertanto, la durata di un blocco OFDM è:
+\[
+    T_{OFDM} = (64 + 16) \times 50 \text{ ns} = 4 \si{\mu s}
+\]
+In generale, la dispersione del ritardo di un canale interno è \( \sigma_\tau < 500 \text{ ns} \), il che significa che il canale può essere considerato flat fading, cioè:
+\[
+T_{OFDM} \gg \sigma_\tau
+\]
+Assumendo che la mobilità massima interna sia \( v = 3 \text{ m/s} \), la massima deviazione Doppler è:
+\[
+f_d = \frac{5 \times 10^9 \times 3}{3 \times 10^8} = 50 \text{ Hz}
+\]
+da cui segue che:
+\[
+T_c = \frac{1}{f_d} = \frac{1}{50} = 0.01 \text{ s}
+\]
+Il canale è quindi considerato slow fading:
+\[
+T_{OFDM} \ll T_c
+\]
+Ogni sotto-portante trasporta un nuovo simbolo ogni \( T_{OFDM} = 4 \si{ \mu s} \). La velocità di simboli per sotto-portante è:
+\[
+\frac{1}{T_{OFDM}} = 0.25 \times 10^6 \si{ simboli/s}
+\]
+Ci sono 48 sotto-portanti dedicate alla trasmissione dei dati, quindi la velocità complessiva di simboli è:
+\[
+48 \times 0.25 \times 10^6 = 12 \times 10^6 \si{ simboli/s}
+\]
+La perdita di efficienza (spettrale ed energetica) dovuta all'inserimento del prefisso ciclico (CP) è:
+\[
+\eta_{CP} = \frac{N_{CP}}{N + N_{CP}} = \frac{16}{80} = 20\%
+\]
+Vi è inoltre una perdita aggiuntiva di efficienza spettrale dovuta alle sotto-portanti di guardia:
+\[
+\eta_{GS} = \frac{16}{64} = 25\%
+\]

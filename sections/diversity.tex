@@ -22,7 +22,7 @@ Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene 
 \end{figure}
 
 
-I metodi principali per ridurre gli effetti di un fading di tali tipologie sono le diversity techniques, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
+I metodi principali per ridurre gli effetti di un fading di tali tipologie sono le tecniche basate sulla diversità, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
 Le principali tecniche di diversity sono:
 \begin{itemize}
     \item \textbf{Time diversity}: relative al coherence time ($T_c$). Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. Slow fading channels potrebbero non garantire una diversity sufficiente. Il canale deve variare sufficientemente in maniera veloce.
@@ -227,7 +227,7 @@ Gli errori possono far scegliere al decoder la word sbagliata, la capacità di e
 \]
 Maggiore è la distanza di Hamming, maggiore è la ridondanza da aggiungere.
 Fissata $R=\frac{k}{n}$, $d_{min}$ sarà più grande al crescere di $k$ e $n$, tuttavia si complica anche il sistema.
-\section*{Convolutional code}
+\section*{Codici convoluzionali}
 
 I codici convoluzionali, al contrario dei block code, non sono sistematici, si trasmettono infatti solo i bit di parità.
 L'encoder utilizza una sliding window per generare $n>1$ bit di parità, combinando vari sottoinsiemi di bit nel campo GF(2), realizzando una sorta di convoluzione.
@@ -562,10 +562,10 @@ Più nel dettaglio abbiamo lato trasmettitore da eseguire i seguenti passi:
 \end{center}
 \paragraph*{Turbo code (error correction)}
 
-Si tratta di un convolutional code in cui sono utilizzati due encoder in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decoding grazie alla ridondanza ottenuta e alla diversity, ottenuta dalla presenza di uno stream di dati differente.
+Si tratta di un codice convoluzionale in cui sono utilizzati due encoder in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decoding grazie alla ridondanza ottenuta e alla diversity, ottenuta dalla presenza di uno stream di dati differente.
 Il sistema è composto da tre sequenze di cui due codificate e una inalterata. L'utilizzo dell'interleaver permette di estendere artificialmente la lunghezza della sequenza, avvicinandosi alle ipotesi di Shannon. Inoltre l'interleaver permette di ottenere sequenze indipendenti. 
 Il trasmettitore invia quindi tre sequenze, tra cui quella originaria, ottenendo un $R=\frac{1}{3}$. L'idea è che se il canale produce un errore le due sequenze prodotte in maniera differente possono essere unite  per correggere l'errore.
-Per quanto riguarda il decoder si utilizzano due decoder in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generanza senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
+Per quanto riguarda il decoder si utilizzano due decoder in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generata senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
 Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decoder. L'uscita è infine inviata al deinterleaver. 
 Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in ingresso al primo decoder l'uscita dell'interleaver. 
 L'uscita dei decoder rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
@@ -643,7 +643,7 @@ In figura viene mostrata la convergenza con $K=2048$, $R=1/2$ e un numero di ite
 
 \section*{Space diversity}
 
-In generale sia la frequency che time diversity richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
+In generale sia diversità in tempo che il frequenza richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
 \begin{itemize}
     \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
     \item \textbf{Diversity gain}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati. 
@@ -656,7 +656,7 @@ Per assumere incorrelazione tra le varie antenne la loro distanza deve essere al
 
 La \textbf{coherence distance} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né dal tempo, né dalla velocità.
 
-Le carrier frequencies attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
+Le frequenze portanti attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
 
 
 \paragraph*{Canale MIMO (Multiple Input Multiple Output)}
@@ -689,8 +689,8 @@ Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso
     x_i[m] = h_i c_m + n_i[m] \quad i = 1, \ldots, N
 \]
 Questo rappresenta il segnale ricevuto sull'$i$-esima antenna.
-È ragionevole assumere $h_i \in \mathbb{R}$ , dato che si può sempre moltiplicare $x_i[m]$ per $ e^{j\arg(h_i)} $ senza cambiare le statistiche del segnale.
 Ogni segnale ha il proprio rumore e distorsione da parte del canale.
+Possiamo per i calcoli assumere che $h_i$ sia una costante, perché nonostante sia modellizzata come una variabile aleatoria, ne faremo una stima misurando il canale, per un tempo che dovrà essere maggiore del symbol time.
 
 L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale.
 Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
@@ -910,7 +910,7 @@ Utilizzando la modulazione OFDM l'idea sarebbe adattare $m$ ed $R$ per ogni cana
 % TODO: p non lo metterei, perché non è chiaro cosa rappresenti
 \[
     \begin{cases}
-       \underset{\mathbf{p}}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2})
+       \underset{\mathbf{p}}{\text{max}} \sum_{n=1}^{N} \log_2(1 + \frac{P_n}{\sigma_n^2}) \\
        \sum_{n=1}^{N} P_n = P_0 \quad \text{(power budget)} \\
         P_n \geq 0 \quad n = 1, \ldots, N
     \end{cases}    

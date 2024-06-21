@@ -228,7 +228,7 @@ La componente aleatoria è dovuta alla presenza di ostacoli differenti che copro
 La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri ($A_S$ e $\sigma_S$) espressi in dB,
 ovvero la PDF è:
 \[
-    f_{A_s}(a_S) = \frac{1}{\sqrt{2\pi \sigma_S^2}} e^{-\frac{a_S^2}{2\sigma_S^2}}
+    f_{A_s^{dB}}(a_S) = \frac{1}{\sqrt{2\pi \sigma_S^2}} e^{-\frac{a_S^2}{2\sigma_S^2}}
 \]
 
 Tipicamente $\sigma_S$ varia tra 0 e 9 dB.
@@ -279,7 +279,31 @@ Per quanto riguarda i parametri delle varie repliche:
           \]
 
           \begin{itemize}
-              \item La distribuzione per l'ampiezza del canale \(\alpha\) è \textit{Rayleigh}
+              \item La distribuzione per l'ampiezza del canale \(\alpha\) è \textit{Rayleigh} \footnote{
+                        Siano \(X\) e \(Y\) variabili casuali normali indipendenti con media 0 e varianza \(\sigma^2\). La pdf congiunta di \(X\) e \(Y\) è data da:
+                        \[
+                            f_{X,Y}(x,y) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right).
+                        \]
+                        Per cui la CDF della variabile aleatoria \( R = \sqrt{X^2 + Y^2}\) è data da:
+                        \[
+                            F_R(r) = \int_{x^2 + y^2 < r^2} \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}} \, dx \, dy
+                        \] 
+                        
+
+
+                        Passando alle coordinate polari, lo Jacobiano della trasformazione dalle coordinate cartesiane \((x, y)\) alle coordinate polari \((\rho, \theta)\) è \(\rho\), cioè:
+                        \[
+                            dx \, dy = \rho \, d\rho \, d\theta.
+                        \]
+                        La CDF diventa quindi:
+                        \[
+                            F_R(r) = \int_{\rho < r, 0 \leq \theta \leq 2\pi} \frac{1}{2 \pi \sigma^2} e^{-\frac{\rho^2}{2\sigma^2}} \rho \, d\rho \, d\theta = \int_{0}^{2\pi} d\theta \int_{0}^{r} \frac{\rho}{2\pi \sigma^2} e^{-\frac{\rho^2}{2\sigma^2}}\, d\rho = \int_{-\infty}^{r} \frac{\rho}{\sigma^2} e^{-\frac{\rho^2}{2\sigma^2}} \text{u}(\rho)\, d\rho
+                        \] 
+                        Ovvero:
+                        \[
+                            f_R(r) = \frac{r}{\sigma^2} e^{-\frac{r^2}{2\sigma^2}} \text{u}(r)
+                        \]
+                    }
                     \[
                         f_{\alpha}(\alpha) =
                         \begin{cases}
@@ -320,7 +344,8 @@ La ricezione di più repliche, soprattutto se notevolemnte distanziate tra loro,
 Sebbene quindi si scelga un filtro che rispetti la condizione di Nyquist, gli effetti del canale non permettono di rimuovere completamente l'ISI, generata dal fatto che $g\left[m-k\right]$ non si annulla.
 
 
-Definiamo dei parametri che ci permettano di capire la gravità dell'ISI. Il delay spread permette di misurare la dispersione temporale introdotta dal canale:
+Definiamo dei parametri che ci permettano di capire la gravità dell'ISI.
+Il delay spread, che può essere interpretato come la differenza di tempo tra l'istante d'arrivo della prima componente del multipath e l'istante d'arrivo dell'ultima, permette di misurare la dispersione temporale introdotta dal canale:
 \begin{itemize}
     \item $\sigma_\tau \ll T$: delay spread inferiore al symbol time, il canale è detto \textbf{flat fading}  e l'effetto dell'ISI è trascurabile in quanto le varie repliche ricevute fanno tutte riferimento allo stesso simbolo.
     \item $\sigma_\tau > T$: delay spread maggiore del symbol time, il canale è detto \textbf{frequency selective} e l'effetto dell'ISI non è più trascurabile in quanto le varie repliche, appartenti a simboli differenti, interferiscono tra loro.
@@ -399,9 +424,9 @@ Se $B_c > B_S \approx \frac{1}{T}$, ovvero la banda del segnale trasmesso, non s
     \includegraphics[width=0.875\textwidth]{imgs/coherence_bandwidth.png}
 \end{center}
 La coherence bandwidth può essere determinata considerando la densità spettrale di potenza.
-TODO questa parte non è chiara.
+%TODO questa parte non è chiara.
 Quando $\sigma_{\tau} < T$ vale $B_c > B_s$ e il canale è flat fading, altrimenti se $\sigma_{\tau} > T$ vale $B_c < B_s$ e il canale è frequency selective.
-I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere proprietà statistiche si possono applicare le operazioni standard per il calcolo del valor medio e della varianza, tuttavia ciò risulta particolarmente complesso e serve dunque approssimare tramite un procedimento approssimativo.
+I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere proprietà statistiche si possono applicare le operazioni standard per il calcolo del valor medio e della varianza, tuttavia ciò risulta particolarmente complesso e serve dunque approssimare.
 
 
 \[
@@ -444,11 +469,11 @@ Le misurazioni del canale dipendono dalla frequenza del segnale e dall'ambiente 
 Valori tipici di delay spread sono:
 
 \begin{itemize}
-    \item $0.2 \, \mu s$ (area rurale),
-    \item $0.5 \, \mu s$ (area suburbana),
-    \item $3-8 \, \mu s$ (area urbana),
-    \item $<2 \, \mu s$ (microcella urbana),
-    \item $50-300 \, \text{ns}$ (picocella indoor).
+    \item $0.2 \, \si{\mu s}$ (area rurale),
+    \item $0.5 \, \si{\mu s}$ (area suburbana),
+    \item $3-8 \, \si{\mu s}$ (area urbana),
+    \item $<2 \, \si{\mu s}$ (microcella urbana),
+    \item $50-300 \, \si{ns}$ (picocella indoor).
 \end{itemize}
 
 \begin{center}
@@ -456,11 +481,11 @@ Valori tipici di delay spread sono:
         \hline
         \textbf{Ambiente} & \textbf{RMS Delay Spread ($\sigma_\tau$)}       & \textbf{Note}      \\
         \hline
-        Urbano            & $1300 \, \text{ns} \, (3500 \, \text{ns max})$  & NYC                \\
-        LTE ETU           & Fino a $5 \, \mu s$                             & Caso tipico medio  \\
-        Suburbano         & $1960-2110 \, \text{ns}$                        & Caso estremo medio \\
-        Indoor            & $10-50 \, \text{ns}$                            & Edificio d'uffici  \\
-        Indoor            & $70-94 \, \text{ns} \, (1470 \, \text{ns max})$ & Edificio d'uffici  \\
+        Urbano            & $1300 \, \si{ns} \, (3500 \, \si{ns} \text{ max})$  & NYC                \\
+        LTE ETU           & Fino a $5 \, \si{\mu s}$                             & Caso tipico medio  \\
+        Suburbano         & $1960-2110 \, \si{ns}$                        & Caso estremo medio \\
+        Indoor            & $10-50 \, \si{ns}$                            & Edificio d'uffici  \\
+        Indoor            & $70-94 \, \si{ns} \, (1470 \, \si{ns} \text{ max})$ & Edificio d'uffici  \\
         \hline
     \end{tabular}
 \end{center}
@@ -478,7 +503,7 @@ Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
 % TODO: inserire considerazione sulla BER
 % TODO: %\delta(t - \tau) o \delta(\tau - \tau_l
 \[
-    h(t, \tau) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
+    h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
 \]
 % TODO: mediato?
 Dove abbiamo aggiunto la dipendenza dal tempo alle ampiezze e alle fasi delle repliche. Dato che il large scale fading è mediato su una distanza nell'ordine del metro, lo possiamo considerare costante (avendo un rate con cui varia molto più lento).
@@ -493,7 +518,7 @@ Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'e
 \begin{center}
     \includegraphics[width=0.75\textwidth]{imgs/doppler.png}
 \end{center}
-    
+
 L'effetto Doppler, considerando una qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
 In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allontana sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore.
 Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{Doppler shift} ($f_d$).
@@ -535,14 +560,14 @@ dove:
 \end{itemize}
 
 
-Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando. 
+Il segno dipende dalla direzione del movimento, ovvero se la sorgente e l'osservatore si stanno avvicinando o allontanando.
 Nell'esempio si assume che il ricevitore si stia allontanando dalla sorgente, quindi il segno è negativo, mentre il trasmettitore è fermo.
 Il segnale ricevuto in $y$ risulta avere una frequenza inferiore a quello in $x$.
 Il termine $f_d$ assume un valore significativo solo per $v$ o $f_c$ molto grandi, in quanto a denominatore si ha la velocità della luce.
 In generale l'effetto introdotto non produce grandi errori, tuttavia nel caso di canale con introduzione di repliche si ha la ricezione di repliche con angoli differenti, generando un fenomeno più difficile da trattare e non deterministico, detto \textbf{Doppler spread}.
 % TODO: theta è una variabile aleatoria?
-Il Doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$. 
-Il segnale ricevuto invece viene descritto come un processo aleatorio a media nulla e se ne studia autocorrelazione e densità spettrale di potenza.
+Il Doppler shift di ciascuna replica dipende dall'angolo $\theta$, quindi $f_d = f_c \frac{v \cos(\theta)}{c}$.
+Il segnale ricevuto invece viene descritto come un processo aleatorio a media nulla e se ne studia \textbf{autocorrelazione} e \textbf{densità spettrale di potenza}.
 Esistono diversi modelli utilizzati per descrivere lo spreading in frequenza,
 che si verifica quando le varie repliche del segnale vengono aggregate al ricevitore.
 
@@ -560,9 +585,7 @@ L'assunzione non è del tutto realistica, ma più che la forma dello spread è i
     }
 \end{figure}
 
-\[
-    S_D(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f - f_c}{f_d}\right)^2}}
-\]
+
 Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effetto prodotto è l'allargamento dello spettro occupato (\textbf{Doppler spread}), derivante dal fatto che il segnale stocastico ricevuto assume la forma:
 
 \[
@@ -573,6 +596,10 @@ dove $s(t)$ è il segnale trasmesso e $d(t)$ è il Jokes' Doppler spectrum. Quan
 
 \[
     S_Y(f) = S_S(f) \ast S_D(f)
+\]
+Supponendo quindi che il segnale inviato fosse $s(t) = \sin(2\pi f_c t)$:
+\[
+    S_Y(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f - f_c}{f_d}\right)^2}}
 \]
 
 Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jakes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
@@ -600,7 +627,7 @@ Lo stesso concetto può essere espresso anche in termini di distanza, molto impo
 \]
 Questo implica che segnali ricevuti a distanze nell'ordine di metà lunghezza d'onda possono essere considerati incorrelati (TODO?).
 Se $T < T_c$ si può asssumere che il canale sia modellabile come LTI in quanto la risposta risulta costante nel tempo per almeno $T_c$, inferiore al tempo dei simboli.
-Incrementando il rate di riduce il tempo dei simboli, permettendo di modellare il canale come LTI, tuttavia si rischia di incorrere in un canale frequency selective per cui sono necessarie contromisure per contrastare l'ISI generato.
+Incrementando il rate si riduce il tempo dei simboli, permettendo di modellare il canale come LTI, tuttavia si rischia di incorrere in un canale frequency selective per cui sono necessarie contromisure per contrastare l'ISI generato.
 
 
 
@@ -678,34 +705,34 @@ Il canale è anche definibile come \textit{frequency-selective} a causa di \( B_
 
 
 \begin{center}
-\textbf{Small-Scale Fading} \\
-\textit{(Based on multipath time delay spread)}
+    \textbf{Small-Scale Fading} \\
+    \textit{(Based on multipath time delay spread)}
 
-\bigskip
+    \bigskip
 
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Flat Fading} & \textbf{Frequency Selective Fading} \\ \hline
-BW of signal $<$ BW of channel & BW of signal $>$ BW of channel \\
-Delay spread $<$ Symbol period & Delay spread $>$ Symbol period \\ \hline
-\end{tabular}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Flat Fading}           & \textbf{Frequency Selective Fading} \\ \hline
+        BW of signal $<$ BW of channel & BW of signal $>$ BW of channel      \\
+        Delay spread $<$ Symbol period & Delay spread $>$ Symbol period      \\ \hline
+    \end{tabular}
 \end{center}
 
 
 
 \begin{center}
-\textbf{Small-Scale Fading} \\
-\textit{(Based on Doppler spread)}
+    \textbf{Small-Scale Fading} \\
+    \textit{(Based on Doppler spread)}
 
-\bigskip
+    \bigskip
 
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Fast Fading} & \textbf{Slow Fading} \\ \hline
-High Doppler spread & Low Doppler spread \\
-Coherence time $<$ Symbol period & Coherence time $>$ Symbol period \\
-Channel variations faster than baseband signal variations & Channel variations slower than baseband signal variations \\ \hline
-\end{tabular}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Fast Fading}                                      & \textbf{Slow Fading}                                      \\ \hline
+        High Doppler spread                                       & Low Doppler spread                                        \\
+        Coherence time $<$ Symbol period                          & Coherence time $>$ Symbol period                          \\
+        Channel variations faster than baseband signal variations & Channel variations slower than baseband signal variations \\ \hline
+    \end{tabular}
 \end{center}
 
 \bigskip
