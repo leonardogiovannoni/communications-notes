@@ -686,7 +686,7 @@ Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e
 \end{center}
 Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
 \[
-    x_i[m] = h_i c_m + n_i[m] \quad i = 1, \ldots, N
+    y_i[m] = h_i c_m + n_i[m] \quad i = 1, \ldots, N
 \]
 Questo rappresenta il segnale ricevuto sull'$i$-esima antenna.
 Ogni segnale ha il proprio rumore e distorsione da parte del canale.
@@ -695,29 +695,42 @@ Possiamo per i calcoli assumere che $h_i$ sia una costante, perché nonostante s
 L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale.
 Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
 % TODO: i %w_i sono reali o complessi 
+%\[
+%    z[m] = \sum_{i=1}^{N} w_i x_i[m] = \sum_{i=1}^{N} w_i h_i c_m + \sum_{i=1}^{N} w_i n_i[m]
+%\]
+
 \[
-    z[m] = \sum_{i=1}^{N} w_i x_i[m] = \sum_{i=1}^{N} w_i h_i c_m + \sum_{i=1}^{N} w_i n_i[m]
+    z[m] = \mathbf{w}^H \mathbf{y}[m] = \mathbf{w}^H \mathbf{h} x[m] + \mathbf{w}^H \mathbf{n}[m] = \mathbf{w}^H \mathbf{h} c_m + \mathbf{w}^H \mathbf{n}[m]
 \]
 dove $w_i$ sono i pesi assegnati alle varie antenne.
 
 
+%\[
+%    P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c_m  \right|^2 \right] = \mathbb{E} \left[  |c_m|^2  \right] \left| \sum_{i=1}^{N} w_i h_i \right|^2 = A \left| \sum_{i=1}^{N} w_i h_i \right|^2 = A \left| \mathbf{w}^T \mathbf{h} \right|^2
+%\]
 \[
-    P = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i h_i c_m  \right|^2 \right] = \mathbb{E} \left[  |c_m|^2  \right] \left| \sum_{i=1}^{N} w_i h_i \right|^2 = A \left| \sum_{i=1}^{N} w_i h_i \right|^2 = A \left| \mathbf{w}^T \mathbf{h} \right|^2
+    %P = \langle \mathbf{w}^H \mathbf{h} c_m, \mathbf{w}^H \mathbf{h} c_m \rangle
+    P = \mathbb{E} \left[ | \mathbf{w}^H \mathbf{h} c_m |^2 \right]= \mathbb{E} \left[ |c_m|^2 \right] | \mathbf{w}^H \mathbf{h} |^2 = A | \mathbf{w}^H \mathbf{h} |^2
 \]
 
+
 \[
-    \begin{array}{ll}
-            P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i[m]  \right|^2 \right] \\
-            = \mathbb{E} \left[ \left( \sum_{i=1}^{N} w_i n_i[m] \right)  \left( \sum_{i=1}^{N} w_i n_i[m] \right)^*  \right] \\
-            = \mathbb{E} \left[  \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* n_i[m] n_j[m]^*  \right] \\
-            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \mathbb{E} \left[ n_i[m] n_j[m]^* \right] \\
-            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \sigma^2 \delta_{ij} \\
-            = \sum_{i=1}^{N} w_i w_i^* \sigma^2 \\
-            = \sum_{i=1}^{N} |w_i|^2 \sigma^2 \\
-            = \sigma^2 \sum_{i=1}^{N} |w_i|^2 = \sigma^2 \|\mathbf{w}\|^2
-    \end{array}
+    P_N = \mathbb{E} \left[ |\mathbf{w}^H \mathbf{n}[m] |^2 \right] = \mathbb{E} \left[ \mathbf{w}^H \mathbf{n}[m] \ \overline{\mathbf{w}^H \mathbf{n}[m]} \right] = \mathbb{E} \left[\mathbf{w}^H \mathbf{n}[m]  \left(\mathbf{n}[m]\right)^H \mathbf{w} \right] = \mathbf{w}^H \mathbf{E}\left[ \mathbf{n}[m] (\mathbf{n}[m])^H \right] \mathbf{w} = \mathbf{w}^H \sigma^2 \mathbf{I} \ \mathbf{w} = \sigma^2 \|\mathbf{w}\|^2
 \]
-Dove la delta di Kronecker è dovuta al fatto che i rumori sono incorrelati, ovvero:
+
+%\[
+%    \begin{array}{ll}
+%            P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i[m]  \right|^2 \right] \\
+%            = \mathbb{E} \left[ \left( \sum_{i=1}^{N} w_i n_i[m] \right)  \left( \sum_{i=1}^{N} w_i n_i[m] \right)^*  \right] \\
+%            = \mathbb{E} \left[  \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* n_i[m] n_j[m]^*  \right] \\
+%            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \mathbb{E} \left[ n_i[m] n_j[m]^* \right] \\
+%            = \sum_{i=1}^{N} \sum_{j=1}^{N} w_i w_j^* \sigma^2 \delta_{ij} \\
+%            = \sum_{i=1}^{N} w_i w_i^* \sigma^2 \\
+%            = \sum_{i=1}^{N} |w_i|^2 \sigma^2 \\
+%            = \sigma^2 \sum_{i=1}^{N} |w_i|^2 = \sigma^2 \|\mathbf{w}\|^2
+%    \end{array}
+%\]
+Dove l'ultimo passaggio è dovuto al fatto che i rumori sono incorrelati, ovvero:
 \[
     \mathbb{E} \left[ n_i[m] n_j[m]^* \right] = \mathbb{E} \left[ n_i[m] \right] \mathbb{E} \left[ n_j[m]^* \right]
 \]
@@ -725,46 +738,44 @@ Dove la delta di Kronecker è dovuta al fatto che i rumori sono incorrelati, ovv
 L'obiettivo è massimizzare il SNR, che si può quindi scrivere come:
 
 \[
-    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left| \mathbf{w}^T \mathbf{h} \right|^2}{\|\mathbf{w}\|^2} \leq \frac{A}{\sigma^2} \frac{\|\mathbf{w}\|^2 \|\mathbf{h}\|^2}{\|\mathbf{w}\|^2} = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 =  \frac{A}{\sigma^2} \sum_{i=1}^{N} |h_i|^2
+    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left| \mathbf{w}^H \mathbf{h} \right|^2}{\|\mathbf{w}\|^2} \leq \frac{A}{\sigma^2} \frac{\|\mathbf{w}\|^2 \|\mathbf{h}\|^2}{\|\mathbf{w}\|^2} = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 
 \]
 
 
 
+dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. 
 
-dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. Imponendo la condizione $w_i = h_i^*$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza.
-
-
-% TODO: h è complesso? Nel caso vi vuole il modulo?
-Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\frac{A}{\sigma^2}h$, ovvero la forma valida per un semplice fading channel.
+Imponendo la condizione $w_i = h_i$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza.
+Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\frac{A}{\sigma^2}h^2$, ovvero la forma valida per un semplice fading channel.
 \paragraph*{MISO (Multiple Input Single Output)}
 \begin{center}
     \includegraphics[width=0.4\textwidth]{imgs/miso.jpg}
 \end{center}
 Per quanto riguarda la configurazione con più antenne in trasmissione e singola antenna in ricezione, sistema MISO, si ottiene la stessa espressione con alcuni accorgimenti lato trasmettitore
 \[
-    x[m] = \sum_{i=1}^{N} h_i y_i[m] + n[m] = \mathbf{h}^T \mathbf{y}[m] + n[m] \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
+    y[m] = \mathbf{h}^T \mathbf{x}[m] + n[m] \quad \text{segnale ricevuto tramite l'unica antenna disponibile}
 \]
 
 La differenza sostanziale con il caso SIMO è che i vari segnali sono combinati ``naturalmente" durante la trasmissione e ricevuti quindi già aggregati. 
 La scelta dei coefficienti non può essere effettuata lato ricevitore, ma deve essere il trasmettitore a scegliere stimando il canale, lato ricevitore la stima è ovviamente più complessa rispetto a quella che effettuerebbe il ricevitore per proprio conto.
 L'operazione effettuata dal trasmettitore è detta \textbf{spatial precoding} ed il simbolo è denominato \textbf{spatial pre-coded symbol}.
 \[
-    y_i[m] = b_i c_m \quad \text{simbolo trasmesso sulla $i$-esima antenna}
+    x_i[m] = b_i c_m \quad \text{simbolo trasmesso sulla $i$-esima antenna}
 \]
 
 \[
-    \mathbf{y}[m] = c_m \mathbf{b} 
+    \mathbf{x}[m] = c_m \mathbf{b} 
 \]
 
 L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
 
-Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \| }$, ovvero $\mathbf{b} = \frac{1}{\| \mathbf{h} \|} \mathbf{h}^*$.
+Il rapporto SNR è massimizzato scegliendo $\mathbf{b} = \frac{1}{\| \mathbf{h} \|} \mathbf{h}^*$.
 
 %\[
 %    x[m] = \sum_{i=1}^{N} h_i y_i[m]  = \sum_{i=1}^{N} h_i b_i c_m + n[m] = \sum_{i=1}^{N} \frac{h_i h_i^*}{\| \mathbf{h} \|} c_m + n[m] = \| \mathbf{h} \| c_m + n[m]
 %\]
 \[
-    x[m] = \mathbf{h}^T \mathbf{y}[m] + n[m] = c_m \mathbf{h}^T \mathbf{b} + n[m] = c_m \frac{1}{\|\mathbf{h}\|} \mathbf{h}^H \mathbf{h} + n[m] = \| \mathbf{h} \| c_m + n[m]
+    y[m] = \mathbf{h}^T \mathbf{x}[m] + n[m] = c_m \mathbf{h}^T \mathbf{b} + n[m] = c_m \frac{1}{\|\mathbf{h}\|} \mathbf{h}^H \mathbf{h} + n[m] = \| \mathbf{h} \| c_m + n[m]
 \]
 \[
     P = \|\mathbf{h} \|^2 \ \mathbb{E} \left[\left| c_m \right|^2 \right] = \|\mathbf{h} \|^2  A
@@ -773,7 +784,7 @@ Il rapporto SNR è massimizzato scegliendo $b_i = \frac{h_i^*}{ \| \mathbf{h} \|
     P_N = \sigma^2  
 \]
 \[
-    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2}  \sum_{i=1}^{N} |h_i|^2
+    \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 
 \]
 
 La differenza tra il caso con singola antenna (sia lato trasmettitore che ricevitore) e il caso con più antenne (MISO/SIMO) è dato dal fattore $\| \mathbf{h} \| = \sum_{i=1}^{N} |h_i|^2$.
