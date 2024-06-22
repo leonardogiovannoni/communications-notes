@@ -279,7 +279,7 @@ Per quanto riguarda i parametri delle varie repliche:
           \]
 
           \begin{itemize}
-              \item La distribuzione per l'ampiezza del canale \(\alpha\) è \textit{Rayleigh} \footnote{
+              \item La distribuzione per l'ampiezza del canale \(\alpha\) è \textit{Rayleigh}\footnote{
                         Siano \(X\) e \(Y\) variabili casuali normali indipendenti con media 0 e varianza \(\sigma^2\). La pdf congiunta di \(X\) e \(Y\) è data da:
                         \[
                             f_{X,Y}(x,y) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right).
@@ -305,20 +305,37 @@ Per quanto riguarda i parametri delle varie repliche:
                         \]
                     }
                     \[
-                        f_{\alpha}(\alpha) =
-                        \begin{cases}
-                            \frac{\alpha}{\sigma^2} e^{-\frac{\alpha^2}{2\sigma^2}} & \alpha \geq 0 \\
-                            0                                                       & \alpha < 0
-                        \end{cases}
+                        f_{\alpha}(x) = \frac{x}{\sigma^2} e^{-\frac{x^2}{2\sigma^2}} \text{u}(x)
                     \]
 
-              \item La distribuzione per la potenza del canale \(s = \alpha^2\) è \textit{esponenziale}
+              \item La distribuzione per la potenza del canale \(s = \alpha^2\) è \textit{esponenziale}\footnote{Sapendo che la PDF di $\alpha$ è $f_{\alpha}(x) = \frac{x}{\sigma^2} e^{-\frac{x^2}{2\sigma^2}} \text{u}(x)$, possiamo calcolare la PDF di $s = \alpha^2$:
+                \[
+                    F_{\alpha}(x) = \mathbb{P}\left\{ \alpha \leq x \right\} = \int_{0}^{x} \frac{t}{\sigma^2} e^{-\frac{t^2}{2\sigma^2}} \, dt
+                \]
+                Ovvero:
+                \[
+                    \mathbb{P}\left\{ s \leq x^2 \right\} = \mathbb{P}\left\{ \alpha^2 \leq x^2 \right\} = \int_{0}^{x^2} \frac{t}{\sigma^2} e^{-\frac{t}{2\sigma^2}} \, dt
+                \]
+                Applicando il cambio di variabile $t^2 = u$:
+                \[
+                     \mathbb{P}\left\{ s \leq x^2 \right\} = \int_{0}^{x} \frac{1}{2\sigma^2} e^{-\frac{u}{2\sigma^2}} \, du 
+                \]
+                Ovvero, per il primo teorema fondamentale del calcolo integrale, la derivata della CDF di $s$ è:
+                \[
+                    f_s(x) = \frac{1}{2\sigma^2} e^{-\frac{x}{2\sigma^2}} \text{u}(x)
+                \]
+                
+                
+
+            }
+
                     \[
-                        f_s(s) =
-                        \begin{cases}
-                            \frac{1}{2\sigma^2} e^{-\frac{s}{2\sigma^2}} & s \geq 0 \\
-                            0                                            & s < 0
-                        \end{cases}
+                        %f_s(s) =
+                       % \begin{cases}
+                       %     \frac{1}{2\sigma^2} e^{-\frac{s}{2\sigma^2}} & s \geq 0 \\
+                      %      0                                            & s < 0
+                       % \end{cases}
+                        f_s(s) = \frac{1}{2\sigma^2} e^{-\frac{s}{2\sigma^2}} \text{u}(s)
                     \]
           \end{itemize}
 

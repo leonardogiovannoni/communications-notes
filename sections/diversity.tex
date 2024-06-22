@@ -663,7 +663,7 @@ Le frequenze portanti attualmente utilizzate permettono di utilizzare anche ante
 
 
 Nei classici sistemi con un antenna in trasmissione ed un'antenna in ricezione, il canale, se narrow-band può essere descritto da uno scalare complesso.
-Nel caso di sistemi con più antenne in trasmissione e ricezione tra ogni coppia di antenne vi è un canale differente, quindi l'intero sistema, per quanto riguarda il canale, può essere descritto tramite una mtrice complessa.
+Nel caso di sistemi con più antenne in trasmissione e ricezione tra ogni coppia di antenne vi è un canale differente, quindi l'intero sistema, per quanto riguarda il canale, può essere descritto tramite una matrice complessa.
 \[ 
     \mathbf{H} = 
     \begin{bmatrix}
@@ -679,7 +679,7 @@ Nel caso di sistemi con più antenne in trasmissione e ricezione tra ogni coppia
     \end{array}
 \]
 
-Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e $\mathbf{H}$ è la matrice del canale. In questo caso, $M$ rappresenta il numero di antenne in trasmissione mentre $N$ il numero di antenne in ricezione.
+Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e $\mathbf{H}$ è la matrice del canale. In questo caso, $N$ rappresenta il numero di antenne in ricezione mentre $M$ il numero di antenne in trasmissione.
 \paragraph*{Canale SIMO (Single Input Multiple Output)}
 \begin{center}
     \includegraphics[width=0.4\textwidth]{imgs/simo.jpg}
@@ -792,7 +792,7 @@ Considerando i guadagni del canale come variabili aleatore con distribuzione di 
 \[
     f_{\| \mathbf{h} \|^2} (x) = \frac{1}{D-1} x^{D-1} e^{-x}
 \]
-Il risultato dipende dal numero di antenne, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei gain verso destra (più potenza).
+Il risultato dipende dal numero di antenne $D$, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valor medio dei guadagni verso destra (più potenza).
 Inoltre il \textbf{diversity gain} si manifesta riducendo notevolmente la probabilità di ottenere guadagni molto bassi.
 Ciò è visibile confrontando gli integrali delle due PDF.
 
@@ -978,36 +978,37 @@ In sostanza la distribuzione favorisce i canali con miglior qualità, scartando 
 
 
 % TODO: la fft size è 2048 come il numero di subcarriers?
-
-La banda di un singolo subcarrier è calcolata come:
-\[
-    \Delta f = \frac{f_s}{N} = \frac{30.72 \text{ MHz}}{2048} = 15 \text{ kHz}
-\]
-La banda di un resource block (RB), cioè la minima unità allocabile, è calcolata come:
-\[
-    B_{RB} = 12 \times 15 \text{ kHz} = 180 \text{ kHz}
-\]
-La raw bandwidth è calcolata come:
-\[
-B_{raw} = 1200 \times 15 \text{ kHz} = 18 \text{ MHz}
-\]
-La disponibilità di banda è calcolata togliendo dalla banda grezza la banda usata per informazioni di sincronizzazione e controllo:
-\[
-B_{av} = B_{raw} - 4 \text{ MHz} = 14 \text{ MHz}
-\]
-Il rate massimo per un canale SISO è:
-\[
-    R_{1 \times 1} = 0.9258 \times 8 \times 14 \text{ MHz} \approx 100 \text{ Mb/s}
-\]
-Con il carrier aggregation: quando gli operatori comprano lo spettro di trasmissione, compratno chunks dello spettro che sono più larghi di 20 MHz, e possono essere aggreagati per un singolo utente
-Con un canale MIMO $4 \times 4$ si ha un massimo data rate di:
-\[
-    R_{4 \times 4} = 4 \times 0.9258 \times 8 \times 14 \text{ MHz} \approx 400 \text{ Mb/s}
-\]
-
-
-I terminali più avanzati possono aggregare più bande da 20 MHz ciascuna, per esempio 3 con $4 \times 4$ MIMO e 2 con $2 \times 2$ MIMO, ottenendo un rate di:
-\[
-    R_{\text{aggregated}} = 3 \times 400 \text{ Mb/s} + 2 \times 200 \text{ Mb/s} = 1.6 \text{ Gb/s}
-\]
-
+%
+%La banda di un singolo subcarrier è calcolata come:
+%\[
+%    \Delta f = \frac{f_s}{N} = \frac{30.72 \text{ MHz}}{2048} = 15 \text{ kHz}
+%\]
+%La banda di un resource block (RB), cioè la minima unità allocabile, è calcolata come:
+%\[
+%    B_{RB} = 12 \times 15 \text{ kHz} = 180 \text{ kHz}
+%\]
+%La raw bandwidth è calcolata come:
+%\[
+%B_{raw} = 1200 \times 15 \text{ kHz} = 18 \text{ MHz}
+%\]
+%La disponibilità di banda è calcolata togliendo dalla banda grezza la banda usata per informazioni di sincronizzazione e controllo:
+%\[
+%B_{av} = B_{raw} - 4 \text{ MHz} = 14 \text{ MHz}
+%\]
+%Il rate massimo per un canale SISO è:
+%\[
+%    R_{1 \times 1} = 0.9258 \times 8 \times 14 \text{ MHz} \approx 100 \text{ Mb/s}
+%\]
+%Con il carrier aggregation: quando gli operatori comprano lo spettro di trasmissione, compratno chunks dello spettro che sono più larghi di 20 MHz, e possono essere aggreagati per un singolo utente
+%Con un canale MIMO $4 \times 4$ si ha un massimo data rate di:
+%\[
+%    R_{4 \times 4} = 4 \times 0.9258 \times 8 \times 14 \text{ MHz} \approx 400 \text{ Mb/s}
+%\]
+%
+%
+%I terminali più avanzati possono aggregare più bande da 20 MHz ciascuna, per esempio 3 con $4 \times 4$ MIMO e 2 con $2 \times 2$ MIMO, ottenendo un rate di:
+%\[
+%    R_{\text{aggregated}} = 3 \times 400 \text{ Mb/s} + 2 \times 200 \text{ Mb/s} = 1.6 \text{ Gb/s}
+%\]
+%
+%
