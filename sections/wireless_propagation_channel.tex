@@ -640,9 +640,9 @@ Quindi $T_c$ rappresenta il tempo entro cui il canale può essere considerato co
 
 Lo stesso concetto può essere espresso anche in termini di distanza, molto importante per l'utilizzo di antenne direzionali.
 \[
-    d_c = v T_c = \frac{1}{2} v \frac{c}{f_c v} = \frac{\lambda}{2}
+    d_c = v T_c = \frac{v}{2f_d} = \frac{1}{2} v \frac{c}{f_c v} = \frac{\lambda}{2}
 \]
-Questo implica che segnali ricevuti a distanze nell'ordine di metà lunghezza d'onda possono essere considerati incorrelati (TODO?).
+Questo implica che segnali ricevuti a distanze nell'ordine di metà lunghezza d'onda possono essere considerati incorrelati.
 Se $T < T_c$ si può asssumere che il canale sia modellabile come LTI in quanto la risposta risulta costante nel tempo per almeno $T_c$, inferiore al tempo dei simboli.
 Incrementando il rate si riduce il tempo dei simboli, permettendo di modellare il canale come LTI, tuttavia si rischia di incorrere in un canale frequency selective per cui sono necessarie contromisure per contrastare l'ISI generato.
 
