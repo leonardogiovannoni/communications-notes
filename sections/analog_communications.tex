@@ -28,9 +28,9 @@ dove:
 
 La modulazione AM-DSB è caratterizzata da due sideband, ciascuno localizzato tra \( f_c \pm W \) e \( -f_c \pm W \), dove \( W \) è la banda del segnale modulante. Questi sideband trasportano la stessa informazione, da cui il termine \textbf{dual sideband}.
 
-Effettuando la trasformata di Fourier\footnote{$X(f) \triangleq \int_{-\infty}^{+\infty} x(t) e^{-j2\pi ft} dt$} di \( s_{DSB}(t) \), otteniamo la rappresentazione nel dominio delle frequenze \( S_{DSB}(f) \). Ciò è calcolabile come segue:
+Effettuando la trasformata di Fourier\footnote{$X(f) \triangleq \int_{-\infty}^{+\infty} x(t) e^{-j2\pi ft} dt$} di \( s_{DSB}(t) \), otteniamo la rappresentazione nel dominio delle frequenze \( s_{DSB}(f) \). Ciò è calcolabile come segue:
 \[
-    S_{DSB}(f) = A_c \ \mathcal{F}\{m(t)\} (f)  \ast \mathcal{F}\{\cos(2\pi f_c t) \}(f) = A_c M(f) \ast \frac{\delta(f - f_c) + \delta(f + f_c)}{2} =
+    s_{DSB}(f) = A_c \ \mathcal{F}\{m(t)\} (f)  \ast \mathcal{F}\{\cos(2\pi f_c t) \}(f) = A_c M(f) \ast \frac{\delta(f - f_c) + \delta(f + f_c)}{2} =
 \]
 
 \[
@@ -393,23 +393,76 @@ The signal processing range for this system is from 25MHz to 1.75GHz with a samp
     \includegraphics[width=0.9\textwidth]{imgs/rtl-sdr.png}
 \end{center}
 
-\section*{RTL-SDR Receiving Steps}
+
+
+Il segnale modulato in frequenza \(s_{FM}(t)\) è espresso come:
+
+\[
+s_{FM}(t) = s_I(t) \cos (2\pi f_c t) - s_Q(t) \sin (2 \pi f_c t)
+\]
+
+La sua rappresentazione complessa è:
+
+\[
+    \tilde{s}_{FM}(t) = s_I(t) + j s_Q(t) \quad \text{con} \quad f_c = 102.5 \times 10^6 \, \si{Hz}
+\]
+Per portare il segnale alla banda base, nel ricevitore supereterodino si utilizza una conversione in due passaggi:
+\begin{enumerate}
+\item Conversione dalla frequenza della portante \(f_c\) alla frequenza intermedia \(f_{IF}\).
+\item Conversione dalla frequenza intermedia \(f_{IF}\) alla banda base (BB).
+\end{enumerate}
+Prima di portare il segnale alla banda base, è necessario amplificarlo. Tuttavia, amplificare direttamente alla frequenza della portante richiederebbe un amplificatore con una banda molto ampia, il che è costoso. Per questo motivo, si preferisce prima convertire il segnale alla frequenza intermedia \(f_{IF}\), dove un amplificatore può essere progettato specificamente per quella frequenza.
+
+Il processo di eterodinazione è cruciale per convertire le frequenze radio più alte in frequenze più basse, che sono più facili da amplificare e processare.
+La conversione analogico-digitale avviene con un campionamento a 28.8 MS/s, rispettando il teorema di Nyquist (\(f_s > 2 (f + B)\)) per una banda di 14.4 MHz, poiché \(28.8 \si{MHz} > 2 \cdot (3.57 \si{MHz} + 2.8 \si{MHz})\).
+
+I parametri del segnale ricevuto sono:
+
+\[
+f_c = 102.5 \times 10^6 \, \si{Hz}
+\]
+\[
+f_{IF} = 3.57 \times 10^6 \, \si{Hz}
+\]
+\[
+f_{LO} = f_c - f_{IF}
+\]
+
+dove \(f_{LO}\) rappresenta la frequenza dell'oscillatore locale.
 
 \begin{center}
     \tikzsetnextfilename{sdr_receiver}
     \input{tikz/analog_communications/sdr_receiver.tex}
 \end{center}
+\[
+\begin{aligned}
+s_{FM}(t) \cdot 2 \cos (2 \pi f_{LO} t) & = [s_I(t) \cos (2 \pi f_c t) - s_Q(t) \sin (2 \pi f_c t)] \cdot 2 \cos (2 \pi (f_c - f_{IF}) t) \\
+& = 2 s_I(t) \cos (2 \pi f_c t) \cos (2 \pi (f_c - f_{IF}) t) - 2 s_Q(t) \sin (2 \pi f_c t) \cos (2 \pi (f_c - f_{IF}) t) \\
+& = \underbrace{s_I(t) \cos(2\pi (2f_c - f_{IF}) t)}_{\text{componente ad alta frequenza}} + s_I(t) \cos(2\pi f_{IF} t) - \underbrace{s_Q(t) \sin(2\pi (2f_c - f_{IF}) t)}_{\text{componente ad alta frequenza}} - s_Q(t) \sin(2\pi f_{IF} t)
+\end{aligned}
+\]
 
-Il processo di eterodinazione è essenziale per convertire le frequenze radio più alte in frequenze più basse, più facili da amplificare e processare.
-Nel disegno, $f_{LO}$ rappresenta la frequenza dell'oscillatore locale, mentre $f_{IF}$ (ovvero 3.57 MHz) è la frequenza intermedia a cui il segnale viene convertito, in cui avvengono anche una serie di filtraggi e amplificazioni.
-Successivamente avverrà anche la conversione analogico-digitale con campionamento a 28.8 MS/s, dunque rispettamendo abbondantemente il teorema di Nyquist ($f_s > 2 (f + B)$) fino a una banda di $14.4$ MHz, in quanto \( 28.8 \si{MS/s} > 2 \times (3.57 \si{MHz} + B) \).% (TODO: ultima affermazione da controllare).
+Dove nell'ultimo passaggio sono state utilizzate le formule di Werner\footnote{\[
+\begin{aligned}
+    \cos(A)\cos(B) & = \frac{1}{2}[\cos(A+B) + \cos(A-B)] \\
+    \sin(A)\cos(B) & = \frac{1}{2}[\sin(A+B) + \sin(A-B)]
+\end{aligned}
+\]
+}. Dopo un filtro passa basso, otteniamo:
+\[
+= s_I(t) \cos (2 \pi f_{IF} t) - s_Q(t) \sin (2 \pi f_{IF} t)
+\]
+
+
+
+
 
 Campionando $\cos(2\pi f_{IF} t)$ si ottiene:
 \[
     \cos(2\pi f_{IF} n T_s) = \cos(2\pi \frac{f_{IF}}{f_{ADC}} n)
 \]
 
-La frequenza di campionamento determina la massima banda estraibile dal segnale, ovvero 2.8 MHz
+La frequenza di campionamento determina la massima banda estraibile dal segnale, ovvero 2.8 MHz.
 
 \begin{center}
     \tikzsetnextfilename{mixer_output}
@@ -468,14 +521,14 @@ da cui:
 In questa sezione ci limitiamo a riportare l'implemenetazione in MATLAB di ciò finora discusso. Per prima cosa inizializziamo i parametri:
 \begin{minted}{matlab}
 %% PARAMETERS
-rtlsdr_id        = '0';                                             % stick ID
-rtlsdr_fc        = 102.5e6;                                         % tuner centre frequency in Hz
-rtlsdr_fs        = 228e3;                                           % tuner sampling rate (fixed to 228 kHz)
-rtlsdr_frmlen    = 1000 * 38;                                       % output data frame size (must be a multiple of 5)
-rtlsdr_gain      = 50;                                              % tuner gain in dB
-rtlsdr_datatype  = 'double';                                        % output data type
-audio_fs         = 48e3;                                            % audio output sampling rate
-simTime          = 30;                                              % simulation time in seconds
+rtlsdr_id        = '0';                     % stick ID
+rtlsdr_fc        = 102.5e6;                 % tuner centre frequency in Hz
+rtlsdr_fs        = 228e3;                   % tuner sampling rate (fixed to 228 kHz)
+rtlsdr_frmlen    = 1000 * 38;               % output data frame size (must be a multiple of 5)
+rtlsdr_gain      = 50;                      % tuner gain in dB
+rtlsdr_datatype  = 'double';                % output data type
+audio_fs         = 48e3;                    % audio output sampling rate
+simTime          = 30;                      % simulation time in seconds
 freqDev          = 75e3;
 numSampleSim     = simTime * rtlsdr_fs;
 

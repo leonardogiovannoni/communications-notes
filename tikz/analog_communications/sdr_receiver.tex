@@ -25,7 +25,7 @@
     \node[draw, circle, right=1cm of interp] (m1) {\(\times\)};
     \draw[->] (interp) -- (m1);
     \node[below=of m1] (cos) {};
-    \draw[->] (cos) -- (m1) node[midway, right] {$\cos(2\pi(f_{LO} - f_{IF})t)$};
+    \draw[->] (cos) -- (m1) node[midway, right] {$\cos(2\pi(f_{c} - f_{IF})t)$};
     \node[tri, right=of m1] (dummy3) {};
     \draw[->] (m1) -- (dummy3) node[midway, above] {};
     \node[right=1cm of dummy3, inner sep=0pt, minimum size=0pt] (dummy4) {};

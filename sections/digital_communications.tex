@@ -21,7 +21,7 @@ La modulazione PAM consiste nell'effettuare la mappatura dei bit ed effettuare u
 
 Una sequenza di bit può essere trattata come una variabile aleatoria con distribuzione uniforme:
 \[
-    \mathbb{P}(d_k = 0) = \mathbb{P}(d_k = 1) = \frac{1}{2} 
+    \mathbb{P}(d_k = 0) = \mathbb{P}(d_k = 1) = \frac{1}{2}
 \]
 \[
     \mathbb{E}\{d_k\} = 0\cdot \mathbb{P}(d_k = 0) + 1\cdot \mathbb{P}(d_k = 1) = \frac{1}{2}
@@ -33,10 +33,10 @@ Una sequenza di bit può essere trattata come una variabile aleatoria con distri
 
 Scegliendo una mappatura simmetrica dei bit, possiamo trasmettere simboli con media nulla e quindi con energia a media nulla:
 \[
-    a_i = 
+    a_i =
     \begin{cases}
         -1 & \text{se } d_k = 0 \\
-        1 & \text{se } d_k = 1
+        1  & \text{se } d_k = 1
     \end{cases}
 \]
 Per \( M \) pari si ha \( A_s = \{ \pm 1, \pm 3, \ldots, \pm (M-1) \} \)
@@ -94,12 +94,11 @@ Imponendo \( n-k = m \) abbiamo che \( k = n-m \), quindi:
     = \sum_{m=-\infty}^{+\infty} R_a[m] \sum_{n=-\infty}^{+\infty} g_T(t - nT_s) \cdot g_T^*(t - \tau - nT_s + mT_s)
 \]
 
-\paragraph*{Autocorrelazione media}
 
 La funzione di autocorrelazione media \( \overline{R}_s(\tau) \) è:
 \begin{align*}
-    \overline{R}_s(\tau) & = \lim_{T\to\infty} \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} R_s(t, \tau) dt                                                                   \\
-    \overline{R}_s(\tau) & = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} R_s(t,\tau)dt \quad \text{se} \quad R_s(t,\tau) \quad \text{è periodico in} t           \\
+    \overline{R}_s(\tau) & = \lim_{T\to\infty} \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} R_s(t, \tau) dt                                                                       \\
+    \overline{R}_s(\tau) & = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} R_s(t,\tau)dt \quad \text{se} \quad R_s(t,\tau) \quad \text{è periodico in} t                     \\
     \overline{R}_s(\tau) & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \sum_{n=-\infty}^{\infty} \int_{-\frac{T_s}{2}}^{\frac{T_s}{2}} g_T(t-nT_s)g_T^*(t-\tau-nT_s+mT_s)dt   \\
                          & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \sum_{n=-\infty}^{\infty}\int_{-\frac{T_s}{2}+nT_s}^{\frac{T_s}{2}+nT_s} g_T(t')g_T^*(t'-\tau+mT_s)dt' \\
                          & = \sum_{m=-\infty}^{\infty} R_a[m] \frac{1}{T_s} \int_{-\infty}^{\infty} g_T(t')g_T^*(t'-\tau+mT_s)dt'                                                  \\
@@ -156,15 +155,24 @@ Si ottiene:
 \]
 
 
-In banda passante invece si ha che:
+In banda passante, considerando che il segnale $i$-esimo avrà un coseno a moltiplicare\footnote{
 \[
-    \sigma_a^2 = \frac{M^2 - 1}{6}
+\begin{aligned}
+    E_S &= \mathbb{E} \left[ \left( \int_{-\infty}^{+\infty} a_i g_T(t - kT_s) \cos \left( 2\pi f_c t \right) dt \right)^2 \right] \\
+    &= \int_{-\infty}^{+\infty} \mathbb{E} \left[ a_i^2 \right] g_T^2(t - kT_s) \cos^2 \left( 2\pi f_c t \right) dt \\
+    &= \mathbb{E} \left[ a_i^2 \right] \int_{-\infty}^{+\infty} g_T^2(t - kT_s) \left[ \frac{1}{2} \cos \left( 4\pi f_c t \right) + \frac{1}{2} \right] dt \\
+    &= \frac{1}{2} \mathbb{E} \left[ a_i^2 \right] \int_{-\infty}^{+\infty} g_T^2(t - kT_s) dt + \underbrace{\frac{1}{2} \mathbb{E} \left[ a_i^2 \right] \int_{-\infty}^{+\infty} g_T^2(t - kT_s) \cos \left( 4\pi f_0 t \right) dt}_{\text{trascurabile}} \\
+    &\approx \frac{1}{2} \mathbb{E} \left[ a_i^2 \right] E_{g_T} \\
+    &\Rightarrow \frac{M^2 - 1}{6} E_{g_T}
+\end{aligned}
 \]
+}, invece si ha che:
+
 \[
     P_s = \frac{M^2 - 1}{6} \frac{E_{g_T}}{T_s}
 \]
 
-Come sarà dimostrato più avanti, $R_s \propto B$, dove $B$ è la banda del segnale $s_{PAM}(t)$. 
+Come sarà dimostrato più avanti, $R_s \propto B$, dove $B$ è la banda del segnale $s_{PAM}(t)$.
 Per $R_s$ valgono le seguenti equivalenze:
 \[
     R_s = \frac{1}{T_s} = \frac{1}{mT_s} = \frac{R_b}{m} = \frac{R_b}{\log_2 M}
@@ -195,7 +203,7 @@ Il rumore aggiunto al segnale si modella come rumore bianco gaussiano a potenza 
 Il ricevitore è composto da 3 componenti principali:
 \begin{enumerate}
     \item \textbf{Filtro passa basso}, che filtra il segnale ricevuto per eliminare le frequenze superiori a $B_T$.
-    \item \textbf{Campionatore}, che campiona il segnale filtrato con rate $1/T_s$. 
+    \item \textbf{Campionatore}, che campiona il segnale filtrato con rate $1/T_s$.
     \item \textbf{Decisore}, che associa ad ogni campione un simbolo appartenente alla costellazione.
 \end{enumerate}
 Il segnale ricevuto è il seguente:
@@ -264,10 +272,10 @@ dove:
 \]
 campionato in $t = mT_s$ si ha:
 \[
-        x(mT_s) = x[m] = \sum_{k=-\infty}^{+\infty} a_k g(mT_s - kT_s) + n(mT_s) = \sum_{k=-\infty}^{+\infty} a_k g[m-k] + n[m] \\ 
- \]
+    x(mT_s) = x[m] = \sum_{k=-\infty}^{+\infty} a_k g(mT_s - kT_s) + n(mT_s) = \sum_{k=-\infty}^{+\infty} a_k g[m-k] + n[m] \\
+\]
 \[
-        = a_m g(0) + \sum_{\substack{k \neq m,\\ k=-\infty}}^{+\infty} a_k g[m-k] + n[m]
+    = a_m g(0) + \sum_{\substack{k \neq m,\\ k=-\infty}}^{+\infty} a_k g[m-k] + n[m]
 \]
 
 
@@ -285,7 +293,7 @@ Un approccio non perseguibileconsiste nel trasmettere impulsi di durata finita e
 
 \(\Rightarrow\) Gli impulsi \( g_T(t) \) devono avere durata infinita.
 
-\paragraph*{Criterio di Nyquist}{Primo criterio di Nyquist per la trasmissione priva di ISI}
+\paragraph*{Criterio di Nyquist}{Il criterio di Nyquist per la trasmissione priva di ISI è il seguente:}
 
 \[ g(kT_s) =
     \begin{cases}
@@ -300,16 +308,16 @@ Un approccio non perseguibileconsiste nel trasmettere impulsi di durata finita e
 
 
 
-\paragraph*{Dimostrazione}
-Il criterio di Nyquist nel dominio del tempo garantisce l'assenza di ISI in quanto
-\[ x[k] = a[k] \cdot g(0) + \sum_{\substack{i=-\infty \\ i \neq k}}^{+\infty} a[i] \cdot g[i-k] = a[k] \cdot g(0) \]
-dove il secondo termine è nullo e non vi è ISI se \( g[k] = \delta[k] \).
+\begin{proof}
+    Il criterio di Nyquist nel dominio del tempo garantisce l'assenza di ISI in quanto
+    \[ x[k] = a[k] \cdot g(0) + \sum_{\substack{i=-\infty \\ i \neq k}}^{+\infty} a[i] \cdot g[i-k] = a[k] \cdot g(0) \]
+    dove il secondo termine è nullo e non vi è ISI se \( g[k] = \delta[k] \).
 
-La relazione in frequenza si ottiene come trasformazione
-\[ g[k] = \delta[k] \quad \Longleftrightarrow \quad \overline{G}(f) = 1 \]
-\[ \overline{G}(f) = \frac{1}{T_s} \sum_{k=-\infty}^{+\infty} G\left(f - \frac{k}{T_s}\right) = 1 \]
-\[ \sum_{k=-\infty}^{+\infty} G\left(f - \frac{k}{T_s}\right) = T_s \]
-
+    La relazione in frequenza si ottiene come trasformazione
+    \[ g[k] = \delta[k] \quad \Longleftrightarrow \quad \overline{G}(f) = 1 \]
+    \[ \overline{G}(f) = \frac{1}{T_s} \sum_{k=-\infty}^{+\infty} G\left(f - \frac{k}{T_s}\right) = 1 \]
+    \[ \sum_{k=-\infty}^{+\infty} G\left(f - \frac{k}{T_s}\right) = T_s \]
+\end{proof}
 \paragraph*{Trasmissione priva di ISI}
 Supponiamo sia assegnato un canale a banda rigorosamente limitata con banda \( B_c \).
 \[ H(f) = 0 \quad \text{per} \quad |f| > B_c \]
@@ -319,28 +327,28 @@ Allora si verificano le seguenti:
     \item Non è possibile in alcun modo eliminare l'ISI quando \( T_s < \frac{1}{2B_c} \).
 
 
-          \paragraph*{Dimostrazione:}
+          \begin{proof}
+              Quando \( T_s < \frac{1}{2B_c} \)
 
-          Quando \( T_s < \frac{1}{2B_c} \)
+              \begin{tikzpicture}[scale=0.5]
+                  \draw[->] (-15,0) -- (15,0) node[right] {\( f \)};
+                  \draw[->] (0,-1) -- (0,7) node[above] {\( \overline{G}(f) \)};
 
-          \begin{tikzpicture}[scale=0.5]
-              \draw[->] (-15,0) -- (15,0) node[right] {\( f \)};
-              \draw[->] (0,-1) -- (0,7) node[above] {\( \overline{G}(f) \)};
+                  % Triangles
+                  \draw (-11,0) -- (-8,3) -- (-5,0);
+                  \draw[dashed, red] (-5,-1) -- (-5,4);
+                  \draw[dashed, red] (-3,-1) -- (-3,4);
+                  \draw (-3,0) -- (0,3) -- (3,0);
+                  \draw[dashed, red] (3,-1) -- (3,4);
+                  \draw[dashed, red] (5,-1) -- (5,4);
+                  \draw (5,0) -- (8,3) -- (11,0);
 
-              % Triangles
-              \draw (-11,0) -- (-8,3) -- (-5,0);
-              \draw[dashed, red] (-5,-1) -- (-5,4);
-              \draw[dashed, red] (-3,-1) -- (-3,4);
-              \draw (-3,0) -- (0,3) -- (3,0);
-              \draw[dashed, red] (3,-1) -- (3,4);
-              \draw[dashed, red] (5,-1) -- (5,4);
-              \draw (5,0) -- (8,3) -- (11,0);
+                  \node at (-12,1.5) {\( \cdots \)};
+                  \node at (12,1.5) {\( \cdots \)};
+              \end{tikzpicture}
 
-              \node at (-12,1.5) {\( \cdots \)};
-              \node at (12,1.5) {\( \cdots \)};
-          \end{tikzpicture}
-
-          Esistono degli intervalli di frequenza dove \( \overline{H}(f) = 0 \) per cui non può mai accadere che \( \overline{H}(f) = 1 \) \( \forall f \)
+              Esistono degli intervalli di frequenza dove \( \overline{H}(f) = 0 \) per cui non può mai accadere che \( \overline{H}(f) = 1 \) \( \forall f \)
+          \end{proof}
 
           \bigskip
 
@@ -375,48 +383,49 @@ Allora si verificano le seguenti:
     \item Nel caso valga la condizione \( T_s = \frac{1}{2B_c} \), allora l'unica funzione di trasferimento che permette di eliminare completamente l'ISI è
 
           \[ G(f) = \frac{1}{2B_c} \text{rect}\left(\frac{f}{2B_c}\right) \quad \Leftrightarrow \quad g(t) = \text{sinc}(2B_c t) \]
-
-          \paragraph*{Dimostrazione:}
-
           \begin{center}
 
-              \begin{tikzpicture}[scale=1]
-                  \begin{axis}[
-                          axis lines=middle,
-                          xlabel={$f$},
-                          ylabel={$G(f)$},
-                          xtick={-4, -2, 2, 4},
-                          xticklabels={$-2B_c$, $-B_c$, $B_c$, $2B_c$},
-                          ytick={100},
-                          yticklabels={},
-                          ymin=-0.2, ymax=2,
-                          xmin=-8, xmax=8,
-                          xmajorgrids=false,
-                          ymajorgrids=false,
-                          clip=false
-                      ]
+                  \begin{tikzpicture}[scale=1]
+                      \begin{axis}[
+                              axis lines=middle,
+                              xlabel={$f$},
+                              ylabel={$G(f)$},
+                              xtick={-4, -2, 2, 4},
+                              xticklabels={$-2B_c$, $-B_c$, $B_c$, $2B_c$},
+                              ytick={100},
+                              yticklabels={},
+                              ymin=-0.2, ymax=2,
+                              xmin=-8, xmax=8,
+                              xmajorgrids=false,
+                              ymajorgrids=false,
+                              clip=false
+                          ]
 
-                      \draw [thick] (axis cs:-2,0) rectangle (axis cs:2,0.4);
+                          \draw [thick] (axis cs:-2,0) rectangle (axis cs:2,0.4);
 
-                      \node [red]at (axis cs:7,0.6) {$\sum_{k=-\infty}^{\infty} G(f - \frac{k}{T_s})$};
+                          \node [red]at (axis cs:7,0.6) {$\sum_{k=-\infty}^{\infty} G(f - \frac{k}{T_s})$};
 
-                      \draw [dashed, red] (axis cs:-6,0.4) -- (axis cs:-6,0);
-                      \draw [dashed, red] (axis cs:-8,0.4) -- (axis cs:-2,0.4);
-                      \draw [dashed, red] (axis cs:2,0.4) -- (axis cs:8,0.4);
-                      \draw [dashed, red] (axis cs:6,0.4) -- (axis cs:6,0);
-                  \end{axis}
-                  \
-              \end{tikzpicture}
-          \end{center}
+                          \draw [dashed, red] (axis cs:-6,0.4) -- (axis cs:-6,0);
+                          \draw [dashed, red] (axis cs:-8,0.4) -- (axis cs:-2,0.4);
+                          \draw [dashed, red] (axis cs:2,0.4) -- (axis cs:8,0.4);
+                          \draw [dashed, red] (axis cs:6,0.4) -- (axis cs:6,0);
+                      \end{axis}
+                      \
+                  \end{tikzpicture}
+              \end{center}
 
-          Si nota anche che la funzione $\text{sinc}(2Bt)$ si annulla quando $t = \frac{k}{2B}$ con $k \neq 0$ per cui
-          \[
-              g(kT_s) = \text{sinc} \left(2B_c\cdot\frac{k}{2B_c}\right) = \text{sinc}(k) = 
-              \begin{cases}
-                  1 & \text{se } k=0    \\
-                  0 & \text{se } k\neq0
-              \end{cases}
-          \]
+
+          \begin{proof}
+                  Si nota anche che la funzione $\text{sinc}(2Bt)$ si annulla quando $t = \frac{k}{2B}$ con $k \neq 0$ per cui
+              \[
+                  g(kT_s) = \text{sinc} \left(2B_c\cdot\frac{k}{2B_c}\right) = \text{sinc}(k) =
+                  \begin{cases}
+                      1 & \text{se } k=0    \\
+                      0 & \text{se } k\neq0
+                  \end{cases}
+              \]
+          \end{proof}
+
 \end{enumerate}
 
 
@@ -612,7 +621,7 @@ La \( h_{RC}(t) \) \`e calcolabile in forma chiusa:
 \paragraph*{Rumore}
 Nel caso della banda passante il rumore dell'inviluppo complesso è definito come:
 \[
-    w(t) = w_I(t) + jw_Q(t) 
+    w(t) = w_I(t) + jw_Q(t)
 \]
 e la densità spettrale di potenza è:
 \[
@@ -641,7 +650,7 @@ Volendo quindi soddisfare il criterio di Nyquist col coseno rialzato e volendo u
 
 Nel caso di canale ideale, definendo come $H_{SRRC} = \sqrt{H_{RC}}$ si ottiene:
 \[
-    g_T(t) = h_{SRRC}(t) \quad \Longleftrightarrow \quad G_T(f) = H_{SRRC}(f) 
+    g_T(t) = h_{SRRC}(t) \quad \Longleftrightarrow \quad G_T(f) = H_{SRRC}(f)
 \]
 
 \[
@@ -649,7 +658,7 @@ Nel caso di canale ideale, definendo come $H_{SRRC} = \sqrt{H_{RC}}$ si ottiene:
 \]
 
 
-In tal caso e considerando i simboli a media nulla ed equiprobabli: 
+In tal caso e considerando i simboli a media nulla ed equiprobabli:
 \[
     S_s(f) = \frac{1}{T_s} S_a |G_T(f)|^2 = \frac{A}{T_s} H_{RC}(f)
 \]
@@ -681,7 +690,7 @@ Per quanto riguarda la banda invece:
 
 \[
     x[m] = a_m + n[m] = a_m + n_I[m] + jn_Q[m]
-\]  
+\]
 
 La potenza del segnale di disturbo può essere calcolatora considerando la densità spettrale di potenza:
 \[
@@ -721,7 +730,7 @@ Essendo i simboli reali e quindi anche il segnale PAM, è possibile ignorare la 
 \]
 Il massimo della densità di probabilità è ottenuto minimizzando l'opposto dell'esponente:
 \[
-    \hat{a}_m = \underset{i=1,\ldots,M}{\mathrm{argmin}} \left| x[m] - a^{(i)} \right| 
+    \hat{a}_m = \underset{i=1,\ldots,M}{\mathrm{argmin}} \left| x[m] - a^{(i)} \right|
 \]
 
 Per adottare il criterio di decisione ottimo si possono definire regioni non sovrapposte, all'interno delle quali il segnale ricevuto è associato a un determinato simbolo.
@@ -786,7 +795,7 @@ Si ottiene il solito valore anche calcolando la probabilità di errore per il si
 Se i simboli scelti fossero stati $a^{(i)} = \{-3, -1, 1, 3\}$, la distanza tra simbolo e soglia sarebbe stata in ogni caso 1.
 Per una 4-PAM la probabilità di errore è:
 
-\[ 
+\[
     P^{\text{4-PAM}}_e = \frac{1}{4} \sum_{i=1}^{4} \mathbb{P}(e \mid a^{(i)}) = \frac{1}{4} \cdot 2 \left[ \mathbb{P}(e \mid a^{(i)} = 1) + \mathbb{P}(e \mid a^{(i)} = 3) \right] = \frac{1}{2} \left[ 2 Q\left( \frac{1}{\sigma} \right) + Q\left( \frac{1}{\sigma} \right) \right] = \frac{3}{2} Q\left( \frac{1}{\sigma} \right)
 \]
 
@@ -826,17 +835,17 @@ def gray_code(m):
         msb = 1 << (m - 1)
         return lower + [(msb | x) for x in reversed(lower)]
 \end{minted}
-Dove a partire dal caso precedente, si specchia la lista e si somma alla seconda metà il bit più significativo settato a 1. 
+Dove a partire dal caso precedente, si specchia la lista e si somma alla seconda metà il bit più significativo settato a 1.
 per $m=3$ si ottiene:
 \begin{align*}
-a^{(0)} &= -7 \rightarrow 000 \\
-a^{(1)} &= -5 \rightarrow 001 \\
-a^{(2)} &= -3 \rightarrow 011 \\
-a^{(3)} &= -1 \rightarrow 010 \\
-a^{(4)} &= 1 \rightarrow 110 \\
-a^{(5)} &= 3 \rightarrow 111 \\
-a^{(6)} &= 5 \rightarrow 101 \\
-a^{(7)} &= 7 \rightarrow 100
+    a^{(0)} & = -7 \rightarrow 000 \\
+    a^{(1)} & = -5 \rightarrow 001 \\
+    a^{(2)} & = -3 \rightarrow 011 \\
+    a^{(3)} & = -1 \rightarrow 010 \\
+    a^{(4)} & = 1 \rightarrow 110  \\
+    a^{(5)} & = 3 \rightarrow 111  \\
+    a^{(6)} & = 5 \rightarrow 101  \\
+    a^{(7)} & = 7 \rightarrow 100
 \end{align*}
 
 
@@ -915,7 +924,7 @@ Incrementando il numero di bit per simbolo, per ottenere una stessa probabilità
 
 La modulazione PAM non è utilizzata nella pratica perché non è molto efficiente dal punto di vista energetico.
 Trasmettendo due PAM ortogonali si ottiene una modulazione QAM.
-\[  
+\[
     s_{QAM}(t) = \underbrace{\sum_{i=-\infty}^{+\infty} a_i g_T(t - iT)}_{m_I} + j \underbrace{\sum_{i=-\infty}^{+\infty} b_i g_T(t - iT)}_{m_Q}
 \]
 
@@ -932,7 +941,7 @@ Sfruttando la notazione complessa si ottiene:
     s_{QAM}(t) = \sum_{i=-\infty}^{+\infty} c_i g_T(t - iT)
 \]
 
-La modulazione QAM essendo una combinazione di due PAM ortogonali con $M$ simboli prevede un totale di $M^2$ simboli. 
+La modulazione QAM essendo una combinazione di due PAM ortogonali con $M$ simboli prevede un totale di $M^2$ simboli.
 
 
 
@@ -1016,8 +1025,8 @@ Mentre l'energia media per simbolo è:
 
 La probabilità di errore invece:
 \begin{align*}
-    x\left[ m \right] &= c_m + n \left[ m \right] \\
-    &= a_m + j b_m + n_I \left[ m \right] + j n_Q \left[ m \right]
+    x\left[ m \right] & = c_m + n \left[ m \right]                                    \\
+                      & = a_m + j b_m + n_I \left[ m \right] + j n_Q \left[ m \right]
 \end{align*}
 
 
@@ -1036,21 +1045,21 @@ Facciamo quindi un'approssimazione che si chiama \textit{union bound}.
 
 
 \[
-\begin{array}{ccccc}
-\text{4-QAM} & E_s = 1 = \frac{1}{\sigma} = \sqrt{\frac{E_s}{N_0}} & \Rightarrow & P_e^{\text{4-QAM}} < 2 \ Q\left(\sqrt{\frac{E_s}{N_0}}\right) \\
-\text{16-QAM} & E_s = 5 = \frac{1}{\sigma} = \sqrt{\frac{E_s}{5N_0}} & \Rightarrow & P_e^{\text{16-QAM}} < 3 \ Q\left(\sqrt{\frac{E_s}{5N_0}}\right)\\
-\end{array}
+    \begin{array}{ccccc}
+        \text{4-QAM}  & E_s = 1 = \frac{1}{\sigma} = \sqrt{\frac{E_s}{N_0}}  & \Rightarrow & P_e^{\text{4-QAM}} < 2 \ Q\left(\sqrt{\frac{E_s}{N_0}}\right)   \\
+        \text{16-QAM} & E_s = 5 = \frac{1}{\sigma} = \sqrt{\frac{E_s}{5N_0}} & \Rightarrow & P_e^{\text{16-QAM}} < 3 \ Q\left(\sqrt{\frac{E_s}{5N_0}}\right) \\
+    \end{array}
 \]
 
 Adesso le regioni associate a un simbolo sono porzioni del piano complesso, lungo 2 direzioni,
 Per quanto riguarda l'errore sul bit, adottando la codifica di Gray, che vale quando abbiamo un SNR alto, si ottiene:
 \[
-    P_e^{(M-QAM, b)} = \lim_{N^{(b)} \to +\infty} \frac{N_e^{(b)}}{N^{(b)}} \approx \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{\log_2(M) N^{(s)}} = \frac{1}{\log_2(M)} P_e^{(M-QAM)} 
+    P_e^{(M-QAM, b)} = \lim_{N^{(b)} \to +\infty} \frac{N_e^{(b)}}{N^{(b)}} \approx \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{\log_2(M) N^{(s)}} = \frac{1}{\log_2(M)} P_e^{(M-QAM)}
 \]
 
 Sapendo che $P_e^{(M-QAM)} \leq 2 \ P_e^{(\sqrt{M}, PAM)}$ e che per la codifica di Gray $P_e^{(M-PAM, b)} \approx \frac{1}{\log_2{M}} P_e^{(M-PAM)}$ si ottiene:
 \[
-     P_e^{(M-QAM, b)} = \frac{1}{\log_2(M)} P_e^{(M-QAM)} \leq \frac{2}{\log_2(M)} P_e^{(\sqrt{M}, PAM)} = \frac{1}{\log_2(\sqrt{M})} P_e^{(\sqrt{M}, PAM)} \approx P_e^{(\sqrt{M}, PAM, b)}
+    P_e^{(M-QAM, b)} = \frac{1}{\log_2(M)} P_e^{(M-QAM)} \leq \frac{2}{\log_2(M)} P_e^{(\sqrt{M}, PAM)} = \frac{1}{\log_2(\sqrt{M})} P_e^{(\sqrt{M}, PAM)} \approx P_e^{(\sqrt{M}, PAM, b)}
 \]
 
 Da ciò si evince che la probabilità di errore sul bit per una QAM a $M$ simboli è approssimabile a quella di una modulazione PAM a $\sqrt{M}$ simboli.
