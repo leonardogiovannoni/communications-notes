@@ -377,22 +377,20 @@ Questa doppia trasformazione è necessaria per ottimizzare l'amplificazione del 
     \tikzsetnextfilename{rtl_chain}
     \input{tikz/analog_communications/rtl_chain.tex}
 \end{center}
-The block diagram for an FM receiver using RTL-SDR hardware typically involves the following processing stages:
+Il diagramma a blocchi per un ricevitore FM che utilizza hardware RTL-SDR tipicamente coinvolge le seguenti fasi di elaborazione:
 \begin{enumerate}
-    \item \textbf{RF Antenna:} Captures the FM signal from the air.
-    \item \textbf{Flexible RF Front End:} Filters and amplifies the RF signal from the antenna.
-    \item \textbf{Analogue to Digital Converter (ADC):} Converts the analog RF signal to a digital format.
-    \item \textbf{Demodulation to IQ Band:} The digital signal is demodulated into I (In-phase) and Q (Quadrature) components.
-    \item \textbf{Decimation Filtering:} Reduces the sampling rate and noise, retaining the signal of interest.
-    \item \textbf{Carrier \& Timing Synchronization:} Synchronizes the received signal with the local reference for accurate demodulation.
-    \item \textbf{Baseband Processing:} This may involve MATLAB/Simulink running on a computer to process the demodulated signal.
-    \item \textbf{Baseband Output:} The final audio signal is output, ready for listening.
+\item \textbf{Antenna RF:} Cattura il segnale FM dall'aria.
+\item \textbf{Flessibile Front End RF:} Filtra e amplifica il segnale RF dall'antenna.
+\item \textbf{Convertitore Analogico-Digitale (ADC):} Converte il segnale RF analogico in formato digitale.
+\item \textbf{Demodulazione in Banda IQ:} Il segnale digitale viene demodulato in componenti I (In-phase) e Q (Quadratura).
+\item \textbf{Filtraggio di Decimazione:} Riduce la frequenza di campionamento e il rumore, mantenendo il segnale di interesse.
+\item \textbf{Sincronizzazione di Portante e Temporizzazione:} Sincronizza il segnale ricevuto con il riferimento locale per una demodulazione accurata.
+\item \textbf{Elaborazione della Banda Base:} Questo può coinvolgere MATLAB/Simulink in esecuzione su un computer per elaborare il segnale demodulato.
+\item \textbf{Uscita della Banda Base:} Il segnale audio finale è pronto per l'ascolto.
 \end{enumerate}
-The signal processing range for this system is from 25MHz to 1.75GHz with a sampling frequency (IF) up to around 2.8MHz.
-\begin{center}
-    \includegraphics[width=0.9\textwidth]{imgs/rtl-sdr.png}
+L'intervallo di elaborazione del segnale per questo sistema è da 25 MHz a 1,75 GHz con una frequenza di campionamento (IF) fino a circa 2,8 MHz.\begin{center}
+    \includegraphics[width=0.75\textwidth]{imgs/rtl-sdr.png}
 \end{center}
-
 
 
 Il segnale modulato in frequenza \(s_{FM}(t)\) è espresso come:
