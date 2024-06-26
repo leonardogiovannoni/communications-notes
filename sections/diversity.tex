@@ -837,6 +837,8 @@ Scegliendo in questo modo le matrici si ottiene:
     \end{array}
 \]
 Sebbene ogni antenna riceva dei segnali sovrapposti, scegliendo le matrici in questa maniera è possibile ottenere dei canali ortogonali che non interferiscono tra loro dato che la matrice $\mathbf{\Sigma}$ è diagonale.
+Quindi $\mathbf{s}$ è trasmesso su $p = rank(\mathbf{H})$ canali indipendenti.
+Dato che il rango della matrice del canale è maggiore di 1, la capacità del canale è incrementata di un fattore pari al rango della matrice del canale. Questo non è possibile in sistemi SIMO o MISO, in cui il rango è pari a 1.
 
 Considerando un sistema $2 \times 2$ per esempio si ottiene:
 \[
@@ -862,10 +864,6 @@ L'utilizzo di un canale MIMO può incrementare la capacità del sistema, tuttavi
     \text{segnale ottenuto dopo combining lato ricevitore, non c'è alcuna sovrapposizione}
 \]
 
-
-% TODO: aggiungere considerazioni sull'aumento della capacità del sistema
-
-
 \section*{Diversità in frequenza}
 
 La formula di Shannon fornisce il massimo rate sostenibile su un dato canale di trasmissione:
@@ -880,7 +878,7 @@ Il rate di trasmissione reale può essere approssimato:
     R_b = \log_2 M \  R \frac{1}{T}  \approx m R B
 \]
 
-Dove è $M$ è il numeri di simboli nella costenllazione, $R$ è il coding rate \footnote{con $R_s$ indichiamo il symbol rate, ovvero $\frac{1}{T}$, mentre con $R$ il symbol rate} e $T$ è il symbol time, si fa l'approssimazione che $\frac{1}{T} \approx B$. 
+Dove è $M$ è il numeri di simboli nella costenllazione, $R$ è il coding rate \footnote{con $R_s$ indichiamo il symbol rate, ovvero $\frac{1}{T}$, mentre con $R$ il coding symbol rate} e $T$ è il symbol time, si fa l'approssimazione che $\frac{1}{T} \approx B$. 
 
 
 Per rispettare il limite di capacità si deve avere:
@@ -971,7 +969,7 @@ La risoluzione dell'equazione garantisce il valore $\mu$ tale per cui i vincoli 
 Il metodo dei bisezione può essere applicato dato che la funzione risulta continua e monotona su% TODOl dominio.
 Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superiore irregolare, fino ad un livello pari a $\mu$.
 La distribuzione è ottima e rappresenta la miglior situazione per sfruttare la diversità in frequenza del canale.
-In sostanza la distribuzione favorisce i canali con miglior qualità, scartando completamente quelli la cui capacità è troppo bassa.
+In sostanza la distribuzione favorisce i canali con miglior qualità, scartando completamente quelli la cui capacità è troppo bassa, quindi la maggior parte della potenza verrà allocata alle frequenze con le migliori condizioni di canale e più alto SNR.
 
 
 
