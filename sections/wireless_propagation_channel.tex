@@ -29,7 +29,8 @@ Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraver
 
 
 
-Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione ne fa affidamento. Le space wave sono soggette a diversi fenomeni di propagazione:
+Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione ne fa affidamento. 
+Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il segnale può comunque essere ricevuto a causa di una serie di fenomeni di propagazione:
 \begin{itemize}
     \item \textbf{Riflessione}: quando il segnale impatta con un oggetto liscio molto grande rispetto alla lunghezza d'onda può essere riflesso, ovvero rimbalza e prosegue con angolo differente, oppure passa attraverso.
           \begin{center}
@@ -129,6 +130,7 @@ Il LSF modella la variazione della potenza del segnale in base alla distanza fra
 
 \paragraph*{Path Loss}
 Il path loss è un valore deterministico che modella la media dell'attenuazione della potenza ricevuta, rappresenta un'approssimazione delle equazioni di Maxwell.
+È la grandezza che maggiormente dipende dalla distanza tra trasmettitore e ricevitore nel fading.
 \begin{equation}
     P_{RX} \approx P_{TX} \cdot \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n \quad \text{for } d > d_0
 \end{equation}
@@ -219,7 +221,10 @@ dove \( A \) è l'area dell'antenna in ricezione, che tipicamente è \( A = \lam
 Per frequenze inferiori ai 6 GHz l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
 
 Nella progettazione di sistemi di comunicazione wireless è essenziale tenere in considerazione il rapporto tra frequenza utilizzata e distanza copribile da una singola antenna.
+Il path loss è causato anche dalle frequenze più elevate: una frequenza alta significa una lunghezza d'onda piccola, quindi alcuni materiali possono risultare opachi ai campi elettromagnetici, diventando praticamente degli ostacoli.
+Questo implica che più alta è la frequenza utilizzata, più celle sono necessarie per coprire una determinata area, perché l'area in cui l'attenuazione è accettabile si riduce.
 Per avere una copertura maggiore è meglio utilizzare frequenze portanti minori (si avranno celle grandi), ma per avere capacità maggiori si usano frequenze più alte perché lo spettro disponibile è maggiore (si avranno celle piccole).
+
 \paragraph*{Shadowing}
 
 Dati due punti alla stessa distanza dal trasmettitore, se si considerasse unicamente il path loss, si avrebbe la stessa attenuazione,
@@ -527,10 +532,6 @@ Dove abbiamo aggiunto la dipendenza dal tempo alle ampiezze e alle fasi delle re
 Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'esso molto più lentamente rispetto a guadagni e fasi, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
 
 
-
-
-
-
 \subsection*{Effeto Doppler}
 \begin{center}
     \includegraphics[width=0.75\textwidth]{imgs/doppler.png}
@@ -618,8 +619,9 @@ Supponendo quindi che il segnale inviato fosse $s(t) = \sin(2\pi f_c t)$:
 \[
     S_Y(f) = \frac{1}{\pi f_d \sqrt{1 - \left(\frac{f - f_c}{f_d}\right)^2}}
 \]
-
-Lo studio della funzione di autocrrelazione del canale wireless nel caso del modello di Jakes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
+%the result of this is that the spectrum is broadened
+Il risultato è che lo spettro del segnale ricevuto è più ampio rispetto a quello trasmesso.
+Lo studio della funzione di autocorrelazione del canale wireless nel caso del modello di Jakes permette di giungere alla definizione del \textbf{coherence time}, ovvero l'intervallo temporale entro cui è possibile considerare il canale costante e dunque rappresentabile come un sistema LTI.
 
 
 \[

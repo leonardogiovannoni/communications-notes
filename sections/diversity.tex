@@ -21,17 +21,17 @@ Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene 
     \includegraphics[width=0.675\textwidth]{imgs/diversity_graph.jpg}
 \end{figure}
 
-
 I metodi principali per ridurre gli effetti di un fading di tali tipologie sono le tecniche basate sulla diversità, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
 Le principali tecniche di diversity sono:
 \begin{itemize}
-    \item \textbf{Time diversity}: relative al coherence time ($T_c$). Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. Slow fading channels potrebbero non garantire una diversity sufficiente. Il canale deve variare sufficientemente in maniera veloce.
-    \item \textbf{Frequency diversity}: relative alla coherence bandwidth ($B_c$). Sfruttano tramissioni su bande differenti. I flat fading channels potrebbero non garantire una diversity sufficiente.
-    \item \textbf{Spatial diversity}: relative alla coherence distance. Sfruttano path di propagazione differenti, ad esempio antenne differenti.
+    \item \textbf{Diversità temporale}: relative al tempo di coerenza ($T_c$). Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. I canali slow fading potrebbero non garantire una diversity sufficiente. Il canale deve variare sufficientemente in maniera veloce.
+    \item \textbf{Diversità in frequenza}: relative alla banda di coerenza ($B_c$). Sfruttano tramissioni su bande differenti. I canali flat fading potrebbero non garantire una diversity sufficiente.
+    \item \textbf{Diversità spaziale}: relative alla distanza di coerenza. Sfruttano path di propagazione differenti, ad esempio antenne differenti.
 \end{itemize}
 
-\subsection*{Time diversity: interleaving and coding}
-Il channel coding consiste nell'introdurre dei bit ridondanti insieme a quelli trasmessi per rilevare eventuali errori al ricevitore e migliorare la bit error probability.
+\subsection*{Diversità temporale}
+\paragraph*{Coding}
+Il channel coding consiste nell'introdurre dei bit ridondanti insieme a quelli trasmessi per rilevare eventuali errori al ricevitore e migliorare la probabilità di errore sul bit. 
 La ridondanza è misurata come:
 \[
     R = \frac{k}{n} < 1, \quad \begin{cases}
@@ -152,7 +152,7 @@ Se il confronto ha successo si assume che la trasmissione non abbia introdotto e
 In casi di errore il ricevitore può richiedere una nuova trasmissione, adottando lo schema \textbf{ARQ} (Automatic Repeat reQuest).
 In tale schema ad ogni ricezione si risponde con un ACK o un NACK, in base al risultato del confronto.
 In caso di NACK si procede con una nuova trasmissione. 
-Si tratta di una tecnica di time diversity, in quanto la ritrasmissione avviene dopo $T_{ARQ}$, un intervallo temporale superiore al coherence time del canale ($T_{ARQ} > T_c$).
+Si tratta di una tecnica di diversità temporale, in quanto la ritrasmissione avviene dopo $T_{ARQ}$, un intervallo temporale superiore al coherence time del canale ($T_{ARQ} > T_c$).
 Alcuni ricevitori sono in grado di combinare i due messaggi ricevuti, incrementando la probabilità di ricostruire l'informazione trasmessa.
 Una semplice tecnica di error detection è il \textbf{parity check code}, in cui si aggiunge un bit di parità alla fine della word di 7 bit da trasmettere. Se il numero di bit a 1 è pari, il bit di parità è 0, altrimenti è 1.
 
@@ -641,22 +641,23 @@ Per quanto rigurda la ricezione, il processo è il seguente:
 In figura viene mostrata la convergenza con $K=2048$, $R=1/2$ e un numero di iterazioni, da sinistra a destra, pari rispettivamente a $32, 16, 8, 4, 2, 1$.
 
 
-\section*{Space diversity}
+\section*{Diversità spaziale}
 
 In generale sia diversità in tempo che il frequenza richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
 \begin{itemize}
-    \item \textbf{Array gain}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
-    \item \textbf{Diversity gain}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati. 
+    \item \textbf{Guadagno di array}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
+    \item \textbf{Guadagno di diversità}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati, e deriva dal fatto che l'SNR all'uscita del combinatore ha una distribuzione statistica più "favorevole" rispetto al caso di un singolo cammino.
 \end{itemize} 
 
 Per assumere incorrelazione tra le varie antenne la loro distanza deve essere almeno la metà della lunghezza d'onda:
 \[
-    d_c = \frac{\lambda}{2} \quad \text{coherence distance}
+    d_c = \frac{\lambda}{2} \quad \text{distanza di coerenza}
 \]  
 
-La \textbf{coherence distance} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né dal tempo, né dalla velocità.
+La \textbf{distanza di coerenza} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né dal tempo, né dalla velocità.
 
-Le frequenze portanti attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la space diversity. Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria RF chain, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
+Le frequenze portanti attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la diversità spaziale.
+Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria catena RF, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
 
 
 \paragraph*{Canale MIMO (Multiple Input Multiple Output)}
@@ -865,7 +866,7 @@ L'utilizzo di un canale MIMO può incrementare la capacità del sistema, tuttavi
 % TODO: aggiungere considerazioni sull'aumento della capacità del sistema
 
 
-\section*{Frequency diversity}
+\section*{Diversità in frequenza}
 
 La formula di Shannon fornisce il massimo rate sostenibile su un dato canale di trasmissione:
 \[
@@ -969,7 +970,7 @@ Per ottenere dei valori è necessario calcolare $\mu$, scelto in modo da rispett
 La risoluzione dell'equazione garantisce il valore $\mu$ tale per cui i vincoli sono rispettati, è quindi necessario trovare lo zero di una funzione in $\mu$, ad esempio con il metodo della bisettrice.
 Il metodo dei bisezione può essere applicato dato che la funzione risulta continua e monotona su% TODOl dominio.
 Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superiore irregolare, fino ad un livello pari a $\mu$.
-La distribuzione è ottima e rappresenta la miglior situazione per sfruttare la frequency diversity del canale.
+La distribuzione è ottima e rappresenta la miglior situazione per sfruttare la diversità in frequenza del canale.
 In sostanza la distribuzione favorisce i canali con miglior qualità, scartando completamente quelli la cui capacità è troppo bassa.
 
 
