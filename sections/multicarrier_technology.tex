@@ -164,8 +164,37 @@ Considerando l'inviluppo complesso risulta chiaro che la condizione di Nyquist\f
 Dove $h_{eq}$ è la rappresentazione equivalente del canale, che si può sempre ottenere dalla formula del canale $ h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} \delta(t - \tau_{\ell})$, dove nella versione equivalente il segnale è campionato a multipli di $T$.
 
 Il segnale ricevuto è identico al segnale ottenuto utilizzando la rappresentazione fisica del canale, ma la forma permette un'analisi più semplice.
+\subsection*{Cenni sulla trasformata discreta di Fourier}
+Una sequenza \( x[n] \) è \textit{periodica} se esiste un intero positivo $N_0$ (il \textit{periodo} della sequenza) per il quale è verificata la seguente relazione:
+\[
+    x[n] = x[n + N_0] \quad \forall n
+\]
+Supponiamo che il periodo di ripetizione $T_0$ e l'intervallo di campionamento $T$ siano in relazione:
+\[
+    N_0 T = T_0
+\]
+e cerchiamone la relazione con $x(t)$, considerando la sua equazione di sintesi:
 
-
+\[
+    x(t) = \sum_{k=-\infty}^{\infty} X_k e^{j2\pi k f_0 t}
+\]
+dalla quale ricaviamo il campione
+\[
+    x[n] = x(nT) = \sum_{k=-\infty}^{\infty} X_k e^{\frac{j2\pi k nT}{T_0}} = \sum_{k=-\infty}^{\infty} X_k e^{\frac{j2\pi k n}{N_0}}
+\]
+spezziamo la sommatoria, associando gli elementi all'interno di intervalli della forma $\rinterval{m\, N_0}{(m+1) N_0}$
+\[
+    x[n] = \sum_{m=-\infty}^{+\infty} \sum_{h=0}^{N_0-1} X_{mN_0 + h} e^{\frac{j2\pi (mN_0 + h) n}{N_0}} = \sum_{h=0}^{N_0-1} \left( \sum_{m=-\infty}^{+\infty} X_{mN_0 + h}\right) e^{\frac{j2\pi h n}{N_0}} = \sum_{h=0}^{N_0-1} \overline{X}_h e^{\frac{j2\pi h n}{N_0}} 
+\]
+avendo definito $\overline{X}_h = \sum_{m=-\infty}^{+\infty} X_{mN_0 + h}$, da ciò possiamo arrivare alle seguenti relazioni:
+\[
+    x[k] = \sum_{k=0}^{N-1} \overline{X}_k e^{\frac{j2\pi kn}{N}} \quad \text{anti-trasformata discreta di Fourier}
+\]
+\[
+    \overline{X}_k = \frac{1}{N} \sum_{k=0}^{N-1} x[k] e^{-\frac{j2\pi kn}{N}} \quad \text{trasformata discreta di Fourier}
+\]
+In particolare, la DFT verrà utilizzata per convertire una collezione finita di campioni equispaziati di una funzione in una collezione di coefficienti di una combinazione lineare di sinusoidi complesse,
+assumendo implicitamente che la funzione sia periodica con periodo pari alla lunghezza della sequenza di campioni, per motivi non chiari al sottoscritto.
 \subsection*{Modulazione OFDM}
 La modulazione OFDM risulta essere una delle più utilizzate per trasmissioni digitali ed è del tipo multi-carrier, ereditando quindi i vantaggi di tale tipo di modulazione.
 Si consideri un blocco $S$ composto da $N$ campioni da trasmettere:

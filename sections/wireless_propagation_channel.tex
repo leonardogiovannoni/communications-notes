@@ -19,11 +19,11 @@ La propagazione del segnale nell'atmosfera può essere classificata in base alle
 \end{table}
 
 
-Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraverso il canale, si indentificano i seguenti meccanismi di propagazione:
+Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraverso il canale, si identificano i seguenti meccanismi di propagazione:
 
 \begin{itemize}
     \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza, ma i problemi che si pongono sono il dover utilizzare una frequenza sotto i 2 MHz e quindi antenne di dimensioni molto grandi. Per esempio sono utilizzate nella sincronizzazione di orologi atomici. Possono essere sfruttate per scopi militari.
-    \item \textbf{Sky wave} (3-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalemnte la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
+    \item \textbf{Sky wave} (3-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalmente la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
     \item \textbf{Space wave} (da 30 MHz): le onde richiedono una linea di vista per poter essere ricevute correttamente, e in questo caso si parla di pochi chilometri, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso, che per esempio non sono presenti nelle sky wave, come edifici, alberi, ecc.
 \end{itemize}
 
@@ -61,7 +61,7 @@ Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il 
 
 
 
-    \item \textbf{Scattering}: il segnale impatta con oggetti di piccola dimensione rispetto alla lunghezza d'onda si ha una propagazione in più direzioni del segnale, a differenza della diffrazione dove c'è più meno una direzione comune dove il segnale va.
+    \item \textbf{Scattering}: il segnale impatta con oggetti di piccola dimensione rispetto alla lunghezza d'onda si ha una propagazione in più direzioni del segnale, a differenza della diffrazione dove c'è più o meno una direzione comune dove il segnale va.
           \begin{center}
               \begin{tikzpicture}
                   \shade[ball color=black!40, opacity=0.4] (0,0) circle (0.15cm);
@@ -89,8 +89,8 @@ Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il 
 
 Gli effetti generati da questi fenomeni possono essere riassunti in due diversi tipi di attenuazione del segnale:
 \begin{itemize}
-    \item \textbf{Small-scale fading}: modella fluttazioni rapide della potenza del segnale su lunghezze paragonabili a quella dell'onda.
-    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze. Contribuisce al valor medio della potenza del segnale per una distanza di circa 1 m, e quindi verrà considerato come costante per distanze di circa 1 m.
+    \item \textbf{Small-scale fading}: modella fluttuazioni rapide della potenza del segnale su lunghezze paragonabili a quella dell'onda.
+    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze. Contribuisce al valore medio della potenza del segnale per una distanza di circa 1 m, e quindi verrà considerata come costante per distanze di circa 1 m.
 \end{itemize}
 
 
@@ -448,7 +448,7 @@ Se $B_c > B_S \approx \frac{1}{T}$, ovvero la banda del segnale trasmesso, non s
 La coherence bandwidth può essere determinata considerando la densità spettrale di potenza.
 %TODO questa parte non è chiara.
 Quando $\sigma_{\tau} < T$ vale $B_c > B_s$ e il canale è flat fading, altrimenti se $\sigma_{\tau} > T$ vale $B_c < B_s$ e il canale è frequency selective.
-I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere proprietà statistiche si possono applicare le operazioni standard per il calcolo del valor medio e della varianza, tuttavia ciò risulta particolarmente complesso e serve dunque approssimare.
+I delay sono modellabili come variabili aleatorie $\tau$, perché per ottenere proprietà statistiche si possono applicare le operazioni standard per il calcolo del valore medio e della varianza, tuttavia ciò risulta particolarmente complesso e serve dunque approssimare.
 
 
 \[

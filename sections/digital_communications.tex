@@ -10,13 +10,13 @@
 \end{adjustwidth*}
 
 
-In una comunicazione digitale l'informazione è codificata in sequenze di bit. Se rappresentassimo ogni bit come un funzione delta otterremmo un treno di delta:
+In una comunicazione digitale l'informazione è codificata in sequenze di bit. Se rappresentassimo ogni bit come una funzione delta otterremmo un treno di delta:
 \[
     \sum_{k=-\infty}^{+\infty} d_k \delta(t - kT_b)
 \]
 che occupa però una banda infinita.
 
-La modulazione PAM consiste nell'effettuare la mappatura dei bit ed effettuare un filtraggio con un filtro passa basso avente risposta all'impulso \( g_T(t) \), ottenendo:
+La modulazione PAM consiste nell'effettuare la mappatura dei bit e un filtraggio con un filtro passa basso avente risposta all'impulso \( g_T(t) \), ottenendo:
 \[ s_{PAM}(t) = \sum_{k=-\infty}^{+\infty} a_k\cdot g_T(t - kT_s) \]
 
 Una sequenza di bit può essere trattata come una variabile aleatoria con distribuzione uniforme:
@@ -52,7 +52,7 @@ Gli \( M \) valori \( (M \geq 2) \) che costituiscono l'alfabeto \( A_s = \{ \al
 
 \subsection*{Proprietà derivate della M-PAM}
 \begin{enumerate}
-    \item Il valor medio di \( s(t) \) è zero per ogni \( t \):
+    \item Il valore medio di \( s(t) \) è zero per ogni \( t \):
           \begin{equation*}
               \mathbb{E}\left[ s(t) \right] = 0 \quad \forall t
           \end{equation*}
@@ -436,7 +436,7 @@ Allora si verificano le seguenti:
     \item Piccoli errori di campionamento provocano un ISI molto grande poiché la funzione $\text{sinc}(2B_ct)$ decresce molto lentamente.
 \end{enumerate}
 
-Un errore nel campionatore induce un ISI grande in quanto si sommano molte contributi!
+Un errore nel campionatore induce un ISI grande in quanto si sommano molti contributi!
 
 
 
@@ -630,7 +630,7 @@ e la densità spettrale di potenza è:
 
 
 Dove sia la parte reale che immaginaria danno un contributo $N_0$. Il segnale originale presentava invece un rumore con densità spettrale di potenza $N_0/2$.
-Dopo il filtraggio la densià spettrale di potenza del rumore assume la forma:
+Dopo il filtraggio la densità spettrale di potenza del rumore assume la forma:
 \[
     S_n(f) = S_w |G_R(f)|^2 = 2N_0 |G_R(f)|^2
 \]
@@ -850,7 +850,7 @@ per $m=3$ si ottiene:
 
 
 
-La codifica di Gray permette di assumere che un errore su un simbolo riguardi solo un bit, infatti essendo a il rumore a media nulla è molto probabile che non sia tale per cui un campione finisca in una regione non adiacente a quella del simbolo trasmesso.
+La codifica di Gray permette di assumere che un errore su un simbolo riguardi solo un bit, infatti essendo il rumore a media nulla è molto probabile che un campione non finisca in una regione non adiacente a quella del simbolo trasmesso.
 
 \[
     P^{(b)}_E = \lim_{N^{(b)} \to +\infty} \frac{N_e^{(b)}}{N^{(b)}} \approx \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{ \log_2(M) N^{(s)}} = \frac{1}{\log_2(M)} P^{(s)}_E = \frac{1}{\log_2(M)} \left(\frac{M-1}{M}\right) 2Q\left(\sqrt{\frac{6 \log_2 M \cdot SNR}{M^2-1}}\right)
