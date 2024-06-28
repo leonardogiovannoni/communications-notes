@@ -1,3 +1,83 @@
+\section*{Criterio di Nyquist}
+
+
+Consideriamo un segnale $x(t)$, con spettro $X(f)$, con banda rigorosamente limitata.
+\begin{center}
+    \begin{tikzpicture}
+        % Axis
+        \draw[->] (-5,0) -- (5,0) node[right] {$f$};
+        \draw[->] (0,-0.5) -- (0,3) node[above] {$X(f)$};
+        
+        % Arcs
+        \draw[thick] (-2,0) arc[start angle=180, end angle=0, radius=2];
+        
+        % Labels
+        \node at (-2,-0.3) {$-W$};
+        \node at (2,-0.3) {$W$};
+    \end{tikzpicture}
+\end{center}
+Supponiamo di campionare $x(t)$ con intervallo di campionamento $T_s$, ottenendo la sequenza $x[n] = x(nT_s)$. In tal caso lo spettro del segnale campionato è dato dalla formula
+\[
+    \overline{X}(f) = \frac{1}{T_s} \sum_{k = -\infty}^{+\infty} X(f - \frac{k}{T_s})
+\]
+ovvero un segnale periodico con periodo $\frac{1}{T_s}$. Qualora $\frac{1}{T_s} < 2W$, ovvero $T_s > \frac{1}{2W}$, si verifica il fenomeno dell'aliasing, ovvero la sovrapposizione di copie dello spettro originale.
+
+\begin{figure}[h!]
+    \captionsetup{labelformat=empty}
+
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \resizebox{\textwidth}{!} {
+        \centering
+        \begin{tikzpicture}
+            % Axis
+            \draw[->] (-6.5,0) -- (6.5,0) node[right] {$f$};
+            \draw[->] (0,-0.5) -- (0,3) node[above] {$\overline{X}(f)$};
+            
+            % Arcs
+            \foreach \x in {-4,-2.5,-1,0.5,2} {
+                \draw[thick] (\x,0) arc[start angle=180, end angle=0, radius=1];
+            }
+            % Labels
+            \node at (1,-0.3) {$W$};
+        \end{tikzpicture}
+        }
+        \caption{$T_s > \frac{1}{2W}$}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \resizebox{\textwidth}{!} {
+        \centering
+        \begin{tikzpicture}
+            % Axis
+            \draw[->] (-6.5,0) -- (6.5,0) node[right] {$f$};
+            \draw[->] (0,-0.5) -- (0,3) node[above] {$\overline{X}(f)$};
+            
+            % Arcs
+            \foreach \x in {-6,-3.5,-1,1.5,4} {
+                \draw[thick] (\x,0) arc[start angle=180, end angle=0, radius=1];
+            }
+            % Labels
+            \node at (1,-0.3) {$W$}; 
+        \end{tikzpicture}
+        }
+        \caption{$T_s \leq \frac{1}{2W}$}
+    \end{minipage}
+\end{figure}
+
+\[
+\text{La condizione di Nyquist è quella che mi garantisce assenza di aliasing}
+\]
+
+\[
+\boxed{T_s \leq \frac{1}{2W} \Longleftrightarrow f_s \geq 2W}
+\]
+
+
+
+
+
+
 \section*{Comunicazioni analogiche}
 
 Amplitude Modulation Double Side Band (AM-DSB) è generalmente utilizzata per trasmettere solo la voce.
@@ -50,7 +130,7 @@ Questo comporta la presenza di una componente ad alta frequenza a \( 2f_c \) che
 Dopo la demodulazione e il filtraggio, lo spettro è centrato nuovamente in banda base, recuperando il segnale messaggio.
 
 Definiamo $B = 2W$.
-Nella radio AM si ha una carrier frequency tra i 500 e i 1600 kHz e una $W$ tra i 5 e i 10 kHz.
+Nella radio AM si ha una frequenza portante tra i 500 e i 1600 kHz e una $W$ tra i 5 e i 10 kHz.
 Il segnale è pari (in modulo) a causa della simmetria hermitiana, infatti essendo $m(t)$ reale, $M(-f) = M^*(f)$ e quindi $|M(-f)| = |M(f)|$.
 
 
@@ -103,12 +183,12 @@ Lo spettro del segnale ottenuto tramite moduazione non risulta più simmetrico r
 La mancanza di simmetria rispetto a $f_c$ implica la non esistenza di un segnale reale in grado di rappresentare lo spettro in banda base, in quanto verrebbe meno la simmetria rispetto alla frequenza 0.
 Sebbene questa mancanza non precluda l'utilizzo della modulazione QAM, nella pratica risulta più semplice lo studio di un segnale in banda base.
 \begin{itemize}
-    \item La carrier frequency \( f_c \) non aggiunge informazione al segnale, ma viene utilizzata per traslare il segnale in frequenza.
+    \item La frequenza portante \( f_c \) non aggiunge informazione al segnale, ma viene utilizzata per traslare il segnale in frequenza.
     \item Il criterio di Nyquist richiede un campionamento ad una frequnza doppia rispetto alla banda del segnale, quindi nel caso di segnale passa-banda tale valore può essere molto elevato. Nel caso di segnale in banda base la frequenza di campionamento può essere nettamente inferiore.
 \end{itemize}
 
 Il criterio di Nyquist stabilisce che \( T \leq \frac{1}{2B} \), dove \( T \) è il periodo di campionamento e \( B \) è la banda del segnale, e quindi \( f_s \geq 2B \). Quindi nel nostro caso, $f_s \geq 2B$.
-Un segnale è definito in passa banda quando la propria energia è concentrata all'interno di una banda $2W$ centrata attorno a una carrier frequency $f_c$, con il vincolo $f_c \gg W$.
+Un segnale è definito in passa banda quando la propria energia è concentrata all'interno di una banda $2W$ centrata attorno a una frequenza portante $f_c$, con il vincolo $f_c \gg W$.
 
 \subsection*{Inviluppo Complesso di un Segnale in Banda Passante}
 \begin{center}
