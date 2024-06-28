@@ -1,8 +1,6 @@
 \section*{Comunicazioni analogiche}
 
 Amplitude Modulation Double Side Band (AM-DSB) è generalmente utilizzata per trasmettere solo la voce.
-
-
 Il segnale \( s_{DSB}(t) \) è definito come:
 
 \begin{equation*}
@@ -12,8 +10,6 @@ Il segnale \( s_{DSB}(t) \) è definito come:
 \begin{center}
     \includegraphics[width=0.25\textwidth]{imgs/analog_pam_trasmitter.png}
 \end{center}
-
-
 dove:
 \begin{itemize}
     \item \( m(t) \) è il segnale modulante, o il messaggio.
@@ -77,26 +73,7 @@ L'ipotesi $f_c^{(t)} = f_c^{(r)}$ garantisce la possibilità di effettuare il pa
     \includegraphics[width=1\textwidth]{imgs/analog_qam.png}
 \end{center}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Per raddoppiare la quantità di informazioni trasmesse all'interno della stessa banda si può sfruttare l'ortogonalità della funzione seno e coseno, in modo da trasmettere contemporaneamente due segnali, occupando in modo ottimale la banda a disposizione. Tale modulazione è detta QAM, il termine quadrature indica lo shift di $\pi/2$ tra le due funzioni portanti (seno e coseno), mentre amplitude ricorda che si tratta comunique di una modulazione in cui l'informazione è trasportata interamente dall'ampiezza del segnale. L'ampiezza del segnale portante è infatti modulata in modo proporzionale all'ampiezza del segnale modulante, contente l'informazione da trasmettere.
-
-
-
 
 
 Il segnale composto QAM \( s(t) \) può essere rappresentato come la somma di due segnali modulati DSB, uno modulato con un coseno (la componente in fase) e l'altro con un seno (la componente in quadratura):

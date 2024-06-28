@@ -22,7 +22,7 @@ La propagazione del segnale nell'atmosfera può essere classificata in base alle
 Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraverso il canale, si identificano i seguenti meccanismi di propagazione:
 
 \begin{itemize}
-    \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza, ma i problemi che si pongono sono il dover utilizzare una frequenza sotto i 2 MHz e quindi antenne di dimensioni molto grandi. Per esempio sono utilizzate nella sincronizzazione di orologi atomici. Possono essere sfruttate per scopi militari.
+    \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza, ma i problemi che si pongono sono legati all'utilizzo di una frequenza inferiore a 2 MHz e alla necessità di utilizzare antenne di dimensioni molto grandi. Per esempio sono utilizzate nella sincronizzazione di orologi atomici. Possono essere sfruttate per scopi militari.
     \item \textbf{Sky wave} (3-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalmente la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
     \item \textbf{Space wave} (da 30 MHz): le onde richiedono una linea di vista per poter essere ricevute correttamente, e in questo caso si parla di pochi chilometri, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso, che per esempio non sono presenti nelle sky wave, come edifici, alberi, ecc.
 \end{itemize}
@@ -157,7 +157,7 @@ dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda_0}{4 \pi d_0} \right)^2 \)
     \caption{Esponenti del path loss per vari ambienti}
 \end{table}
 
-Se abbiamo un'antenna, possiamo assumere che esista un'area di raggio $d_0$ centrata nell'antenna, che non è ostrutita, mentre $d$ rappresenta la distanza tra l'area di raggio $d_0$ e il ricevitore, lungo cui ci invece sono ostacoli. In questa area si calcola l'attenuazione utilizzando la regola come se si fosse nello spazio vuoto.
+Se abbiamo un'antenna, possiamo assumere che esista un'area di raggio $d_0$ centrata nell'antenna, che non è ostruita, mentre $d$ rappresenta la distanza tra l'area di raggio $d_0$ e il ricevitore, lungo cui ci invece sono ostacoli. In questa area si calcola l'attenuazione utilizzando la regola come se si fosse nello spazio vuoto.
 Il valore di \( d_0 \) è scelto in modo da poter misurare o stimare con precisione il path loss in condizioni controllate, in modo da poter avere un punto di riferimento da cui calcolare le perdite aggiuntive a distanze maggiori.
 In reti cellulari che coprono aree estese si utilizza una distanza di riferimento di 1 km, mentre in reti progettate per aree più piccole e densamente popolate si utilizzano distanze di riferimento di 100 metri o anche 1 metro.
 
@@ -199,7 +199,7 @@ In reti cellulari che coprono aree estese si utilizza una distanza di riferiment
     }
 \end{center}
 
-La formula, deterministica, che fornisce il valore di attenuazione dato dal path loss è:
+La formula, deterministica, che fornisce il valore di attenuazione data dal path loss è:
 \[
     A_{PL} = \frac{P_{RX}}{P_{TX}} = \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n
 \]
@@ -218,7 +218,7 @@ Nel vuoto l'attenuazione del segnale in base alla distanza è data dalla relazio
 dove \( A \) è l'area dell'antenna in ricezione, che tipicamente è \( A = \lambda^2 \) dove \( \lambda \) è la lunghezza d'onda del segnale.
 
 
-Per frequenze inferiori ai 6 GHz l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale scoglio la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particulare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
+Per frequenze inferiori a 6 GHz l'attenuazione dipende dalle frequenze con una relazione quadratica, tuttavia oltre tale soglia la lunghezza d'onda è sufficientemente piccola per interagire con molecole presenti nell'aria, in particolare ossigeno e vapore acqueo, incrementando ulteriormente l'attenuazione.
 
 Nella progettazione di sistemi di comunicazione wireless è essenziale tenere in considerazione il rapporto tra frequenza utilizzata e distanza copribile da una singola antenna.
 Il path loss è causato anche dalle frequenze più elevate: una frequenza alta significa una lunghezza d'onda piccola, quindi alcuni materiali possono risultare opachi ai campi elettromagnetici, diventando praticamente degli ostacoli.
@@ -347,7 +347,7 @@ Per quanto riguarda i parametri delle varie repliche:
     \item \textbf{Fasi} ($\phi_\ell$): sono modellate come variabili distribuite uniformemente nell'intervallo $[0, 2\pi]$.
 \end{itemize}
 
-La ricezione di più repliche, soprattutto se notevolemnte distanziate tra loro, genera ISI.
+La ricezione di più repliche, soprattutto se notevolmente distanziate tra loro, genera ISI.
 \[
     x(t) = \sum_{i} c_i g(t - iT) \quad \text{uscita filtro in ricezione (senza rumore)}
 \]
@@ -460,12 +460,12 @@ Per quanto riguarda la varianza:
     \sigma_\tau^2 = \mathbb{E}\left[({\tau - \overline{\tau}})^2\right] \approx \overline{\tau^2} - \overline{\tau}^2, \quad \overline{\tau^2} = \mathbb{E} \left[\tau^2\right] = \int_{-\infty}^{+\infty} \tau^2 f_{\tau}(\tau) d\tau \approx \sum_{\ell=0}^{N_c-1} \frac{\alpha_{\ell}^2}{\sum_{m=0}^{N_c-1} \alpha_{m}^2} \tau_{\ell}^2
 \]
 
-Per modellare gli effetti di small scale fading si utilizza il parametro $\sigma_\tau$, ovvero il delay spread che dipende dall'ambiente in cui avviene la trasmissione. Il modello ottenuto risulta piuttosto semplice da utilizzare e secgliendo accuratamente i parametri può essere utilizzato per modellare diversi scenari di trasmissione. L'accuratezza ottenuta non è sempre fedele al caso reale, ma nella maggior parte dei casi non è richiesto, considerando anche che il canale è soggetto a cambiamenti repentini.
+Per modellare gli effetti di small scale fading si utilizza il parametro $\sigma_\tau$, ovvero il delay spread che dipende dall'ambiente in cui avviene la trasmissione. Il modello ottenuto risulta piuttosto semplice da utilizzare e scegliendo accuratamente i parametri può essere utilizzato per modellare diversi scenari di trasmissione. L'accuratezza ottenuta non è sempre fedele al caso reale, ma nella maggior parte dei casi non è richiesto, considerando anche che il canale è soggetto a cambiamenti repentini.
 
 Il BER a parità di rumore dipende fortemente dalla distorsione introdotta nel canale:
 \begin{itemize}
-    \item \textbf{No fading}: aumentando il rapporto SNR è possibile ridurre drasticamente il BER con una potenza di trasmissione contenuta.
-    \item \textbf{Flat fading}: aumentando il rapporto SNR è ancora possibile ridurre il BER, ma sarà necessaria una potenza di trasmissione maggiore.
+    \item \textbf{No fading}: aumentando il rapporto segnale/rumore (SNR) è possibile ridurre drasticamente il BER con una potenza di trasmissione contenuta.
+    \item \textbf{Flat fading}: aumentando il rapporto segnale/rumore (SNR) è ancora possibile ridurre il BER, ma sarà necessaria una potenza di trasmissione maggiore.
     \item \textbf{Frequency selective}: il BER non è riducibile oltre una certa soglia nonostante l'incremento del SNR, principalemente a causa delle interferenze generate dall'ISI.
 \end{itemize}
 
@@ -483,7 +483,7 @@ Per quanto riguarda le decision variables:
 \]
 
 Nell'ultimo caso, inizialmente è il rumore a dominare, quindi incrementando la potenza di trasmissione si ottengono miglioramenti nel BER, tuttavia così facendo si incrementa anche l'energia dei simboli finendo in una zona in cui è l'ISI a dominare.
-La tendenza delle nuove generazioni radio è quello di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
+La tendenza delle nuove generazioni radio è quella di incrementare il symbol-time. Questo comporta il rischio di ottenere con più facilità canali frequency selective anche in ambienti non particolarmente ostili. Per questo le classiche modulazioni PAM o QAM non risultano adatte in certi contesti, ma si fa uso di nuove tipologie di modulazioni multi-carrier come OFDM.
 
 
 Le misurazioni del canale dipendono dalla frequenza del segnale e dall'ambiente in cui avviene la trasmissione.
@@ -513,13 +513,13 @@ Valori tipici di delay spread sono:
 \end{center}
 
 
-Per esempio, in un'area urbana con dealy spread $\sigma_\tau = 4 \mu s$, avremo una coherence bandwidth di $B_c \approx \frac{1}{5 \sigma_\tau} = \frac{1}{20 \mu s} = 50 \text{kHz}$.
+Per esempio, in un'area urbana con delay spread $\sigma_\tau = 4 \mu s$, avremo una coherence bandwidth di $B_c \approx \frac{1}{5 \sigma_\tau} = \frac{1}{20 \mu s} = 50 \text{kHz}$.
 TODO: two path channels and comparison between awgn, flat fading and frequency selective BER.
 
 \section*{Time varying channel}
 Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai guadagni e alle fasi alle varie repliche.
 Intuitivamente tali dipendenze dipendono dal fatto che gli effetti di small scale fading variano drasticamente anche per distanze paragonabili alla lunghezza d'onda, le quali possono essere nell'ordine del centimetro.
-Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsive, ma nel caso di ricevitore mobile vi è una dipendenza dal tempo.
+Tipicamente il canale è descritto come sistema LTI in modo da poter sfruttare la sua risposta impulsiva, ma nel caso di ricevitore mobile vi è una dipendenza dal tempo.
 Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
 
 % TODO: inserire considerazione sulla BER
@@ -532,14 +532,14 @@ Dove abbiamo aggiunto la dipendenza dal tempo alle ampiezze e alle fasi delle re
 Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'esso molto più lentamente rispetto a guadagni e fasi, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
 
 
-\subsection*{Effeto Doppler}
+\subsection*{Effetto Doppler}
 \begin{center}
     \includegraphics[width=0.75\textwidth]{imgs/doppler.png}
 \end{center}
 
 L'effetto Doppler, considerando una qualsiasi onda, è un fenomeno fisico che consiste nel cambiamento apparente della frequenza d'onda percepita da un osservatore raggiunto da un'onda emessa da una sorgente in movimento rispetto ad esso.
 In particolare se la sorgente si avvicina la frequenza apparirà più elevata, mentre se si allontana sembrerà meno elevata, questo deriva dalla compressione (o allargamento) dei tempi in cui l'onda è ricevuta dall'osservatore.
-Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per la trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{Doppler shift} ($f_d$).
+Questo effetto ha delle implicazioni anche per quanto riguarda le onde radio utilizzate per le trasmissioni wireless, introducendo uno shift nelle frequenze del segnale ricevuto indicato come \textbf{Doppler shift} ($f_d$).
 Lo shift può essere determinato considerando la velocità con cui si sta muovendo il ricevitore:
 \[
     d = vt \quad \text{distanza tra $x$ e $y$}
@@ -700,7 +700,7 @@ Incrementando il rate si riduce il tempo dei simboli, permettendo di modellare i
 
 \begin{itemize}
     \item \textbf{Slow fading}: l'effetto Doppler è trascurabile ($B_S \gg f_d$, $T_c \gg T$)
-    \item \textbf{Fast fading}: l'effetto Doppler distorce notevolemnte il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
+    \item \textbf{Fast fading}: l'effetto Doppler distorce notevolmente il segnale, rendendo difficile ridurre il BER ($B_S < f_d, T_c < T$)
 \end{itemize}
 Dove $T$ è il symbol time, $B_S$ è la banda del segnale, $f_d$ è il Doppler shift, $T_c$ è il tempo di coerenza del canale.
 Se la banda del segnale è maggiore del Doppler shift la convoluzione genera un comportamento non molto significativo.
