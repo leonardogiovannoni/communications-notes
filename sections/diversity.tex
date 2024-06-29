@@ -22,11 +22,11 @@ Il fading rappresenta il principale problema nelle comunicazioni radio, sebbene 
 \end{figure}
 
 I metodi principali per ridurre gli effetti di un fading di tali tipologie sono le tecniche basate sulla diversità, ovvero lo sfruttamente di canali con caratteristiche differenti per trasmettere la stessa informazione, aumentando la probabilità che il ricevitore possa ricostruire correttamente il messaggio.
-Le principali tecniche di diversity sono:
+Le principali tecniche di diversità sono:
 \begin{itemize}
-    \item \textbf{Diversità temporale}: relative al tempo di coerenza ($T_c$). Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. I canali slow fading potrebbero non garantire una diversity sufficiente. Il canale deve variare sufficientemente in maniera veloce.
-    \item \textbf{Diversità in frequenza}: relative alla banda di coerenza ($B_c$). Sfruttano tramissioni su bande differenti. I canali flat fading potrebbero non garantire una diversity sufficiente.
-    \item \textbf{Diversità spaziale}: relative alla distanza di coerenza. Sfruttano path di propagazione differenti, ad esempio antenne differenti.
+    \item \textbf{Diversità temporale}: relativa al tempo di coerenza ($T_c$). Sfruttano trasmmissioni in slot temporali separati utilizzado anche \textbf{coding} e \textbf{interleaving}. I canali slow fading potrebbero non garantire una diversità sufficiente. Il canale deve variare sufficientemente in maniera veloce.
+    \item \textbf{Diversità in frequenza}: relativa alla banda di coerenza ($B_c$). Sfruttano tramissioni su bande differenti. I canali flat fading potrebbero non garantire una diversità sufficiente.
+    \item \textbf{Diversità spaziale}: relativa alla distanza di coerenza. Sfruttano path di propagazione differenti, ad esempio antenne differenti.
 \end{itemize}
 
 \subsection*{Diversità temporale}
@@ -36,7 +36,7 @@ La ridondanza è misurata come:
 \[
     R = \frac{k}{n} < 1, \quad \begin{cases}
         k \text{ bit contenenti informazione} \\
-        n \text{ bit in uscita dall'encoder, contenenti informazione più ridondanza} \\
+        n \text{ bit in uscita dall'codificatore, contenenti informazione più ridondanza} \\
         n - k \text{ bit di ridondanza}
     \end{cases}
 \]
@@ -48,7 +48,7 @@ Le operazioni effettuate sfruttano le proprietà matematiche del Galois Field GF
     \includegraphics[width=0.675\textwidth]{imgs/encoder_decoder.jpg}
 \end{figure}
 
-Sorgente e destinazione introducono \textbf{encoder} e \textbf{decoder} per la gestione dei bit di ridondanza, si può utilizzare lo schema:
+Sorgente e destinazione introducono \textbf{codificatore} e \textbf{decodificatore} per la gestione dei bit di ridondanza, si può utilizzare lo schema:
 
 
 \begin{center}
@@ -89,19 +89,19 @@ Sorgente e destinazione introducono \textbf{encoder} e \textbf{decoder} per la g
 In questo schema l'intero sistema è visto come una componente che aggiunge un errore al messaggio trasmesso.
 
 \paragraph*{Block code}
-Si tratta della tipologia più semplice di coding in cui la coded word tramessa è composta da $n-k$ bit di parità.
-L'operazione è rappresentabile come operazione di moltiplicazione fra un vettore (word da trasmettere) e una matrice (\textbf{generator matrix}, definisce il tipo di operazione).
+Si tratta della tipologia più semplice di coding in cui la parola  di codice tramessa è composta da $n-k$ bit di parità.
+L'operazione è rappresentabile come operazione di moltiplicazione fra un vettore (parola da trasmettere) e una matrice (\textbf{generator matrix}, definisce il tipo di operazione).
 
 \[
     \mathbf{d} = \mathbf{uG}, \quad \begin{cases}
         \mathbf{d} \text{ coded word} \quad d \in GF(2)^{1 \times n} \\
-        \mathbf{u} \text{ word da trasmettere} \quad u \in GF(2)^{1 \times k} \\
+        \mathbf{u} \text{ parola da trasmettere} \quad u \in GF(2)^{1 \times k} \\
         \mathbf{G} \text{ generator matrix} \quad G \in GF(2)^{k \times n}
     \end{cases}
 \]
 
 In generale le prime $k$ colonne della matrice $G$ equiavalgono a $I_k$ (matrice identità $k \times k$) e le restanti $n-k$ colonne sono i bit di ridondanza.
-In totale si possono ottenere $2^k$ codeword differenti (uscita dell'encoder).
+In totale si possono ottenere $2^k$ parole di codice differenti (uscita del codificatore).
 Si parla di \textit{coding sistematico} quando i bit di informazione sono semplicemente copiati.
 
 \paragraph*{Error detection}
@@ -147,14 +147,14 @@ Si parla di \textit{coding sistematico} quando i bit di informazione sono sempli
 
 
 
-Le tecniche di error detection consistono nel confrontare i bit di ridondanza ricevuti con i bit di ridondanza calcolati utilizzando le word ricevute. 
+Le tecniche di error detection consistono nel confrontare i bit di ridondanza ricevuti con i bit di ridondanza calcolati utilizzando le parole ricevute. 
 Se il confronto ha successo si assume che la trasmissione non abbia introdotto errori, altrimenti si rileva un errore nella trasmissione.
 In casi di errore il ricevitore può richiedere una nuova trasmissione, adottando lo schema \textbf{ARQ} (Automatic Repeat reQuest).
 In tale schema ad ogni ricezione si risponde con un ACK o un NACK, in base al risultato del confronto.
 In caso di NACK si procede con una nuova trasmissione. 
 Si tratta di una tecnica di diversità temporale, in quanto la ritrasmissione avviene dopo $T_{ARQ}$, un intervallo temporale superiore al coherence time del canale ($T_{ARQ} > T_c$).
 Alcuni ricevitori sono in grado di combinare i due messaggi ricevuti, incrementando la probabilità di ricostruire l'informazione trasmessa.
-Una semplice tecnica di error detection è il \textbf{parity check code}, in cui si aggiunge un bit di parità alla fine della word di 7 bit da trasmettere. Se il numero di bit a 1 è pari, il bit di parità è 0, altrimenti è 1.
+Una semplice tecnica di error detection è il \textbf{parity check code}, in cui si aggiunge un bit di parità alla fine della parola di 7 bit da trasmettere. Se il numero di bit a 1 è pari, il bit di parità è 0, altrimenti è 1.
 
 \[
     \begin{cases}
@@ -174,18 +174,18 @@ Una semplice tecnica di error detection è il \textbf{parity check code}, in cui
     \end{bmatrix}
     \Rightarrow u_7 = \sum_{i=0}^{6} u_i
 \]
-Il parity bit è calcolato sommando tutti i bit delle word usando l'algebra in GF(2).
+Il bit di parità è calcolato sommando tutti i bit delle parole usando l'algebra in GF(2).
 Sebbene sia molto semplice questa tecnica, non può essere sempre efficace in quanto può riconoscere unicamente un numero di errori dispari, mentre in caso di numero di errori pari si avrà un bilanciamente degli 1 ed il confronto avrà successo.
 
 \paragraph*{Error correction}
-Le tecniche di error correction sono utilizzate per rilevare e correggere errori di trasmissione, senza necessità di richiedere una nuova trasmissione.
+Le tecniche di correzione dell'errore sono utilizzate per rilevare e correggere errori di trasmissione, senza necessità di richiedere una nuova trasmissione.
 Dato un canale si definisce \textbf{capacità} il massimo rate a cui è possibile trasmettere:
 \[
     C = B \log_2(1 + \text{SNR}) \quad \text{bit/s}
 \]
 
-Ogni trasmissione con rate $R < C$ ed $\epsilon$ arbitratio è possibile determinare un error correction code per cui $P_e < \epsilon$.
-Una semplice tecnica di error correction è il \textbf{repetition code}, in cui la word è ripetuta 3 volte. 
+Ogni trasmissione con rate $R < C$ ed $\epsilon$ arbitratio è possibile determinare un correzione dell'errore code per cui $P_e < \epsilon$.
+Una semplice tecnica di correzione dell'errore è il \textbf{repetition code}, in cui la parola è ripetuta 3 volte. 
 Per stabilire quale sia il bit corretto in casi di incongruenza si adotta una strategia maggioritaria.
 
 
@@ -209,15 +209,16 @@ Per stabilire quale sia il bit corretto in casi di incongruenza si adotta una st
 
 
 Questa tecnica è in grado di correggere un unico errore, tuttavia se utilizzato come error detection può rilevare fino a due errori.
-La distanza tra due codeword è calcolata come numero di bit differenti fra le due stringhe, detta anche \textbf{Hamming distance}. Il decoder selezione le word con minima distanza rispetto a quella ricevuta.
+La distanza tra due parole di codice è calcolata come numero di bit differenti fra le due stringhe, detta anche \textbf{distanza di Hamming}. Il decodificatore seleziona la parola  con minima distanza rispetto a quella ricevuta.
 
 \[
 %\hat{a}_m = \underset{i=1,\ldots,M}{\mathrm{argmin}}
     \hat{d} = \underset{d}{\mathrm{argmin}} \left\{\text{distance}(d, \hat{x})\right\}
 \]
 
-Dove $\hat{d}$ è la word in uscita dal decoder, $d$ è una word possibile e $\hat{x}$ è la word ricevuta
-Gli errori possono far scegliere al decoder la word sbagliata, la capacità di error correction di un block code è tanto maggiore quanto maggiore è la Hamming distance tra le codeword generabili. La bontà del block code è misurabile con la minima distanza tra codewords $d_{min}$.
+Dove $\hat{d}$ è la parola in uscita dal decodificatore, $d$ è una parola possibile e $\hat{x}$ è la parola ricevuta
+Gli errori possono far scegliere al decodificatore la parola sbagliata, la capacità di correzione dell'errore di un codice a blocchi è tanto maggiore quanto maggiore è la distanza di Hamming tra le parola  di codice generabili.
+La bontà del codice a blocchi è misurabile con la minima distanza tra parole di codice $d_{min}$.
 \[
     d_{min} - 1 \quad \text{Numero massimo di errori rilevabili}
 \]
@@ -228,10 +229,10 @@ Gli errori possono far scegliere al decoder la word sbagliata, la capacità di e
 Maggiore è la distanza di Hamming, maggiore è la ridondanza da aggiungere.
 Fissata $R=\frac{k}{n}$, $d_{min}$ sarà più grande al crescere di $k$ e $n$, tuttavia si complica anche il sistema.
 \section*{Codici convoluzionali}
+I codici convoluzionali, al contrario dei codici a blocchi, non sono sistematici, si trasmettono infatti solo i bit di parità.
 
-I codici convoluzionali, al contrario dei block code, non sono sistematici, si trasmettono infatti solo i bit di parità.
-L'encoder utilizza una sliding window per generare $n>1$ bit di parità, combinando vari sottoinsiemi di bit nel campo GF(2), realizzando una sorta di convoluzione.
-L'encoder si comporta come $n$ filtri lineari in parallelo, i parametri che lo costituiscono sono:
+Il codificatore utilizza una finestra scorrevole per generare $n>1$ bit di parità, combinando vari sottoinsiemi di bit nel campo GF(2), realizzando una sorta di convoluzione.
+Il codificatore si comporta come $n$ filtri lineari in parallelo, i parametri che lo costituiscono sono:
 \begin{itemize}
     \item $n$: bit generati
     \item $k$: bit di informazione (si considererà sempre $k=1$)
@@ -249,18 +250,17 @@ Per i codici convoluzionali, che operano in GF(2), similmente scriveremo:
 \]
 
 I bit in uscita sono quindi un flusso continuo e non organizzati in blocchi.
-
-Trattandosi di sistemi con memoria, l'encoder può essere rappresentato come una macchina a stati finiti.
-L'output dell'encoder dipende dal bit in input e dalla stato corrente.
-L'evoluzione temporale dell'encoder può essere catturata dal \textbf{trellis diagram}, in cui si ha l'evoluzione degli stati in funzione del tempo.
-Ogni sequenza, con la corrispondente encoded word, può essere rappresentata come un cammino nel trellis diagram.
-Una trasmissione di $N$ codewords implica la trasmissione di $n \cdot N$ bits, ottenuti dalla codifica di $k \cdot N$ input word.
-Poiché ogni codeword è funzione anche di $L-1$ input word precedenti, la sequenza può essere codificata considerandola solo nella sua interezza. 
-Il decoder dovrà scegliere la sequenza più "vicina" rispetto a quella ricevuta tra tutte le possibili sequenza, ovvero $2^{k \cdot N}$
+Trattandosi di sistemi con memoria, il codificatore può essere rappresentato come una macchina a stati finiti.
+L'output del codificatore dipende dal bit in input e dalla stato corrente.
+L'evoluzione temporale del codificatore può essere catturata dal diagramma a traliccio (\textit{trellis diagram}), in cui si ha l'evoluzione degli stati in funzione del tempo.
+Ogni sequenza, con la corrispondente parola codificata, può essere rappresentata come un cammino nel diagramma a traliccio.
+Una trasmissione di $N$ parole di codice implica la trasmissione di $n \cdot N$ bits, ottenuti dalla codifica di $k \cdot N$ input word.
+Poiché ogni parola  di codice è funzione anche di $L-1$ parole in input precedenti, la sequenza può essere codificata considerandola solo nella sua interezza. 
+Il decodificatore dovrà scegliere la sequenza più "vicina" rispetto a quella ricevuta tra tutte le possibili sequenza, ovvero $2^{k \cdot N}$
 \[
     \hat{d} = \underset{d}{\text{argmin}} \left\{\text{distance}(d, \hat{x})\right\}
 \]
-Dove $d$ è una possibile sequenza, $\hat{x}$ è la sequenza ricevuta e $\hat{d}$ è la sequenza in uscita dal decoder.
+Dove $d$ è una possibile sequenza, $\hat{x}$ è la sequenza ricevuta e $\hat{d}$ è la sequenza in uscita dal decodificatore.
 L'utilizzo nella pratica di codici convoluzionali è stata resa possibile solo dall'introduzione dell'algoritmo di Viterbi, in grado di applicare una decodifica con complessità lineare e non più esponenziale.
 
 \paragraph*{Codice convoluzionale (2, 1, 3)}
@@ -275,8 +275,8 @@ Come si può notare, la dimensione dei generatori è $kL = 1 \cdot 3 = 3$, il co
     \includegraphics[width=0.5\textwidth]{imgs/213code.png}
 \end{center}
 
-Nella figura è possibile notare come siano presenti 2 elementi di memoria (i due rettangoli bianchi), ovvero i $k(L-1)$ elementi di memoria che sono sufficienti a rappresentare lo stato dell'encoder.
-Le codeword di output, applicando quindi la convoluzione tra i bit di input e i generatori, sono:
+Nella figura è possibile notare come siano presenti 2 elementi di memoria (i due rettangoli bianchi), ovvero i $k(L-1)$ elementi di memoria che sono sufficienti a rappresentare lo stato del codificatore.
+Le parole di codice di output, applicando quindi la convoluzione tra i bit di input e i generatori, sono:
 \[
     d_1^{\left(i\right)} = \sum_{\ell=0}^{2} g_1\left(\ell\right) \cdot u^{\left( i - \ell \right)} = u^{\left(i\right)} + u^{\left(i-1\right)} + u^{\left(i-2\right)}
 \]
@@ -307,7 +307,7 @@ Possiamo definire una macchina a stati fatta nella seguente maniera:
 \end{center}
 
 
-Dove i nodi rappresentano lo stato dell'encoder, ovvero i bit di memoria, mentre gli archi rappresentano separati dallo slash rispettivamente il bit di input e l'output.
+Dove i nodi rappresentano lo stato del codificatore, ovvero i bit di memoria, mentre gli archi rappresentano separati dallo slash rispettivamente il bit di input e l'output.
 La macchina a stati è ricavabile col seguente codice:
 
 \begin{minted}{python3}
@@ -321,7 +321,7 @@ def next_state(input_bit: bool, state: Tuple[bool, bool]):
     return (input_bit, state[0]), (d[0], d[1])
 \end{minted}
 
-La funzione \textit{next\_state} prende in input il bit da codificare e lo stato corrente dell'encoder, restituendo lo stato successivo, ottenuto con una sorta di shift, e i bit di output.
+La funzione \texttt{next\_state} prende in input il bit da codificare e lo stato corrente del codificatore, restituendo lo stato successivo, ottenuto con una sorta di shift, e i bit di output.
 
 \paragraph*{Algoritmo di Viterbi}
 L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevuta:
@@ -330,15 +330,15 @@ L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevut
     \hat{d} = \underset{d}{\text{argmin}} \left( d_H \left(\tilde{d}, \hat{x}\right) \right)
 \]
 Le possibili sequenza $\tilde{d}$ sono viste come sequene di $N$ blocchi, ciascuna composta da 
-$n$ bit, ovver i bit prodotti a partire dai $k$ bit di informaione in ingresso all'encoder.
+$n$ bit, ovver i bit prodotti a partire dai $k$ bit di informaione in ingresso alil codificatore.
 
 
 \[
     d_H\left(\tilde{d}, \hat{x}\right) = \sum_{j=1}^{N} d_H\left(\tilde{d}_j, \hat{x}_j\right)
 \]
 
-Dove $d_H$ è la distanza di Hamming tra due sequenze di bit, $\tilde{d}_j$ è la $j$-esima codeword possibile e $\hat{x}_j$ è la $j$-esima codeword ricevuta.
-Ogni sequenza $\tilde{d}$ corrisponde ad una seuqenza di stati $\tilde{S}_0, \ldots, \tilde{S}_N$ nel diagramma a trabocco, ovvero a un determinato path. La $j$-esima uscita dell'encoder, $\tilde{d}_j$, dipende dalla transizione tra gli stati $\tilde{S}_{j-1}$ e $\tilde{S}_j$.
+Dove $d_H$ è la distanza di Hamming tra due sequenze di bit, $\tilde{d}_j$ è la $j$-esima parola  di codice possibile e $\hat{x}_j$ è la $j$-esima parola  di codice ricevuta.
+Ogni sequenza $\tilde{d}$ corrisponde ad una seuqenza di stati $\tilde{S}_0, \ldots, \tilde{S}_N$ nel diagramma a trabocco, ovvero a un determinato path. La $j$-esima uscita del codificatore, $\tilde{d}_j$, dipende dalla transizione tra gli stati $\tilde{S}_{j-1}$ e $\tilde{S}_j$.
 .
 .
 .
@@ -350,9 +350,7 @@ La distanza di Hamming può essere calcolata in Python come:
 def hamming_distance(a: int, b: int) -> int:
     return bin(a ^ b).count('1')
 \end{minted}
-
-
-Dal Trellis diagram possiamo dedurre la funzione di transizione come:
+Dal diagramma a traliccio possiamo dedurre la funzione di transizione come:
 \begin{minted}{python3}
 
 def state_machine(state: int, input_bit: bool) -> Tuple[int, int]:
@@ -380,7 +378,7 @@ def viterbi_algorithm(sequence: List[bool]) -> List[bool]:
     return get_decoded_sequence(matrix, final_state)
 \end{minted}
 
-La funzione \textit{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di output. Con il termine output indicheremo l'output dell'encoder che abbiamo ricevuto e quindi che dovremo, sfruttano anche lo stato del sistema, trasformare nel bit di input originario, ovvero l'$i$-esimo bit della sequenza che effettivamente si voleva trasmettere. Il numero di riga corrisponde al possibile stato.
+La funzione \texttt{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di output. Con il termine output indicheremo l'output del codificatore che abbiamo ricevuto e quindi che dovremo, sfruttano anche lo stato del sistema, trasformare nel bit di input originario, ovvero l'$i$-esimo bit della sequenza che effettivamente si voleva trasmettere. Il numero di riga corrisponde al possibile stato.
 \begin{minted}{python3}
 def populate_matrix(outputs: List[int]) -> List[List[Optional[ViterbiCell]]]:
     matrix: List[List[Optional[ViterbiCell]]] = empty_matrix(rows=4, cols=len(outputs) + 1)
@@ -403,7 +401,7 @@ def populate_matrix(outputs: List[int]) -> List[List[Optional[ViterbiCell]]]:
     return matrix
 \end{minted}
 
-La funzione \textit{get\_last\_state} trova lo stato finale con la distanza globale minima nell'ultima colonna della matrice.
+La funzione \texttt{get\_last\_state} trova lo stato finale con la distanza globale minima nell'ultima colonna della matrice.
 \begin{minted}{python3}
 def get_last_state(matrix: List[List[Optional[ViterbiCell]]]) -> int:
     min_distance = float('inf')
@@ -415,7 +413,7 @@ def get_last_state(matrix: List[List[Optional[ViterbiCell]]]) -> int:
             final_state = row
     return final_state
 \end{minted}
-La funzione \textit{get\_decoded\_sequence} ricostruisce la sequenza decodificata risalendo dalla matrice a partire dallo stato finale.
+La funzione \texttt{get\_decoded\_sequence} ricostruisce la sequenza decodificata risalendo dalla matrice a partire dallo stato finale.
 \begin{minted}{python3}
 def get_decoded_sequence(matrix: List[List[Optional[ViterbiCell]]], final_state: int) -> List[bool]:
     sequence_length = len(matrix[0]) - 1
@@ -431,7 +429,7 @@ def get_decoded_sequence(matrix: List[List[Optional[ViterbiCell]]], final_state:
 \end{minted}
 
 
-Come esempio consideriamo di voler trasmettere la sequenza di bit $010000$, l'encoder emetterà quindi la sequenza $00 \ 11 \ 10 \ 11 \ 00 \ 00$. Supponendo che il decoder riceva la sequenza $00 \ 10 \ 10 \ 11 \ 00 \ 00$, l'algoritmo di Viterbi sarà in grado di correggere l'errore e restituire la sequenza corretta $010000$.
+Come esempio consideriamo di voler trasmettere la sequenza di bit $010000$, il codificatore emetterà quindi la sequenza $00 \ 11 \ 10 \ 11 \ 00 \ 00$. Supponendo che il decodificatore riceva la sequenza $00 \ 10 \ 10 \ 11 \ 00 \ 00$, l'algoritmo di Viterbi sarà in grado di correggere l'errore e restituire la sequenza corretta $010000$.
 
 
 
@@ -441,7 +439,7 @@ Come esempio consideriamo di voler trasmettere la sequenza di bit $010000$, l'en
 \end{center}
 
 
-Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampando i campi \textit{prev\_state}, \textit{global\_distance} e \textit{input\_bit} per ogni cella della matrice:
+Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione in memoria, stampando i campi \texttt{prev\_state}, \texttt{global\_distance} e \texttt{input\_bit} per ogni cella della matrice:
 
 
 \begin{table}[h!]
@@ -501,10 +499,10 @@ Ovvero eseguendo l'algoritmo in Python si ottiene la seguente rappresentazione i
 \end{center}
 
 I codici convoluzionali risultano adatti per canali memoryless con errori randomici, uniformamente distribuiti ed incorrelati. 
-Tuttavia un canale fading è tipicamente suggetto a \textbf{bursty errors}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. 
+Tuttavia un canale fading è tipicamente suggetto a \textbf{errori a raffica}, ovvero genera un gruppo di errori consecutivi nel tempo e/o in frequenza. 
 Quando il canale è in \textbf{deep fade} ci sono delle dipendenze statistiche tra errori consecutivi.
-L'idea dell'interleaving consiste nel far sembrare il canale memoryless dal punto di vista del decoder, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti dell'encoder prima di effettuare la trasmissione.
-Lato ricevitore prima del decoder verrà effettuata un'operazione di de-interleaving per ripristinare l'ordine originale.
+L'idea dell'interleaving consiste nel far sembrare il canale senza memoria dal punto di vista del decodificatore, de-correlando gli errori provocati dal canale, semplicemente rimescolando i bit prodotti del codificatore prima di effettuare la trasmissione.
+Lato ricevitore prima del decodificatore verrà effettuata un'operazione di de-interleaving per ripristinare l'ordine originale.
 Il costo delle operazioni di (de-)interleaving è pagato in termini di latenza in quanto sia lato ricevitore che lato trasmettitore è necessario avere un intero blocco di dati prima di poter effettuare le operazioni. 
 Esiste un trade-off tra latenza e decorrelazione ottenibile, basata sulla profondità $k$ dell'interleaver, ovvero la dimensione del blocco sul quale si effettua l'operazione di rimescolamento.
 
@@ -555,20 +553,20 @@ Nella formula della capacità del canale di Shannon\footnote{$C=B\log_2(1+\text{
 Negli anni sono stati introdotti nuovi codici, sempre più efficienti, tra cui turbo code e LDPC, i quali si avvicinano al limite teorico imposto dalla formula di Shannon.
 
 
-Più nel dettaglio abbiamo lato trasmettitore da eseguire i seguenti passi:
+%Più nel dettaglio abbiamo lato trasmettitore da eseguire i seguenti passi:
 
 \begin{center}
     \includegraphics[width=0.75\textwidth]{imgs/codes_and_shannon_bound.png}
 \end{center}
-\paragraph*{Turbo code (error correction)}
+\paragraph*{Turbo code (correzione dell'errore)}
 
-Si tratta di un codice convoluzionale in cui sono utilizzati due encoder in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decoding grazie alla ridondanza ottenuta e alla diversity, ottenuta dalla presenza di uno stream di dati differente.
+Si tratta di un codice convoluzionale in cui sono utilizzati due codificatori in parallelo in grado di generare due sequenze indipendenti, migliorando il processo di decodifica grazie alla ridondanza ottenuta e alla diversità, ottenuta dalla presenza di uno stream di dati differente.
 Il sistema è composto da tre sequenze di cui due codificate e una inalterata. L'utilizzo dell'interleaver permette di estendere artificialmente la lunghezza della sequenza, avvicinandosi alle ipotesi di Shannon. Inoltre l'interleaver permette di ottenere sequenze indipendenti. 
 Il trasmettitore invia quindi tre sequenze, tra cui quella originaria, ottenendo un $R=\frac{1}{3}$. L'idea è che se il canale produce un errore le due sequenze prodotte in maniera differente possono essere unite  per correggere l'errore.
-Per quanto riguarda il decoder si utilizzano due decoder in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generata senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
-Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decoder. L'uscita è infine inviata al deinterleaver. 
-Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in ingresso al primo decoder l'uscita dell'interleaver. 
-L'uscita dei decoder rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
+Per quanto riguarda il decodificatore si utilizzano due decodificatori in cascata, il primo prevede in ingresso i bit sistematici e la prima sequenza generata senza interleaving. L'output prodotto invece di essere utilizzato come uscita del sistema è inviato ad un inteleaver, assieme ai bit sistematici. 
+Le due sequenze dopo l'interleaving sono mandate in ingresso, assieme alla seconda sequenza di parità, al secondo decodificatore. L'uscita è infine inviata al deinterleaver. 
+Completato il primo ciclo è possibile effettuarne altri, mandando nuovamente in ingresso al primo decodificatore l'uscita dell'interleaver. 
+L'uscita dei decodificatori rappresenta una stima, sempre più accurata, della sequenza trasmessa. Il processo iterativo va avanti finché vi sono modifiche nei bit decifrati.
 In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes permette di effettuare la correzione degli errori ed ottenere dei BER molto bassi, tuttavia il prezzo è ancora pagato in termini di latenza.
 
 
@@ -596,8 +594,8 @@ In generale se il SNR rispetta le condizioni di Shannon l'impiego di turbo codes
         \end{tikzpicture}
 \end{center}
 \begin{enumerate}
-    \item I bit di informazione (e.g. $01101$) entrano nel trasmettitore e vengono copiati negli encoder RSC1 e RSC2, che corrispondono a codici diversi. Prima di entrare in RSC2, i bit di informazione vengono rimescolati dall'interleaver (e.g. $10011$).
-    \item Ogni encoder genera una stringa di bit di correzione di errore (bit di parità) eseguendo una serie di calcoli sui bit di dati che riceve (e.g. rispettivamente, $10110$ e $11100$).
+    \item I bit di informazione (e.g. $01101$) entrano nel trasmettitore e vengono copiati negli codificatore RSC1 e RSC2, che corrispondono a codici diversi. Prima di entrare in RSC2, i bit di informazione vengono rimescolati dall'interleaver (e.g. $10011$).
+    \item Ogni codificatore genera una stringa di bit di correzione di errore (bit di parità) eseguendo una serie di calcoli sui bit di dati che riceve (e.g. rispettivamente, $10110$ e $11100$).
     \item I bit di informazione e le due stringhe di bit di parità sono combinati in un unico blocco e inviati sul canale, dove il rumore può causare errori nella trasmissione.
 \end{enumerate}
 
@@ -627,7 +625,7 @@ Per quanto rigurda la ricezione, il processo è il seguente:
 \begin{enumerate}
     \item Al segnale (campionato) viene associata una lista di interi (e.g. $[7, -5, 5, 2, -4; \ 6, 5, 7 -2, \textcolor{red}{-2}; \ 3, 8, 1, -5, -3]$, dove $\hat{p}_1$, $\hat{u}$ e $\hat{p}_2$ sono stati separati da un punto e virgola, mentre il rosso è idicata una predizione sbagliata), 
     i cui elementi indicano quanto è probabile che un bit sia 0 o 1. Ad esempio, -7 significa che il bit è quasi certamente uno 0, mentre +7 significa che è quasi certamente un 1. Notare che un errore è avvenuto nel quinto bit del blocco: originariamente un 1, ora ha un valore negativo, che suggerisce uno 0 logico.
-    \item Ogni decoder prende la lista contenente l'informazione con rumore e la rispettiva lista di parità e calcola quanto è sicuro di ciascun bit decodificato (\textit{reliability values}). La lista di affidabilità in uscita dal primo decoder è sfruttata dall'interleaver. I due decoder scambiano queste informazioni di affidabilità ripetutamente e dopo un certo numero di iterazioni, tipicamente da quattro a dieci, iniziano ad essere d'accordo su tutti i bit decodificati. Nella prima iterazione il primo decodere usa i bit sistematici, dalla seconda userà i bit di affidabilità.
+    \item Ogni decodificatore prende la lista contenente l'informazione con rumore e la rispettiva lista di parità e calcola quanto è sicuro di ciascun bit decodificato (\textit{reliability values}). La lista di affidabilità in uscita dal primo decodificatore è sfruttata dall'interleaver. I due decodificatori scambiano queste informazioni di affidabilità ripetutamente e dopo un certo numero di iterazioni, tipicamente da quattro a dieci, iniziano ad essere d'accordo su tutti i bit decodificati. Nella prima iterazione il primo decodificatoree usa i bit sistematici, dalla seconda userà i bit di affidabilità.
     \item I dati decodificati sono la somma della lista contenente l'informazione (con rumore, e.g. $[6, 5, 7 -2, \textcolor{red}{-2}]$) più le due liste finali contenti i valori di confidenza(e.g. $[-5, 3, 7, -6, 5]$ e $[-3, 4, 2, -4, 3]$). L'output ($[-14, 12, 16, -12, 6]$) viene convertito nuovamente in bit binari ($[0, 1, 1, 0, 1]$,  da cui si può notare che il quinto bit ora ha il valore corretto).
 \end{enumerate}
 
@@ -643,7 +641,7 @@ In figura viene mostrata la convergenza con $K=2048$, $R=1/2$ e un numero di ite
 
 \section*{Diversità spaziale}
 
-In generale sia diversità in tempo che il frequenza richiedono parecchie risorse, per questo un altro tipo di diversity è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
+In generale sia diversità in tempo che il frequenza richiedono parecchie risorse, per questo un altro tipo di diversità è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
 \begin{itemize}
     \item \textbf{Guadagno di array}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
     \item \textbf{Guadagno di diversità}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati, e deriva dal fatto che l'SNR all'uscita del combinatore ha una distribuzione statistica più "favorevole" rispetto al caso di un singolo cammino.
@@ -654,7 +652,7 @@ Per assumere incorrelazione tra le varie antenne la loro distanza deve essere al
     d_c = \frac{\lambda}{2} \quad \text{distanza di coerenza}
 \]  
 
-La \textbf{distanza di coerenza} deriva dalle proprietà di time varying del canale, tuttavia come si può osservare non ha dipendenze né dal tempo, né dalla velocità.
+La \textbf{distanza di coerenza} deriva dalle proprietà di tempo varianza del canale, tuttavia come si può osservare non ha dipendenze né dal tempo, né dalla velocità.
 
 Le frequenze portanti attualmente utilizzate permettono di utilizzare anche antenne nel solito sistema sfruttando al massimo la diversità spaziale.
 Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della propria catena RF, quindi lo spazio occupato è maggiore rispetto alla grandezza dell'antenna.
@@ -663,7 +661,7 @@ Bisogna comunque tenere in considerazione che ogni antenna ha bisogno della prop
 \paragraph*{Canale MIMO (Multiple Input Multiple Output)}
 
 
-Nei classici sistemi con un antenna in trasmissione ed un'antenna in ricezione, il canale, se narrow-band può essere descritto da uno scalare complesso.
+Nei classici sistemi con un antenna in trasmissione ed un'antenna in ricezione, il canale, se a banda stretta può essere descritto da uno scalare complesso.
 Nel caso di sistemi con più antenne in trasmissione e ricezione tra ogni coppia di antenne vi è un canale differente, quindi l'intero sistema, per quanto riguarda il canale, può essere descritto tramite una matrice complessa.
 \[ 
     \mathbf{H} = 
@@ -693,7 +691,7 @@ Questo rappresenta il segnale ricevuto sull'$i$-esima antenna.
 Ogni segnale ha il proprio rumore e distorsione da parte del canale.
 Possiamo per i calcoli assumere che $h_i$ sia una costante, perché nonostante sia modellizzata come una variabile aleatoria, ne faremo una stima misurando il canale, per un tempo che dovrà essere maggiore del symbol time.
 
-L'idea più semplice per sfruttare la diversity è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale.
+L'idea più semplice per sfruttare la diversità è scegliere di volta in volta il segnale con attenuzione minore, stimando il canale.
 Tuttavia esistono tecniche in grado di utilizzare le informazioni provenienti da tutti i segnali ricevuti.
 % TODO: i %w_i sono reali o complessi 
 %\[
@@ -718,7 +716,6 @@ dove $w_i$ sono i pesi assegnati alle varie antenne.
 \[
     P_N = \mathbb{E} \left[ |\mathbf{w}^H \mathbf{n}[m] |^2 \right] = \mathbb{E} \left[ \mathbf{w}^H \mathbf{n}[m] \ \overline{\mathbf{w}^H \mathbf{n}[m]} \right] = \mathbb{E} \left[\mathbf{w}^H \mathbf{n}[m]  \left(\mathbf{n}[m]\right)^H \mathbf{w} \right] = \mathbf{w}^H \mathbf{E}\left[ \mathbf{n}[m] (\mathbf{n}[m])^H \right] \mathbf{w} = \mathbf{w}^H \sigma^2 \mathbf{I} \ \mathbf{w} = \sigma^2 \|\mathbf{w}\|^2
 \]
-
 %\[
 %    \begin{array}{ll}
 %            P_N = \mathbb{E} \left[ \left| \sum_{i=1}^{N} w_i n_i[m]  \right|^2 \right] \\
@@ -735,17 +732,13 @@ Dove l'ultimo passaggio è dovuto al fatto che i rumori sono incorrelati, ovvero
 \[
     \mathbb{E} \left[ n_i[m] n_j[m]^* \right] = \mathbb{E} \left[ n_i[m] \right] \mathbb{E} \left[ n_j[m]^* \right]
 \]
-% TODO: come si rimuovono i complessi?
 L'obiettivo è massimizzare il SNR, che si può quindi scrivere come:
 
 \[
     \text{SNR} = \frac{P}{P_N} = \frac{A}{\sigma^2} \frac{\left| \mathbf{w}^H \mathbf{h} \right|^2}{\|\mathbf{w}\|^2} \leq \frac{A}{\sigma^2} \frac{\|\mathbf{w}\|^2 \|\mathbf{h}\|^2}{\|\mathbf{w}\|^2} = \frac{A}{\sigma^2} \|\mathbf{h}\|^2 
 \]
 
-
-
 dove la disuguaglianza è dovuta alla disuguaglianza di Schwarz. 
-
 Imponendo la condizione $w_i = h_i$ si ottiene il massimo SNR possibile e quindi vale l'uguaglianza.
 Se si ha un unico canale l'espressione del SNR si riduce al semplice rapporto $\frac{A}{\sigma^2}h^2$, ovvero la forma valida per un semplice fading channel.
 \paragraph*{MISO (Multiple Input Single Output)}
@@ -759,15 +752,11 @@ Per quanto riguarda la configurazione con più antenne in trasmissione e singola
 
 La differenza sostanziale con il caso SIMO è che i vari segnali sono combinati ``naturalmente" durante la trasmissione e ricevuti quindi già aggregati. 
 La scelta dei coefficienti non può essere effettuata lato ricevitore, ma deve essere il trasmettitore a scegliere stimando il canale, lato ricevitore la stima è ovviamente più complessa rispetto a quella che effettuerebbe il ricevitore per proprio conto.
-L'operazione effettuata dal trasmettitore è detta \textbf{spatial precoding} ed il simbolo è denominato \textbf{spatial pre-coded symbol}.
-\[
-    x_i[m] = b_i c_m \quad \text{simbolo trasmesso sulla $i$-esima antenna}
-\]
-
+L'operazione effettuata dal trasmettitore è detta \textbf{pre-codifica spaziale} e il simbolo è denominato \textbf{simbolo spaziale pre-codificato}.
 \[
     \mathbf{x}[m] = c_m \mathbf{b} 
 \]
-
+Dove $x_i[m]$ è il simbolo trasmesso dalla $i$-esima antenna del trasmettitore.
 L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
 
 Il rapporto segnale/rumore (SNR) è massimizzato scegliendo $\mathbf{b} = \frac{1}{\| \mathbf{h} \|} \mathbf{h}^*$.
@@ -793,8 +782,8 @@ Considerando i guadagni del canale come variabili aleatore con distribuzione di 
 \[
     f_{\| \mathbf{h} \|^2} (x) = \frac{1}{D-1} x^{D-1} e^{-x}
 \]
-Il risultato dipende dal numero di antenne $D$, tuttavia in generale si ottiene un \textbf{array gain}, ovvero uno spostamente del valore medio dei guadagni verso destra (più potenza).
-Inoltre il \textbf{diversity gain} si manifesta riducendo notevolmente la probabilità di ottenere guadagni molto bassi.
+Il risultato dipende dal numero di antenne $D$, tuttavia in generale si ottiene un \textbf{guadagno di array}, ovvero uno spostamente del valore medio dei guadagni verso destra (più potenza).
+Inoltre il \textbf{guadagno di diversità} si manifesta riducendo notevolmente la probabilità di ottenere guadagni molto bassi.
 Ciò è visibile confrontando gli integrali delle due PDF.
 
 \paragraph*{MIMO (Multiple Input Multiple Output)}
@@ -813,7 +802,7 @@ dove $\mathbf{U}$ e $\mathbf{V}$ sono matrici unitarie, mentre $\mathbf{\Sigma} 
     p = \text{rank}(H) = \min(N_R, N_T)
 \]
 
-La tecnica di \textbf{spatial multiplexing} consiste nell'effettuare sia un pre-coding lato trasmettitore, sia un combining lato ricevitore, dunque utilizzando due pesi differenti. In questo modo è possibile creare un certo numero di canali ortogonali indipendenti, detti \textbf{spatial channels}.
+La tecnica di \textbf{spatial multiplexing} consiste nell'effettuare sia una pre-codifica lato trasmettitore, sia un combining lato ricevitore, dunque utilizzando due pesi differenti. In questo modo è possibile creare un certo numero di canali ortogonali indipendenti, detti \textbf{canali spaziali}.
 \[
     \begin{array}{ll}
         \mathbf{H} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^H \quad \text{decomposizione SVD matrice del canale MIMO} \\
@@ -965,9 +954,8 @@ Per ottenere dei valori è necessario calcolare $\mu$, scelto in modo da rispett
         f: \mathbb{R}^n \rightarrow \mathbb{R}
     \end{cases}
 \]
-La risoluzione dell'equazione garantisce il valore $\mu$ tale per cui i vincoli sono rispettati, è quindi necessario trovare lo zero di una funzione in $\mu$, ad esempio con il metodo della bisettrice.
-Il metodo dei bisezione può essere applicato dato che la funzione risulta continua e monotona su% TODOl dominio.
-Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superiore irregolare, fino ad un livello pari a $\mu$.
+La risoluzione dell'equazione garantisce il valore $\mu$ tale per cui i vincoli sono rispettati, è quindi necessario trovare lo zero di una funzione in $\mu$, ad esempio con il metodo di bisezione, che può essere applicato dato che la funzione risulta continua e monotona su
+Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superficie irregolare, fino ad un livello pari a $\mu$.
 La distribuzione è ottima e rappresenta la miglior situazione per sfruttare la diversità in frequenza del canale.
 In sostanza la distribuzione favorisce i canali con miglior qualità, scartando completamente quelli la cui capacità è troppo bassa, quindi la maggior parte della potenza verrà allocata alle frequenze con le migliori condizioni di canale e più alto SNR.
 

@@ -23,13 +23,13 @@ Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraver
 
 \begin{itemize}
     \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza, ma i problemi che si pongono sono legati all'utilizzo di una frequenza inferiore a 2 MHz e alla necessità di utilizzare antenne di dimensioni molto grandi. Per esempio sono utilizzate nella sincronizzazione di orologi atomici. Possono essere sfruttate per scopi militari.
-    \item \textbf{Sky wave} (3-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra quest'ultima e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalmente la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
+    \item \textbf{Sky wave} (3-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra di essa e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalmente la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
     \item \textbf{Space wave} (da 30 MHz): le onde richiedono una linea di vista per poter essere ricevute correttamente, e in questo caso si parla di pochi chilometri, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso, che per esempio non sono presenti nelle sky wave, come edifici, alberi, ecc.
 \end{itemize}
 
 
 
-Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione ne fa affidamento. 
+Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione vi fa affidamento. 
 Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il segnale può comunque essere ricevuto a causa di una serie di fenomeni di propagazione:
 \begin{itemize}
     \item \textbf{Riflessione}: quando il segnale impatta con un oggetto liscio molto grande rispetto alla lunghezza d'onda può essere riflesso, ovvero rimbalza e prosegue con angolo differente, oppure passa attraverso.
@@ -45,7 +45,7 @@ Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il 
 
 
 
-    \item \textbf{Diffrazione}: quando il segnale è ostruito da oggetti con superfici taglienti e irregolari, parte del segnale può modificare l'angolo con cui si propaga. Questo fenomeno permette in certe condizioni di ricevere un segnale anche in assenza di un line-of-sight a causa di un oggetto che crea una zona d'ombra, ovviamente l'energia ricevuta sarà minore rispetto a quella originaria del segnale.
+    \item \textbf{Diffrazione}: quando il segnale è ostruito da oggetti con superfici taglienti e irregolari, parte del segnale può modificare l'angolo con cui si propaga. Questo fenomeno permette in certe condizioni di ricevere un segnale anche in assenza di una linea di vista a causa di un oggetto che crea una zona d'ombra, ovviamente l'energia ricevuta sarà minore rispetto a quella originaria del segnale.
           \begin{center}
               \begin{tikzpicture}
                   \draw[thick] (-2,0) -- (-0.0625,0);
@@ -229,17 +229,12 @@ Per avere una copertura maggiore è meglio utilizzare frequenze portanti minori 
 
 Dati due punti alla stessa distanza dal trasmettitore, se si considerasse unicamente il path loss, si avrebbe la stessa attenuazione,
 tuttavia nella realtà vi è una componente aleatoria da dover considerare, modellabile tramite shadowing.
-La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto.
-La componente aleatoria è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri ($A_S$ e $\sigma_S$) espressi in dB,
+La componente aleatoria è dovuta alla presenza di ostacoli differenti che coprono parzialmente il segnale ricevuto ed è caratterizzata da una distribuzione log-normale con parametri $\mu = 0$ e $\sigma_S$, espressi in dB, quindi una distribuzione normale con parametri ($A_S$ e $\sigma_S$) espressi in dB,
 ovvero la PDF è:
 \[
     f_{A_s^{dB}}(a_S) = \frac{1}{\sqrt{2\pi \sigma_S^2}} e^{-\frac{a_S^2}{2\sigma_S^2}}
 \]
-
 Tipicamente $\sigma_S$ varia tra 0 e 9 dB.
-
-
-
 Gli effetti del path loss e dello shadowing sono sommati per ottenere le variazioni dovute al large scale fading.
 \[
     A_{LS} = A_{PL} \cdot A_S \quad \text{scala lineare}
@@ -248,10 +243,6 @@ Gli effetti del path loss e dello shadowing sono sommati per ottenere le variazi
 \[
     A_{LS}^{dB} = A_{PL}^{dB} + A_S^{dB} \quad \text{scala logaritmica}
 \]
-
-
-Il path loss è deterministico e dipende dall'esponente scelto in base all'ambiente circostante e dalla distanza tra trasmettitore e ricevitore,
-mentre lo shadowing è aleatorio e distribuito come una log-normale.
 Entrambi contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
 
 \begin{center}
@@ -514,7 +505,6 @@ Valori tipici di delay spread sono:
 
 
 Per esempio, in un'area urbana con delay spread $\sigma_\tau = 4 \mu s$, avremo una coherence bandwidth di $B_c \approx \frac{1}{5 \sigma_\tau} = \frac{1}{20 \mu s} = 50 \text{kHz}$.
-TODO: two path channels and comparison between awgn, flat fading and frequency selective BER.
 
 \section*{Time varying channel}
 Se il ricevitore di un segnale è in movimento il modello di canale risulta più complesso, in quanto è necessario aggiungere una dipendenza dal tempo ai guadagni e alle fasi alle varie repliche.
@@ -589,7 +579,7 @@ Il segnale ricevuto invece viene descritto come un processo aleatorio a media nu
 Esistono diversi modelli utilizzati per descrivere lo spreading in frequenza,
 che si verifica quando le varie repliche del segnale vengono aggregate al ricevitore.
 
-Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna repliche che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico})
+Tra questi modelli, il modello dello spettro Doppler di Jakes è particolarmente noto, il quale presuppone che le repliche del segnale arrivino in maniera uniformemente distribuita da ogni direzione, con ciascuna replica che apporta la stessa quantità di energia, cosicché nessuna direzione risulti favorita rispetto ad un'altra in termini di intensità del segnale ricevuto (\textit{scattering isotropico})
 L'assunzione non è del tutto realistica, ma più che la forma dello spread è importante conoscere il fenomeno introdotto dal canale.
 
 \begin{figure}[ht]
@@ -705,7 +695,7 @@ Incrementando il rate si riduce il tempo dei simboli, permettendo di modellare i
 Dove $T$ è il symbol time, $B_S$ è la banda del segnale, $f_d$ è il Doppler shift, $T_c$ è il tempo di coerenza del canale.
 Se la banda del segnale è maggiore del Doppler shift la convoluzione genera un comportamento non molto significativo.
 
-In generale gli effeti LSF determinano la dimensione della cella di copertura, considerando anche la frequenza di trasmissione.
+In generale gli effetti LSF determinano la dimensione della cella di copertura, considerando anche la frequenza di trasmissione.
 
 
 Come esempio, consideriamo il caso di trasmissione di un segnale a una frequenza \( f_c = 2.1 \si{GHz} \) in un'area suburbana. L'utente si muove alla velocità di $90 \si{km/h}$, ovvero \( v = 25 \si{m/s} \). Lo scenario è caratterizzato da un delay spread \( \sigma_\tau = 2 \si{\mu s} \).

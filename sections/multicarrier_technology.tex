@@ -6,7 +6,8 @@
 
 
 La tecnologia multi-carrier è impiegata da tutte le modulazioni più recenti e rappresenta la base del livello fisico per trasmissioni LTE, 5G e Wi-Fi. 
-L'ampio utilizzo di questa tiplogia di modulazione deriva dalla capacità di ridurre i problemi derivanti dall'utilizzo di un canale frequency selective, i cui problemi sono sempre più evidenti all'aumentare del rate di trasmissione. Inoltre presenta dei benefici anche nell'occupazione spetrale e nella flessibilità di allocazione delle risorse radio ai vari utenti del sistema.
+L'ampio utilizzo di questa tiplogia di modulazione deriva dalla capacità di ridurre i problemi derivanti dall'utilizzo di un canale frequency selective, i cui problemi sono sempre più evidenti all'aumentare del rate di trasmissione. 
+Inoltre presenta dei benefici anche nell'occupazione spettrale e nella flessibilità di allocazione delle risorse radio ai vari utenti del sistema.
 \begin{itemize}
     \item Robustezza contro canali frequecy-selective
     \item Efficienza spettrale
@@ -17,15 +18,9 @@ L'idea base consiste nel suddividere il segnale originale da trasmettere, caratt
 ciascuno avente una banda tale da evitare i problemi del canale frequency selective, ovvero inferiori alla coherence bandwidth.
 
 
-
-
-
 \begin{center}
     \includegraphics[width=0.8\textwidth]{imgs/multicarrier.jpg}
 \end{center}
- 
-
-
 
 \[
   B_s > B_c \Rightarrow \text{frequency selective channel}  
@@ -35,8 +30,7 @@ ciascuno avente una banda tale da evitare i problemi del canale frequency select
     \Delta B = \frac{B_s}{N} < B_c \Rightarrow \text{flat fading channel}
 \]
 I segnali in cui è stato suddiviso l'originale non saranno affetti da ISI.
-
-Per effettuare una trasmissione parallela dei veri segnali si potrebbe utilizzare filtri passa banda in parallelo, tuttavia nella pratica cioè non è possibile a causa della mancanza di un filtro ideale, la cui rappresentazione in frequenza sarebbe una perfetta rect. Inoltre l'utilizzo di molti filtri sarebbe molto costoso.
+Per effettuare una trasmissione parallela dei vari segnali si potrebbe utilizzare filtri passa banda in parallelo, tuttavia nella pratica cioè non è possibile a causa della mancanza di un filtro ideale, la cui rappresentazione in frequenza sarebbe una perfetta rect. Inoltre l'utilizzo di molti filtri sarebbe molto costoso.
 
 
 \begin{center}
@@ -206,7 +200,7 @@ L'effetto introdotto dal canale genera una componente ISI lato ricevitore:
 \[
   y\left[k\right] = \sum_{\ell=0}^{L-1} h\left[\ell\right] s\left[k - \ell\right] = h(0)s\left[k\right] + \sum_{\ell=1}^{L-1} h\left[\ell\right] s\left[k - \ell\right]
 \]
-Tipicamente quando si studia una modulazione si considera una sequenza infinita di simboli, ma in questo caso se ne considera $N$, quindi gli indici negativi vengono considerati come 0 dato che non esistono.
+Tipicamente quando si studia una modulazione si considera una sequenza infinita di simboli, ma in questo caso se ne considera una di $N$ simboli, quindi gli indici negativi vengono considerati come 0 dato che non esistono.
 
 % create a system of equations
 %\[
@@ -321,8 +315,7 @@ Invece di aggiungere elementi al vettore $\mathbf{s}$, ottentendo un vettore $\m
 
 
 La nuova matrice risulta ancora essere del tipo Toeplitz, ma in aggiunta è anche \textbf{circolante}, dato che ogni riga è ottenuta tramite uno shift circolare verso destra della riga precedente (vale anche per le colonne, shiftando verso il basso).
-% TODO: ma quanto è grande %N_{CP}
-Una matrice circolante può essere diagonalizzata, cioè può essere espressa come:
+Ogni matrice circolante può essere diagonalizzata, e in particolare può essere espressa come:
 \[
     \overline{\mathbf{H}} = \mathbf{F}^H \mathbf{H} \mathbf{F}
 \]
@@ -339,7 +332,7 @@ Una matrice circolante può essere diagonalizzata, cioè può essere espressa co
                                                     \end{cases*}
     \end{cases*}
 \]
-L'elemento $n$-esimo sulla diagonale risulta avere la trasformata di fourier discreta di fourier del canale (manca solo il termine $\frac{1}{\sqrt{N}}$)
+L'elemento $n$-esimo sulla diagonale risulta avere la trasformata  discreta di Fourier del canale (manca solo il termine $\frac{1}{\sqrt{N}}$)
 
 
 La matrice $\mathbf{F}$ è unitaria, ovvero gode delle proprietà:
