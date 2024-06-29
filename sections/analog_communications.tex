@@ -184,7 +184,7 @@ La mancanza di simmetria rispetto a $f_c$ implica la non esistenza di un segnale
 Sebbene questa mancanza non precluda l'utilizzo della modulazione QAM, nella pratica risulta più semplice lo studio di un segnale in banda base.
 \begin{itemize}
     \item La frequenza portante \( f_c \) non aggiunge informazione al segnale, ma viene utilizzata per traslare il segnale in frequenza.
-    \item Il criterio di Nyquist richiede un campionamento ad una frequnza doppia rispetto alla banda del segnale, quindi nel caso di segnale passa-banda tale valore può essere molto elevato. Nel caso di segnale in banda base la frequenza di campionamento può essere nettamente inferiore.
+    \item Il criterio di Nyquist richiede un campionamento ad una frequenza doppia rispetto alla banda del segnale, quindi nel caso di segnale passa-banda tale valore può essere molto elevato. Nel caso di segnale in banda base la frequenza di campionamento può essere nettamente inferiore.
 \end{itemize}
 
 Il criterio di Nyquist stabilisce che \( T \leq \frac{1}{2B} \), dove \( T \) è il periodo di campionamento e \( B \) è la banda del segnale, e quindi \( f_s \geq 2B \). Quindi nel nostro caso, $f_s \geq 2B$.
@@ -427,7 +427,7 @@ Le componenti principali sono:
     \item Componenti aggiuntive come un \textbf{LED di alimentazione}, un \textbf{diodo ESD} e un \textbf{sensore IR} per l'interfacciamento con l'utente e la protezione del dispositivo.
 \end{itemize}
 
-Il dispositivo implementa un ricevitore super heterodyne, in cui il segnale in banda è prima trasformato in media frequenza (IF) e dopo alcune trasformazioni in banda base.
+Il dispositivo implementa un ricevitore supereterodina, in cui il segnale in banda è prima trasformato in media frequenza (IF) e dopo alcune trasformazioni in banda base.
 Questa doppia trasformazione è necessaria per ottimizzare l'amplificazione del segnale, più semplice a media frequenza rispetto al segnale in banda base.
 
 \begin{center}
@@ -449,7 +449,6 @@ L'intervallo di elaborazione del segnale per questo sistema è da 25 MHz a 1,75 
     \includegraphics[width=0.75\textwidth]{imgs/rtl-sdr.png}
 \end{center}
 
-
 Il segnale modulato in frequenza \(s_{FM}(t)\) è espresso come:
 
 \[
@@ -461,7 +460,7 @@ La sua rappresentazione complessa è:
 \[
     \tilde{s}_{FM}(t) = s_I(t) + j s_Q(t) \quad \text{con} \quad f_c = 102.5 \times 10^6 \, \si{Hz}
 \]
-Per portare il segnale alla banda base, nel ricevitore supereterodino si utilizza una conversione in due passaggi:
+Per portare il segnale in banda base, nel ricevitore supereterodina si utilizza una conversione in due passaggi:
 \begin{enumerate}
 \item Conversione dalla frequenza della portante \(f_c\) alla frequenza intermedia \(f_{IF}\).
 \item Conversione dalla frequenza intermedia \(f_{IF}\) alla banda base (BB).
@@ -526,8 +525,8 @@ La frequenza di campionamento determina la massima banda estraibile dal segnale,
 % TODO: cos'è il mixer?
 Nella figura è rappresentato il segnale in uscita dal mixer, con frequenza intermedia $f_{IF} = 3.57$ MHz e banda $W = 1.4$ MHz.
 
-Ogni sample è composto da 8 bit. I sample del segnale campionato seguono un percorso parallelo per estrarre la commponente in fase e in quadratura. Entrambi i rami effettuano la conversione da media a frequenza a banda base.
-Avvengono una serie di operazioni che permettono di estrarre la banda che sarà rappresentata dai sample I/Q in uscita da ques'ultima fase tramite interfaccia USB.
+Ogni campione è composto da 8 bit. I campioni del segnale campionato seguono un percorso parallelo per estrarre la commponente in fase e in quadratura. Entrambi i rami effettuano la conversione da media a frequenza a banda base.
+Avvengono una serie di operazioni che permettono di estrarre la banda che sarà rappresentata dai campioni I/Q in uscita da ques'ultima fase tramite interfaccia USB.
 La fase di decimation permette di adattare il campionamente  del segnale al valore richiesto dell'utente. Il rate massimo è circa 2.8 MS/s.
 Lo spettro di frequenza in grado di essere captato dal dispositivo risulta approssimativamente (TODO).
 Bisogna comunque tenere in considerazione che la banda limitata a 2.8 MHz non permette di estrarre informazioni di modulazioni che richiedano una banda superiore, ad esempio il Wi-Fi.

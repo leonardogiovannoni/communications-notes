@@ -617,20 +617,11 @@ La \( h_{RC}(t) \) \`e calcolabile in forma chiusa:
 
 
 \paragraph*{Rumore}
-Nel caso della banda passante il rumore dell'inviluppo complesso è definito come:
-\[
-    w(t) = w_I(t) + jw_Q(t)
-\]
-e la densità spettrale di potenza è:
-\[
-    S_w(f) = 2N_0
-\]
-
-
-Dove sia la parte reale che immaginaria danno un contributo $N_0$. Il segnale originale presentava invece un rumore con densità spettrale di potenza $N_0/2$.
+In banda passante il rumore ha densità spettrale di potenza $N_0$, mentre in banda base ha densità spettrale di potenza $N_0/2$.
+Considereremo il caso in banda passante.
 Dopo il filtraggio la densità spettrale di potenza del rumore assume la forma:
 \[
-    S_n(f) = S_w |G_R(f)|^2 = 2N_0 |G_R(f)|^2
+    S_n(f) = S_w |G_R(f)|^2 = N_0 |G_R(f)|^2
 \]
 
 Il ricevitore deve quindi essere implementato al fine di minimizzare l'effetto del rumore, ovvero massimizzare l'SNR.
@@ -692,15 +683,15 @@ Per quanto riguarda la banda invece:
 
 La potenza del segnale di disturbo può essere calcolatora considerando la densità spettrale di potenza:
 \[
-    P_n = \int_{-\infty}^{+\infty} S_n(f) df = 2N_0 \int_{-\infty}^{+\infty} |G_R(f)|^2 df = 2N_0 \int_{-\infty}^{+\infty} |H_{RC}(f)|^2 df = 2N_0
+    P_n = \int_{-\infty}^{+\infty} S_n(f) df = N_0 \int_{-\infty}^{+\infty} |G_R(f)|^2 df = 2N_0 \int_{-\infty}^{+\infty} |H_{RC}(f)|^2 df = N_0
 \]
 
 Essendo il rumore a media nulla, la varianza del rumore è pari alla sua potenza:
 \[
-    \sigma_n^2 = P_n = 2N_0
+    \sigma_n^2 = P_n = N_0
 \]
 
-Quindi la variabile aleatoria associata al rumore ha distribuzione del tipo $\mathcal{N}(0, 2 N_0)$.
+Quindi la variabile aleatoria associata al rumore ha distribuzione del tipo $\mathcal{N}(0, N_0)$.
 
 Si può dimostrare che in presenza di filtro RRC e simboli equiprobabili la strategia di dicisione ottima consiste nel massimizzare la probabilità condizionata di aver ricevuto $a^{(i)}$ sapendo di aver ricevuto $x[m]$:
 
