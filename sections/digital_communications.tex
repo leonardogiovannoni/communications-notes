@@ -17,7 +17,6 @@ che occupa però una banda infinita.
 
 La modulazione PAM consiste nell'effettuare la mappatura dei bit e un filtraggio con un filtro passa basso avente risposta all'impulso \( g_T(t) \), ottenendo:
 \[ s_{PAM}(t) = \sum_{k=-\infty}^{+\infty} a_k\cdot g_T(t - kT_s) \]
-
 Una sequenza di bit può essere trattata come una variabile aleatoria con distribuzione uniforme:
 \[
     \mathbb{P}(d_k = 0) = \mathbb{P}(d_k = 1) = \frac{1}{2}
@@ -196,7 +195,7 @@ L'efficienza spettrale aumenta con l'aumentare del numero di livelli. Sfortunata
 \end{center}
 
 
-Il canale di comunicazione è generalmente modellato come un sistema LTI, caratterizzato da una risposta impusliva $h(t)$ e da un rumore additivo $w(t)$.
+Il canale di comunicazione è generalmente modellato come un sistema LTI, caratterizzato da una risposta impulsiva $h(t)$ e da un rumore additivo $w(t)$.
 Nel caso ideale $h(t) = \delta (t)$.
 Il rumore aggiunto al segnale si modella come rumore bianco gaussiano a potenza spettrale costante $N_0/2$, col quale si modella il disturbo proveniente dalle radiazioni solari, dalle radiazioni del big bang e del rumore dei dispositivi.
 Il ricevitore è composto da 3 componenti principali:
@@ -209,7 +208,6 @@ Il segnale ricevuto è il seguente:
 \[
     r(t) = s(t) \ast h(t) + w(t)
 \]
-
 mentre il segnale filtrato è:
 \[
     x(t) = r(t) \ast g_R(t) = \sum_{k=-\infty}^{+\infty} a_k g(t - kT_s) + n(t)
@@ -286,8 +284,7 @@ Un canale con banda \( B_c \) in generale introduce ISI. Ci sono due aspetti di 
 \end{enumerate}
 
 Nel risolvere i due problemi riterremo \( h(t) \) fissata, e \( g_T(t) \) e \( g_R(t) \) variabili, in quanto determinabili dal progettista.
-
-Un approccio non perseguibileconsiste nel trasmettere impulsi di durata finita e quindi con banda illimitata. Questo è in contrasto con la limitatezza messa a disposizione dal canale di trasmissione \( (B_c < \infty) \).
+Un approccio non perseguibile consiste nel trasmettere impulsi di durata finita e quindi con banda illimitata. Questo è in contrasto con la limitatezza messa a disposizione dal canale di trasmissione \( (B_c < \infty) \).
 
 \(\Rightarrow\) Gli impulsi \( g_T(t) \) devono avere durata infinita.
 
@@ -775,7 +772,6 @@ Quindi la probabilità di errore in questo caso può essere espressa come:
 \]
 
 Dove l'ultima uguaglianza deriva dal fatto che la soglia $t_i=0$ e il valore medio della gaussiana è $m_x = -1$.
-
 Si ottiene il solito valore anche calcolando la probabilità di errore per il simbolo $+1$, quindi la probabilità di errore della 2-PAM equivale a:
 \[
     P^{\text{2-PAM}}_e = \frac{1}{2} Q\left(\frac{1}{\sigma}\right) + \frac{1}{2} Q\left(\frac{1}{\sigma}\right) = Q\left(\frac{1}{\sigma}\right)

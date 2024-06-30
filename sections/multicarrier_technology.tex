@@ -195,7 +195,6 @@ Si consideri un blocco $S$ composto da $N$ campioni da trasmettere:
 \[
   S = \left\{s\left[0\right], s\left[1\right], \ldots, s\left[N-1\right]\right\}
 \]
-
 L'effetto introdotto dal canale genera una componente ISI lato ricevitore:
 \[
   y\left[k\right] = \sum_{\ell=0}^{L-1} h\left[\ell\right] s\left[k - \ell\right] = h(0)s\left[k\right] + \sum_{\ell=1}^{L-1} h\left[\ell\right] s\left[k - \ell\right]
@@ -279,7 +278,7 @@ Il prefisso appeso in testa può essere utilizzato come elementi con indice nega
 
 
 Calcolando nuovamente la convoluzione, adesso ogni campione avrà anche alcune componenti con indice negativo.
-Introducendo il prefisso nel blocco tramesso in uscita dal canale si ottiene un vettore $\mathbf{y}$ i cui elementi sono costituiti dalla somma di $L$ termini.
+Introducendo il prefisso nel blocco trasmesso in uscita dal canale si ottiene un vettore $\mathbf{y}$ i cui elementi sono costituiti dalla somma di $L$ termini.
 \[
 y[k] = \sum_{\ell=0}^{L-1} h[\ell] s[(k-\ell) \mod N]
 \]
@@ -402,7 +401,8 @@ Dato che $\mathbf{H}$ è diagonale, il segnale ricevuto sul subcarrier $n$ dipen
 I simboli trasmessi sono idealmente generati in frequenza, ovvero sono convoluti prima della trasmissione tramite DFT inversa, quindi per essere recuperati è necessario effettuare la DFT. L'uso del prefisso risulta comunque essenziale affinché le proprietà algebriche sfruttate siano verificate. 
 La DFT può essere calcolata tramite FFT, un'operazione molto semplice dato che è costituita da una moltiplicazione matriciale, quindi il costo per la rimozione dell'ISI è molto contenuto. In questo modo è vicino il limite del rate di tramissione raggiungibile, a patto che vi sia una banda sufficientemente ampia.
 Il costo da pagare è l'utilizzo aggiuntivo di energia e banda per la trasmissione del prefisso, il quale non contiene alcuna informazione utile.
-La denominazione OFDM deriva dal fatto che si tratta di una sorta di modulazione in frequenza, in cui le varie subcarrier sono ortogonali, ovvero non interferiscono tra di loro. La banda occupata è data dalla somma delle bande occupate dalle varie subcarrieri, dunque è necessario determinare quali sono tali contributi.
+La denominazione OFDM deriva dal fatto che si tratta di una sorta di modulazione in frequenza, in cui le varie subcarrier sono ortogonali, ovvero non interferiscono tra di loro. 
+La banda occupata è data dalla somma delle bande occupate dalle varie subcarrier, dunque è necessario determinare quali sono tali contributi.
 \[
     s[k] = \frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} S_n e^{\frac{j2\pi nk}{N}}, \quad k = 0, \ldots, N-1
 \]
@@ -624,7 +624,7 @@ Pertanto, la durata di un blocco OFDM è:
 \]
 In generale, il delay spread di un canale interno è \( \sigma_\tau < 500 \text{ ns} \), il che significa che il canale può essere considerato flat fading, cioè:
 \[
-T_{OFDM} \gg \sigma_\tau
+    \sigma_\tau \ll T_{OFDM}
 \]
 Assumendo che la mobilità massima interna sia \( v = 3 \text{ m/s} \), per una WiFi a 5 GHz, la massima deviazione Doppler è:
 \[

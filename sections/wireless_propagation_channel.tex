@@ -243,7 +243,7 @@ Gli effetti del path loss e dello shadowing sono sommati per ottenere le variazi
 \[
     A_{LS}^{dB} = A_{PL}^{dB} + A_S^{dB} \quad \text{scala logaritmica}
 \]
-Entrambi contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lughezza d'onda.
+Entrambi contribuisoono a variazioni nella potenza media ricevuta, le cui fluttuazioni sono significative solo per grandi distanze, considerando la lunghezza d'onda.
 
 \begin{center}
     \includegraphics[width=0.675\textwidth]{imgs/fading_sum.jpg}
@@ -460,7 +460,7 @@ Il BER a parità di rumore dipende fortemente dalla distorsione introdotta nel c
     \item \textbf{Frequency selective}: il BER non è riducibile oltre una certa soglia nonostante l'incremento del SNR, principalemente a causa delle interferenze generate dall'ISI.
 \end{itemize}
 
-Per quanto riguarda le decision variables:
+Per quanto riguarda le variabili decisionali:
 \[
     x\left[m\right] = c_m + n\left[m\right] \quad \text{no fading} \quad P_e = Q(\sqrt{\text{SNR}})
 \]
@@ -586,21 +586,18 @@ L'assunzione non è del tutto realistica, ma più che la forma dello spread è i
     \centering
     \includegraphics[width=0.875\textwidth]{imgs/jakes.jpg}
     \captionsetup{width=.5\textwidth}
-    % TODO: nella figura in alto a sinistra, cosa è rappresentato?
-    \caption*{Spettro Doppler di Jakes:
-        per il segnale $s$ vale \( S_S(f) = \frac{1}{2} \delta \left(f - f_c \right) + \frac{1}{2} \delta \left(f + f_c\right) \),
-        mentre per il segnale $y$ vale \( S_Y(f) = S_D(f) \ast S_S(f) \).
-    }
+    \caption*{Spettro Doppler di Jakes}
+      
 \end{figure}
 
 
 Lo spettro originale è ripetuto su un intervallo maggiore di frequenza. L'effetto prodotto è l'allargamento dello spettro occupato (\textbf{Doppler spread}), derivante dal fatto che il segnale stocastico ricevuto assume la forma:
 
 \[
-    y(t) = s(t) d(t)
+    y(t) = \alpha(t) s(t)
 \]
 % TODO da dove deriva la radice quadrata al denominatore considerando v cos(theta) / c
-dove $s(t)$ è il segnale trasmesso e $d(t)$ è il Jokes' Doppler spectrum. Quando $f_d$ è trascurabile (e quindi circa 0), $S_D(f)$ diventa circa una delta, e quindi $S_Y(f) = S_S(f)$. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
+dove $\alpha(t)$ è il guadagno tempo-variante del canale e $s(t)$ è il segnale trasmesso . Quando $f_d$ è trascurabile (e quindi circa 0), $S_D(f)$ diventa circa una delta, e quindi $S_Y(f) = S_S(f)$. In frequenza, la convoluzione tra queste due funzioni produce una funzione la cui durata (tempo) e banda (frequenza) è la somma delle due funzioni di partenza, per questo motivo si ha un un incremento della banda occcupata.
 
 \[
     S_Y(f) = S_S(f) \ast S_D(f)

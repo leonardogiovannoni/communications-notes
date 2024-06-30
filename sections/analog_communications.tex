@@ -104,7 +104,7 @@ dove:
 
 La modulazione AM-DSB è caratterizzata da due bande laterali, ciascuna localizzata tra \( f_c \pm W \) e \( -f_c \pm W \), dove \( W \) è la banda del segnale modulante. Queste bande laterali trasportano la stessa informazione, da cui il termine \textbf{dual sideband}.
 
-Effettuando la trasformata di Fourier\footnote{$X(f) \triangleq \int_{-\infty}^{+\infty} x(t) e^{-j2\pi ft} dt$} di \( s_{DSB}(t) \), otteniamo la rappresentazione nel dominio delle frequenze \( s_{DSB}(f) \). Ciò è calcolabile come segue:
+Effettuando la trasformata di Fourier\footnote{$X(f) \triangleq \int_{\mathbb{R}} x(t) e^{-j2\pi ft} dt$} di \( s_{DSB}(t) \), otteniamo la rappresentazione nel dominio delle frequenze \( s_{DSB}(f) \). Ciò è calcolabile come segue:
 \[
     s_{DSB}(f) = A_c \ \mathcal{F}\{m(t)\} (f)  \ast \mathcal{F}\{\cos(2\pi f_c t) \}(f) = A_c M(f) \ast \frac{\delta(f - f_c) + \delta(f + f_c)}{2} =
 \]
@@ -153,7 +153,7 @@ L'ipotesi $f_c^{(t)} = f_c^{(r)}$ garantisce la possibilità di effettuare il pa
     \includegraphics[width=1\textwidth]{imgs/analog_qam.png}
 \end{center}
 
-Per raddoppiare la quantità di informazioni trasmesse all'interno della stessa banda si può sfruttare l'ortogonalità della funzione seno e coseno, in modo da trasmettere contemporaneamente due segnali, occupando in modo ottimale la banda a disposizione. Tale modulazione è detta QAM, il termine quadrature indica lo shift di $\pi/2$ tra le due funzioni portanti (seno e coseno), mentre amplitude ricorda che si tratta comunique di una modulazione in cui l'informazione è trasportata interamente dall'ampiezza del segnale. L'ampiezza del segnale portante è infatti modulata in modo proporzionale all'ampiezza del segnale modulante, contente l'informazione da trasmettere.
+Per raddoppiare la quantità di informazioni trasmesse all'interno della stessa banda si può sfruttare l'ortogonalità della funzione seno e coseno, in modo da trasmettere contemporaneamente due segnali, occupando in modo ottimale la banda a disposizione. Tale modulazione è detta QAM, il termine quadrature indica lo shift di $\pi/2$ tra le due funzioni portanti (seno e coseno), mentre amplitude ricorda che si tratta comunque di una modulazione in cui l'informazione è trasportata interamente dall'ampiezza del segnale. L'ampiezza del segnale portante è infatti modulata in modo proporzionale all'ampiezza del segnale modulante, contente l'informazione da trasmettere.
 
 
 Il segnale composto QAM \( s(t) \) può essere rappresentato come la somma di due segnali modulati DSB, uno modulato con un coseno (la componente in fase) e l'altro con un seno (la componente in quadratura):
@@ -179,7 +179,7 @@ La demodulazione è fatta nella seguente maniera:
 \end{equation}
 
 Le componenti ad alta frequenza sono filtrate dal filtro passa-basso, ottenendo così i segnali originali \( m_1(t) \) e \( m_2(t) \).
-Lo spettro del segnale ottenuto tramite moduazione non risulta più simmetrico rispetto a $f_c$, tuttavia essendo un segnale reale resta valida la simmetria rispetto all'asse delle ordinate.
+Lo spettro del segnale ottenuto tramite modulazione non risulta più simmetrico rispetto a $f_c$, tuttavia essendo un segnale reale resta valida la simmetria rispetto all'asse delle ordinate.
 La mancanza di simmetria rispetto a $f_c$ implica la non esistenza di un segnale reale in grado di rappresentare lo spettro in banda base, in quanto verrebbe meno la simmetria rispetto alla frequenza 0.
 Sebbene questa mancanza non precluda l'utilizzo della modulazione QAM, nella pratica risulta più semplice lo studio di un segnale in banda base.
 \begin{itemize}
@@ -283,38 +283,17 @@ L'inviluppo complesso sarà:
     \hat{s}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
 \]
 
-La formula dell'integrale per trovare i coefficienti della serie di Fourier \( c_n \) del segnale \( x(t) \) su un periodo \( T_0 \) è data da:
-\[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
-
-Per la modulazione FM, dove \( f_0 = f_m \) (la frequenza di modulazione) e quindi \( T_0 = \frac{1}{f_m} \), i coefficienti per l'inviluppo complesso \( \hat{s}_{FM}(t) \) diventano:
+Proviamo a trovare i coefficienti di Fourier \( c_n \) \footnote{
+    \[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
+} del segnale \( \hat{s}_{FM}(t) \) su un periodo \( T_0 = \frac{1}{f_m} \) \footnote{Per la modulazione FM, dove \( f_0 = f_m \) (la frequenza di modulazione) e quindi \( T_0 = \frac{1}{f_m} \), i coefficienti per l'inviluppo complesso \( \hat{s}_{FM}(t) \) diventano:
 \[ c_n = \frac{1}{T_m} \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} A_c e^{j m_f \sin(2\pi f_m t)} e^{-j 2\pi f_m n t} dt \]
-
-Applicando l'espansione di Jacobi-Anger, sappiamo che:
+}:
+Dall'espansione di Jacobi-Anger, sappiamo che:
 \[ e^{j z \sin \theta} = \sum_{k=-\infty}^\infty J_k(z) e^{j k \theta} \]
-
-Quindi, con \( z = m_f \) e \( \theta = 2\pi f_m t \), otteniamo:
-\[ e^{j m_f \sin(2\pi f_m t)} = \sum_{k=-\infty}^\infty J_k(m_f) e^{j k 2\pi f_m t} \]
-
-
-Sostituendo l'espansione nell'integrale per \( c_n \):
-\[ c_n = \frac{A_c}{T_m} \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} \sum_{k=-\infty}^\infty J_k(m_f) e^{j k 2\pi f_m t} e^{-j 2\pi f_m n t} dt \]
-
-Scambiando la somma e l'integrale (supponendo convergenza uniforme), e notando che \( e^{j (k-n) 2\pi f_m t} \) è periodico con periodo \( T_m \), otteniamo:
-\[ c_n = \frac{A_c}{T_m} \sum_{k=-\infty}^\infty J_k(m_f) \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} e^{j (k-n) 2\pi f_m t} dt \]
-
-L'integrale:
-\[ \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} e^{j (k-n) 2\pi f_m t} dt \]
-è non nullo solo quando \( k = n \), in tal caso è uguale a \( T_m \). Altrimenti è nullo a causa dell'ortogonalità delle funzioni esponenziali su un periodo completo.
-
-Quindi:
+Quindi moltiplicando per $A_c$, con \( z = m_f \) e \( \theta = 2\pi f_m t \), otteniamo:
+\[ A_c e^{j m_f \sin(2\pi f_m t)} = \sum_{k=-\infty}^\infty A_c J_k(m_f) e^{j k 2\pi f_m t} \]
+Che per definizione è la serie di Fourier del segnale \( A_c e^{j m_f \sin(2\pi f_m t)} \), quindi:
 \[ c_n = A_c J_n(m_f) \]
-
-
-La rappresentazione in serie di Fourier dello spettro dell'inviluppo complesso del segnale FM è quindi data da:
-\[
-    \hat{s}_{FM}(t) = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) e^{j 2\pi n f_m t}
-\]
-% FM signal spectrum representation
 Il segnale FM può essere rappresentato come:
 \[
     s_{FM}(t) = \text{Re}\{ \hat{s}_{FM}(t) e^{j 2\pi f_c t} \} = A_c \sum_{n=-\infty}^{\infty} J_n(m_f) \cos(2\pi (f_c + n f_m) t)
@@ -439,7 +418,7 @@ Il diagramma a blocchi per un ricevitore FM che utilizza hardware RTL-SDR tipica
 \item \textbf{Antenna RF:} Cattura il segnale FM dall'aria.
 \item \textbf{Flessibile Front End RF:} Filtra e amplifica il segnale RF dall'antenna.
 \item \textbf{Convertitore Analogico-Digitale (ADC):} Converte il segnale RF analogico in formato digitale.
-\item \textbf{Demodulazione in Banda IQ:} Il segnale digitale viene demodulato in componenti I (In-phase) e Q (Quadratura).
+\item \textbf{Demodulazione in Banda IQ:} Il segnale digitale viene demodulato in componenti I (In fase) e Q (Quadratura).
 \item \textbf{Filtraggio di Decimazione:} Riduce la frequenza di campionamento e il rumore, mantenendo il segnale di interesse.
 \item \textbf{Sincronizzazione di Portante e Temporizzazione:} Sincronizza il segnale ricevuto con il riferimento locale per una demodulazione accurata.
 \item \textbf{Elaborazione della Banda Base:} Questo può coinvolgere MATLAB/Simulink in esecuzione su un computer per elaborare il segnale demodulato.
@@ -448,15 +427,11 @@ Il diagramma a blocchi per un ricevitore FM che utilizza hardware RTL-SDR tipica
 L'intervallo di elaborazione del segnale per questo sistema è da 25 MHz a 1,75 GHz con una frequenza di campionamento (IF) fino a circa 2,8 MHz.\begin{center}
     \includegraphics[width=0.75\textwidth]{imgs/rtl-sdr.png}
 \end{center}
-
 Il segnale modulato in frequenza \(s_{FM}(t)\) è espresso come:
-
 \[
 s_{FM}(t) = s_I(t) \cos (2\pi f_c t) - s_Q(t) \sin (2 \pi f_c t)
 \]
-
 La sua rappresentazione complessa è:
-
 \[
     \tilde{s}_{FM}(t) = s_I(t) + j s_Q(t) \quad \text{con} \quad f_c = 102.5 \times 10^6 \, \si{Hz}
 \]
@@ -645,7 +620,7 @@ Infine eseguiamo la demodulazione su \texttt{rtlsdr\_frmlen} campioni, utilizzan
 \[
     \tilde{m}[k] = \frac{f_s}{2\pi \Delta f} \angle \left( \tilde{v}[k] \ \tilde{v}^*[k-1] \right)
 \]
-Per eseguirla, utilizzando un vettore ausialiare che conterrà gli stessi valori dei campioni, ma shiftati di una posizione e coniugati, ottenendo il seguente codice:
+Per eseguirla, utilizzando un vettore ausiliare che conterrà gli stessi valori dei campioni, ma shiftati di una posizione e coniugati, ottenendo il seguente codice:
 \begin{minted}{matlab}
 numSamp = 0;
 lastSample = 0;
