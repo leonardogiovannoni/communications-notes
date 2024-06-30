@@ -644,7 +644,7 @@ In figura viene mostrata la convergenza con $K=2048$, $R=1/2$ e un numero di ite
 
 \section*{Diversità spaziale}
 
-In generale sia diversità in tempo che il frequenza richiedono parecchie risorse, per questo un altro tipo di diversità è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
+In generale sia la diversità in tempo che il frequenza richiedono parecchie risorse, per questo un altro tipo di diversità è spesso sfruttata, semplicemente utilizzando più antenne. Si possono sfruttare due tipologie di guadagni differenti:
 \begin{itemize}
     \item \textbf{Guadagno di array}: si tratta del guadagno di potenza ottenuto utilizzando più antenne rispetto all'utilizzo della singola antenna. Il guadagno è tanto più alto quanto è alta la correlazione spaziale del canale. Si sfruttano tipicamente antenne direzionali.
     \item \textbf{Guadagno di diversità}: si tratta del guadagno ottenuto combinando i segnali ricevuti dalle varie antenne, considerati incorrelati. Tale guadagno è massimo quando i segnali sono completamente decorrelati, e deriva dal fatto che l'SNR all'uscita del combinatore ha una distribuzione statistica più "favorevole" rispetto al caso di un singolo cammino.
@@ -686,7 +686,7 @@ Dove $\mathbf{x}$ è il segnale trasmesso, $\mathbf{y}$ è il segnale ricevuto e
 \begin{center}
     \includegraphics[width=0.4\textwidth]{imgs/simo.jpg}
 \end{center}
-Nel caso di unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
+Nel caso di un'unica antenna in trasmissione si parla di canale SIMO ed in tal caso $\mathbf{H} \in \mathbb{C}^{N \times 1}$
 \[
     y_i[m] = h_i c_m + n_i[m] \quad i = 1, \ldots, N
 \]
@@ -759,7 +759,7 @@ L'operazione effettuata dal trasmettitore è detta \textbf{pre-codifica spaziale
 \[
     \mathbf{x}[m] = c_m \mathbf{b} 
 \]
-Dove $x_i[m]$ è il simbolo trasmesso dalla $i$-esima antenna del trasmettitore.
+Dove l'elemento $i$-esimo del vettore $\mathbf{x}[m]$ è il simbolo trasmesso dalla $i$-esima antenna del trasmettitore.
 L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
 
 Il rapporto segnale/rumore (SNR) è massimizzato scegliendo $\mathbf{b} = \frac{1}{\| \mathbf{h} \|} \mathbf{h}^*$.
@@ -907,7 +907,7 @@ I valori di $m$ ed $R$ che si possono utilizzare appartengono ad un insieme fini
 
 Come si evince dalla tabella, in pratica c'è un mapping diretto tra SNR misurato (channel quality indicator, CQI) e lo specifico ordine di modulazione e coding rate di una trasmissione.
 La qualità del canale in termini di SNR può essere espressa tramite \textbf{radio beared index} ($\in [1, 15]$).
-Utilizzando la modulazione OFDM l'idea sarebbe adattare $m$ ed $R$ per ogni canale, distribuendo la potenza nel modo più efficace possibile per massimizzare il rate di trasmissione. Questo problema è inidcato con il termine di \textbf{water-filling}, la potenza a disposizione è invece detta \textbf{power budget}. Nella pratica si tratta di un problema di ottimizzazione per il quale sono definiti alcuni vincoli da rispettare:
+Utilizzando la modulazione OFDM l'idea sarebbe adattare $m$ ed $R$ per ogni canale, distribuendo la potenza nel modo più efficace possibile per massimizzare il rate di trasmissione. Questo problema è indicato con il termine di \textbf{water-filling}, la potenza a disposizione è invece detta \textbf{power budget}. Nella pratica si tratta di un problema di ottimizzazione per il quale sono definiti alcuni vincoli da rispettare:
 
 % TODO: p non lo metterei, perché non è chiaro cosa rappresenti
 \[
@@ -937,7 +937,6 @@ ovvero il gradiente:
         \frac{1}{\ln(2)} \frac{1}{\sigma_N^2 + P_N} - \lambda
 \end{bmatrix} = \mathbf{0}
 \]
-
 La soluzione del problema è:
 \[
     \hat{P}_n = \frac{1}{\lambda \ln(2)} - \sigma_n^2, \quad n = 1, \ldots, N
@@ -946,7 +945,6 @@ considerando il vincolo che $P_n \geq 0$ e ponendo $\mu = \frac{1}{\lambda \ln(2
 \[
     \hat{P}_n = \text{max} \{ 0, \mu - \sigma_n^2    \} = (\mu - \sigma_n^2)^+, \quad n = 1, \ldots, N
 \]
-
 Per ottenere dei valori è necessario calcolare $\mu$, scelto in modo da rispettare il vincolo sulla potenza a disposizione.
 \[
     \sum_{n=1}^{N} (\mu - \sigma_n^2)^+ = P_0
