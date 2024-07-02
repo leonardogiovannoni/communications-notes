@@ -955,8 +955,21 @@ Per ottenere dei valori è necessario calcolare $\mu$, scelto in modo da rispett
         f: \mathbb{R}^n \rightarrow \mathbb{R}
     \end{cases}
 \]
-La risoluzione dell'equazione garantisce il valore $\mu$ tale per cui i vincoli sono rispettati, è quindi necessario trovare lo zero di una funzione in $\mu$, ad esempio con il metodo di bisezione, che può essere applicato dato che la funzione risulta continua e monotona su
-Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superficie irregolare, fino ad un livello pari a $\mu$.
+La risoluzione dell'equazione garantisce il valore di $\mu$ (che chiameremo $\hat{\mu}$) tale per cui i vincoli sono rispettati, ed è quindi necessario trovare lo zero di una funzione in $\mu$, ad esempio con il metodo di bisezione, che può essere applicato dato che la funzione risulta continua e monotona (debolmente crescente) in $\mu$ su $\mathbb{R}$, in quanto somma di funzioni debolmente crescenti.
+Il termine water-filling deriva dal fatto che osservando il grafico della distribuzione della potenza, si ha l'impressione che la potenza si distribuisca come l'acqua all'interno di un contenitore con superficie irregolare, fino ad un livello pari a $\hat{\mu}$.
 La distribuzione è ottima e rappresenta la miglior situazione per sfruttare la diversità in frequenza del canale.
 In sostanza la distribuzione favorisce i canali con miglior qualità, scartando completamente quelli la cui capacità è troppo bassa, quindi la maggior parte della potenza verrà allocata alle frequenze con le migliori condizioni di canale e più alto SNR.
 
+\noindent
+\begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{imgs/ofdm_channel_to_waterfill.png}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{imgs/waterfilling.png}
+\end{minipage}
+
+Nel grafico a sinistra è rappresentato il risultato di una simulazione dove si può vedere la differenza di guadagno tra le varie frequenze dello spettro.
+Nella figura a destra, in maniera inversamente proporzionale alla qualità del canale, viene rappresentato in blu la potenza del rumore ($\sigma_n^2$) e in rosso la potenza allocata alle varie frequenze ($P_n = (\hat{\mu} - \sigma_n^2)^+$).
+Per qualsiasi chunk index, ad esclusione di quelli con SNR molto basso, si nota quindi che la somma tra la potenza allocata e la potenza del rumore è costante ed uguale a $\hat{\mu}$, 
