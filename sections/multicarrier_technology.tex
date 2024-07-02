@@ -326,7 +326,7 @@ Ogni matrice circolante può essere diagonalizzata, e in particolare può essere
     \begin{cases*}
         \mathbf{F}: \mathbf{F}_{n, m} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi nm}{N}} \quad \text{fourier trasform matrix normalizzata} \\
         \mathbf{H}: \mathbf{H}_{n, m} = \begin{cases*}
-                                                        \sum_{\ell=0}^{L-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} & \text{se } $n = m$ \\
+                                                        \sum_{\ell=0}^{N-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} & \text{se } $n = m$ \\
                                                         0 & \text{se } $n \neq m$
                                                     \end{cases*}
     \end{cases*}
@@ -406,7 +406,7 @@ La banda occupata è data dalla somma delle bande occupate dalle varie subcarrie
 \[
     s[k] = \frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} S_n e^{\frac{j2\pi nk}{N}}, \quad k = 0, \ldots, N-1
 \]
-Dove $s[k]$ è il segnale trasmesso nel dominio del tempo. Si può notare che in ogni istante ci sono informazioni di ogni simbolo del blocco, questo deriva dal fatto che vi è stata l'operazione di DFT inversa. OFDM trasmette i simboli in parallelo sulle varie subcarrier. 
+Dove $s[k]$ è il segnale trasmesso nel dominio del tempo. Si può notare che in ogni istante ci sono informazioni di ogni simbolo del blocco, questo deriva dal fatto che vi è stata l'operazione di DFT inversa. OFDM trasmette i simboli in parallelo sulle varie subcarrier, in particolare vengono trasmessi $N$ simboli ogni $N \cdot T$ secondi, questo permette di eliminare l'ISI dovuta al canale frequency selective. 
 
 \[
     S_n e^{\frac{j2\pi nk}{N}} = S_n e^{\frac{j2\pi BTnk}{N}} = \underbrace{S_n e^{j2\pi n\Delta f k T_s}}_{\text{Frequency tone con frequenza $\Delta f$}} = \underbrace{S_n e^{j 2 \pi n \Delta f t}}_{\text{segnale analogico campionato}} \bigg|_{t=kT}
@@ -430,6 +430,17 @@ Un simbolo OFMD corrisponde alla sovrapposizione di $N$ segnali nell'intervallo 
     \includegraphics[width=0.5\textwidth]{imgs/ofdm_sinc.png}
 \end{center}
 
+Nella figura si può vedere come quando andiamo a trasmettere $s[k] = \sum_{n=0}^{N-1} S_n e^{\frac{j2\pi n k}{N}}$ si vada a trasmettere la combinazione delle seguenti sinusoidi, come rappresentate singolarmente in figura:
+\[
+    \begin{array}{ll}
+        n = 0 \Rightarrow \frac{1}{\sqrt{N}} S_0 e^{j2\pi} \\
+        n = 1 \Rightarrow \frac{1}{\sqrt{N}} S_1 e^{j2\pi \frac{k}{N}} \\
+        \vdots \\
+        n = N-1 \Rightarrow \frac{1}{\sqrt{N}} S_{N-1} e^{j2\pi \frac{N-1}{N} k}
+    \end{array}
+\]
+
+
 
 Quindi si ottiene che la banda occupata da OFDM è la somma di N funzioni sinc, ciascuna centrata in una subcarrier differente. In teoria ciò implica che l'occupazione di banda risulti essere infinita, tuttavia la sinc tende a 0 molto velocemente, quindi il contributo può considerarsi limitato ad una certa banda. Inoltre ciò che si può notare è che le varie sinc non interferiscono tra loro nelle subcarrier, infatti in corrispondenza di tali valori solo una sinc risulterà non essere nulla. Per contenere la banda le subcarrier agli estremi non sono utilizzate, in modo che al di fuori della banda a disposizione non vi sia un contributo energetico significativo.
 \[
@@ -439,7 +450,7 @@ Tale relazione vale solo se si impongono virtual carriers per minimizzare il fen
 La banda risulta particolarmente ristretta in quanto non ci sono fattori a moltiplicare $\frac{1}{T_s}$, come avviene utilizzando un RRC. Tuttavia parte della banda risulta non sfruttata in quanto è necessario trasmettere sia il prefisso, sia non utilizzare alcune subcarrier agli estremi, dette \textbf{virtual subcarrier}.
 
 
-Per quanto riguarda il symbol time, in OFDM si ha la relazione:
+Per quanto riguarda il symbol time, in OFDM si ha la relazione con il symbol time:
 \[
     T_{OFDM} = T_s(N+N_{CP}), \quad N_{CP} > L
 \]  
@@ -577,7 +588,6 @@ Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}_{m,m}$, il can
 \[
     \mathbf{H}_{n, n}= \alpha(n) e^{j\phi(n)}
 \]
-
 Se il canale fosse stimato alla perfezione si otterrebbe:
 \[
     \mathbf{X}_{n} = \frac{\mathbf{R}_{n}}{\mathbf{H}_{n, n}} = \mathbf{S}_{n} + \frac{\mathbf{N}_{n} e^{-j\phi(n)}}{\alpha(n)}
