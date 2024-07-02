@@ -584,7 +584,7 @@ Data l'unitarietà della matrice $\mathbf{F}$ si ha che le statistiche del rumor
     R_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}R_{n,n}\mathbf{F}^H = \mathbf{F} \sigma^2 \mathbf{I}_N \mathbf{F}^H = \sigma^2 \mathbf{I}_N
 \]
 
-Dove $R_{n,n}$ è l'autocorrelazione. Da ciò si ottiene quindi che $\mathbf{N}_{n} \sim \mathcal{N}(0, \sigma^2)$.
+Dove $R_{n,n}$ è l'autocorrelazione. Da ciò si ottiene quindi che $\mathbf{CN}_{n} \sim \mathcal{N}(0, \sigma^2)$.
 Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}_{m,m}$, il canale è stimato:
 \[
     \mathbf{H}_{n, n}= \alpha(n) e^{j\phi(n)}
@@ -611,10 +611,10 @@ L'espressione della variabile decisionale è confrontabile con quella di un sist
 Questo permette di applicare le solite considerazioni per la probabilità di errore:
 % TODO: probabilmente non % è H_{m, m}
 \[
-    \mathbb{P}(e \mid \mathbf{H}_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma^2}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right) 
+    \mathbb{P}(e \mid \mathbf{H}_{m, m}) = 2 Q\left( \sqrt{\frac{1}{\sigma(m)^2}}  \right) = 2 Q\left( \sqrt{\frac{E_s \alpha^2(m)}{2N_0}}  \right) 
 \]
 \[
-    \mathbb{P}(e) = \sum_{m=0}^{N-1} \mathbb{P}(e \mid \mathbf{H}_{m, m}) \mathbb{P}(\mathbf{H}_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{N_0}}  \right)
+    \mathbb{P}(e) = \sum_{m=0}^{N-1} \mathbb{P}(e \mid \mathbf{H}_{m, m}) \mathbb{P}(\mathbf{H}_{m,m}) = \frac{2}{N} \sum_{m=0}^{N-1} Q\left( \sqrt{\frac{E_s \alpha^2(m)}{2N_0}}  \right)
 \]
 
 % TODO: qualcosa su OFDMA
@@ -664,4 +664,17 @@ La perdita di efficienza (spettrale ed energetica) dovuta all'inserimento del pr
 Vi è inoltre una perdita aggiuntiva di efficienza spettrale dovuta alle sotto-portanti di guardia e di pilotaggio:
 \[
 \eta_{GS} = \frac{16}{64} = 25\%
+\]
+
+Per cui alla fine la banda utilizzabile è 
+\[
+    20 \si{MHz} \times 0.8 \times 0.75 = 12 \si{MHz}
+\]
+Il data rate nel caso di, per esempio, una 16-QAM sarebbe quindi:
+\[
+    R = m \cdot B = 4 \cdot 12 \si{MHz} = 48 \si{Mbps} 
+\]
+Si può raggiungere lo stesso risultato utilizzando $T_{OFDM}$ e $N$:
+\[
+    R = \frac{N - N_v - N_p}{T_{OFDM}} \cdot m = \frac{48}{4 \times 10^{-6}} \cdot 4 = 48 \si{Mbps}
 \]
