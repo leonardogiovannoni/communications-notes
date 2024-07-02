@@ -442,7 +442,8 @@ Nella figura si può vedere come quando andiamo a trasmettere $s[k] = \sum_{n=0}
 
 
 
-Quindi si ottiene che la banda occupata da OFDM è la somma di N funzioni sinc, ciascuna centrata in una subcarrier differente. In teoria ciò implica che l'occupazione di banda risulti essere infinita, tuttavia la sinc tende a 0 molto velocemente, quindi il contributo può considerarsi limitato ad una certa banda. Inoltre ciò che si può notare è che le varie sinc non interferiscono tra loro nelle subcarrier, infatti in corrispondenza di tali valori solo una sinc risulterà non essere nulla. Per contenere la banda le subcarrier agli estremi non sono utilizzate, in modo che al di fuori della banda a disposizione non vi sia un contributo energetico significativo.
+Quindi si ottiene che la banda occupata da OFDM è la somma di N funzioni sinc, ciascuna centrata in una subcarrier differente.
+Inoltre ciò che si può notare è che le varie sinc non interferiscono tra loro nelle subcarrier, infatti in corrispondenza di tali valori solo una sinc risulterà non essere nulla. Per contenere la banda le subcarrier agli estremi non sono utilizzate, in modo che al di fuori della banda a disposizione non vi sia un contributo energetico significativo.
 \[
     B_{OFDM} \approx N \cdot \frac{1}{NT_s} = \frac{1}{T_s}
 \]
@@ -660,7 +661,7 @@ La perdita di efficienza (spettrale ed energetica) dovuta all'inserimento del pr
 \[
 \eta_{CP} = \frac{N_{CP}}{N + N_{CP}} = \frac{16}{80} = 20\%
 \]
-Vi è inoltre una perdita aggiuntiva di efficienza spettrale dovuta alle sotto-portanti di guardia:
+Vi è inoltre una perdita aggiuntiva di efficienza spettrale dovuta alle sotto-portanti di guardia e di pilotaggio:
 \[
 \eta_{GS} = \frac{16}{64} = 25\%
 \]
