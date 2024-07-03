@@ -173,7 +173,7 @@ In banda passante, considerando che il segnale $i$-esimo avrà un coseno a molti
 Come sarà dimostrato più avanti, $R_s \propto B$, dove $B$ è la banda del segnale $s_{PAM}(t)$.
 Per $R_s$ valgono le seguenti equivalenze:
 \[
-    R_s = \frac{1}{T_s} = \frac{1}{mT_s} = \frac{R_b}{m} = \frac{R_b}{\log_2 M}
+    R_s = \frac{1}{T_s} = \frac{1}{mT_b} = \frac{R_b}{m} = \frac{R_b}{\log_2 M}
 \]
 
 Dove $R_b$ è il bit rate.
@@ -212,7 +212,12 @@ mentre il segnale filtrato è:
 \[
     x(t) = r(t) \ast g_R(t) = \sum_{k=-\infty}^{+\infty} a_k g(t - kT_s) + n(t)
 \]
-dove $g(t) = g_T(t) \ast h(t) \ast g_R(t)$ e $n(t) = w(t) \ast g_R(t)$. La densità spettrale di energia del rumore diventa:
+dove $g(t) = g_T(t) \ast h(t) \ast g_R(t)$ e $n(t) = w(t) \ast g_R(t)$. 
+Si può dimostrare che l'autocorrelazione per un sistema come questo è:
+\[
+    R_n(\tau) = R_w(\tau) \ast g_R(\tau) \ast g_R(-\tau) 
+\]
+Per cui la densità spettrale di potenza del rumore diventa:
 \[
     S_n(f) = S_w(f) |G_R(f)|^2
 \]
@@ -284,9 +289,7 @@ Un canale con banda \( B_c \) in generale introduce ISI. Ci sono due aspetti di 
 \end{enumerate}
 
 Nel risolvere i due problemi riterremo \( h(t) \) fissata, e \( g_T(t) \) e \( g_R(t) \) variabili, in quanto determinabili dal progettista.
-Un approccio non perseguibile consiste nel trasmettere impulsi di durata finita e quindi con banda illimitata. Questo è in contrasto con la limitatezza messa a disposizione dal canale di trasmissione \( (B_c < \infty) \).
-
-\(\Rightarrow\) Gli impulsi \( g_T(t) \) devono avere durata infinita.
+Un approccio non perseguibile consiste nel trasmettere impulsi di durata finita e quindi con banda illimitata. Questo è in contrasto con la limitatezza messa a disposizione dal canale di trasmissione \( (B_c < \infty) \), questo implica che gli impulsi \( g_T(t) \) devono avere durata infinita.
 
 \paragraph*{Criterio di Nyquist}{Il criterio di Nyquist per la trasmissione priva di ISI è il seguente:}
 
@@ -667,7 +670,7 @@ Per quanto riguarda la banda invece:
 \]
 
 \[
-    E_s = P_s T_s = \frac{A}{2} = \frac{M^2 - 1}{6} \quad \text{energia media per simbolo}
+    E_s = P_s T_s = \frac{A}{2} = \frac{M^2 - 1}{6} \quad \text{energia media per simbolo in banda passante}
 \]
 
 
@@ -808,7 +811,7 @@ Esprimendo i risultati in funzione della SNR ($\frac{E_s}{N_0}$), si ottiene:
 
 \section*{Gray mapping}
 La codifica di Gray consiste nel definire la costellazione dei simboli in modo tale che simboli adiacenti differiscano di un solo bit.
-Può essere trovata ricorsivamente col seguente codice:
+Può essere trovata ricorsivamente, per un certo numero di bit \texttt{m}, col seguente codice:
 
 
 \begin{minted}{python3}
@@ -821,7 +824,7 @@ def gray_code(m):
         return lower + [(msb | x) for x in reversed(lower)]
 \end{minted}
 Dove a partire dal caso precedente, si specchia la lista e si somma alla seconda metà il bit più significativo settato a 1.
-per $m=3$ si ottiene:
+Per $m=3$ si ottiene:
 \begin{align*}
     a^{(0)} & = -7 \rightarrow 000 \\
     a^{(1)} & = -5 \rightarrow 001 \\
@@ -1025,27 +1028,20 @@ ovvero:
     P_e^{(M, QAM)} \leq 2 \ P_e^{(\sqrt{M}, PAM)}
 \]
 Facciamo quindi un'approssimazione che si chiama \textit{union bound}.
-
-
-
-
 \[
     \begin{array}{ccccc}
         \text{4-QAM}  & E_s = 1 = \frac{1}{\sigma} = \sqrt{\frac{E_s}{N_0}}  & \Rightarrow & P_e^{\text{4-QAM}} < 2 \ Q\left(\sqrt{\frac{E_s}{N_0}}\right)   \\
         \text{16-QAM} & E_s = 5 = \frac{1}{\sigma} = \sqrt{\frac{E_s}{5N_0}} & \Rightarrow & P_e^{\text{16-QAM}} < 3 \ Q\left(\sqrt{\frac{E_s}{5N_0}}\right) \\
     \end{array}
 \]
-
 Adesso le regioni associate a un simbolo sono porzioni del piano complesso, lungo 2 direzioni,
 Per quanto riguarda l'errore sul bit, adottando la codifica di Gray, che vale quando abbiamo un SNR alto, si ottiene:
 \[
     P_e^{(M-QAM, b)} = \lim_{N^{(b)} \to +\infty} \frac{N_e^{(b)}}{N^{(b)}} \approx \lim_{N^{(s)} \to +\infty} \frac{N_e^{(s)}}{\log_2(M) N^{(s)}} = \frac{1}{\log_2(M)} P_e^{(M-QAM)}
 \]
-
 Sapendo che $P_e^{(M-QAM)} \leq 2 \ P_e^{(\sqrt{M}, PAM)}$ e che per la codifica di Gray $P_e^{(M-PAM, b)} \approx \frac{1}{\log_2{M}} P_e^{(M-PAM)}$ si ottiene:
 \[
     P_e^{(M-QAM, b)} = \frac{1}{\log_2(M)} P_e^{(M-QAM)} \leq \frac{2}{\log_2(M)} P_e^{(\sqrt{M}, PAM)} = \frac{1}{\log_2(\sqrt{M})} P_e^{(\sqrt{M}, PAM)} \approx P_e^{(\sqrt{M}, PAM, b)}
 \]
-
 Da ciò si evince che la probabilità di errore sul bit per una QAM a $M$ simboli è approssimabile a quella di una modulazione PAM a $\sqrt{M}$ simboli.
 

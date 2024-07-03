@@ -14,8 +14,8 @@ Inoltre presenta dei benefici anche nell'occupazione spettrale e nella flessibil
     \item Allocazione flessibile di risorse
 \end{itemize}
 
-L'idea base consiste nel suddividere il segnale originale da trasmettere, caratterizzato da una banda ben superiore rispetto alla coherence bandwidth del canale in tanti segnali,
-ciascuno avente una banda tale da evitare i problemi del canale frequency selective, ovvero inferiori alla coherence bandwidth.
+L'idea base consiste nel suddividere il segnale originale da trasmettere, caratterizzato da una banda ben superiore rispetto alla banda di coerenza del canale in tanti segnali,
+ciascuno avente una banda tale da evitare i problemi del canale frequency selective, ovvero inferiori alla banda di coerenza.
 
 
 \begin{center}
@@ -27,7 +27,7 @@ ciascuno avente una banda tale da evitare i problemi del canale frequency select
 \]
 
 \[
-    \Delta B = \frac{B_s}{N} < B_c \Rightarrow \text{flat fading channel}
+    \Delta f = \frac{B_s}{N} < B_c \Rightarrow \text{flat fading channel}
 \]
 I segnali in cui è stato suddiviso l'originale non saranno affetti da ISI.
 Per effettuare una trasmissione parallela dei vari segnali si potrebbe utilizzare filtri passa banda in parallelo, tuttavia nella pratica cioè non è possibile a causa della mancanza di un filtro ideale, la cui rappresentazione in frequenza sarebbe una perfetta rect. Inoltre l'utilizzo di molti filtri sarebbe molto costoso.
@@ -287,7 +287,7 @@ Ovvero:
 \[
     y[k] = \sum_{\ell=0}^{L-1} h[\ell] \ \overline{s}[k-\ell]
 \]
-Che può anche essere espressa, per risaltare la componente aggiuntiva rispetto all'idea iniziale, come:
+Che può anche essere espressa, per mettere in risalto la componente aggiuntiva rispetto all'idea iniziale, come:
 \[
 y[k] = \sum_{\ell=0}^{\min(L-1, k)} h[\ell] s[k-\ell] + \sum_{\ell=\min(L-1, k)+1}^{L-1} h[\ell] s[k-\ell + N]
 \]
@@ -326,7 +326,7 @@ Ogni matrice circolante può essere diagonalizzata, e in particolare può essere
     \begin{cases*}
         \mathbf{F}: \mathbf{F}_{n, m} = \frac{1}{\sqrt{N}} e^{\frac{-j2\pi nm}{N}} \quad \text{fourier trasform matrix normalizzata} \\
         \mathbf{H}: \mathbf{H}_{n, m} = \begin{cases*}
-                                                        \sum_{\ell=0}^{N-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} & \text{se } $n = m$ \\
+                                                        \sum_{\ell=0}^{L-1} h(\ell) e^{\frac{-j2\pi \ell n}{N}} & \text{se } $n = m$ \\
                                                         0 & \text{se } $n \neq m$
                                                     \end{cases*}
     \end{cases*}
@@ -340,7 +340,7 @@ La matrice $\mathbf{F}$ è unitaria, ovvero gode delle proprietà:
     \item $\| \mathbf{F} \| = 1$ 
 \end{itemize}
 
-Considerando $\mathcal{F}\{\mathbf{y}\} = \mathbf{F} \mathbf{y}$ e $\mathbf{S} = \mathbf{F} \mathbf{s}$, ovvero le DFT dei due vettori si ottiene la seguente espresione:
+Considerando $\mathcal{F}\{\mathbf{y}\} = \mathbf{F} \mathbf{y}$ e $\mathcal{F}\{\mathbf{s}\} = \mathbf{F} \mathbf{s}$, ovvero le DFT dei due vettori si ottiene la seguente espresione:
 \[
     \mathcal{F}\{\mathbf{y}\} = \mathbf{F} \mathbf{y} = \mathbf{F} \mathbf{\overline{H}} \mathbf{s} = \mathbf{F} \left(\mathbf{F}^H \mathbf{H} \mathbf{F}\right)\mathbf{s} =  \mathbf{H} \mathbf{F} \mathbf{s} = \mathbf{H} \mathcal{F}\{\mathbf{s}\}
 \]
@@ -584,7 +584,7 @@ Data l'unitarietà della matrice $\mathbf{F}$ si ha che le statistiche del rumor
     R_{N,N} = \mathbb{E}[\mathbf{N}\mathbf{N}^H] = \mathbb{E}[\mathbf{F}\mathbf{n}\mathbf{n}^H\mathbf{F}^H] = \mathbf{F}\mathbb{E}[\mathbf{n}\mathbf{n}^H]\mathbf{F}^H = \mathbf{F}R_{n,n}\mathbf{F}^H = \mathbf{F} \sigma^2 \mathbf{I}_N \mathbf{F}^H = \sigma^2 \mathbf{I}_N
 \]
 
-Dove $R_{n,n}$ è l'autocorrelazione. Da ciò si ottiene quindi che $\mathbf{CN}_{n} \sim \mathcal{N}(0, \sigma^2)$.
+Dove $R_{n,n}$ è l'autocorrelazione. Da ciò si ottiene quindi che $\mathbf{N}_{n} \sim \mathcal{CN}(0, \sigma^2)$.
 Per rimuovere l'effetto introdotto dal canale, ovvero $\mathbf{H}_{m,m}$, il canale è stimato:
 \[
     \mathbf{H}_{n, n}= \alpha(n) e^{j\phi(n)}
@@ -595,7 +595,7 @@ Se il canale fosse stimato alla perfezione si otterrebbe:
 \]
 
 
-Se il canale è molto attenuato, ovvero $\alpha(n) \approx 0$, il rumore viene amplificato a seguito della divisione, richiedere un SNR superiore.
+Se il canale è molto attenuato, ovvero $\alpha(n) \approx 0$, il rumore viene amplificato a seguito della divisione, richiedendo un SNR superiore.
 La fase non ha alcuna implicazione sul rumore, durante i calcoli di $\sigma ^2=2N_0$ infatti sparisce per via del complesso coniugato.
 L'espressione della variabile decisionale è confrontabile con quella di un sistema tradizionale
 \[
@@ -622,28 +622,28 @@ Questo permette di applicare le solite considerazioni per la probabilità di err
 
 \subsection*{WiFi – IEEE 802.11a/g/n/ac}
 
-Una trasmissione WiFi occupa una larghezza di banda \( B = 20 \text{ MHz} \), che è divisa in \( N = 64 \) sotto-portanti spaziate di \( \Delta f = 312.5 \text{ kHz} \). 
+Una trasmissione WiFi occupa una larghezza di banda \( B = 20 \si{MHz} \), che è divisa in \( N = 64 \) sotto-portanti spaziate di \( \Delta f = 312.5 \si{kHz} \). 
 La specifica 802.11a/g utilizza 48 sotto-portanti per i dati, 4 per i pilot e 12 come sotto-portanti nulle, mentre la specifica 802.11n/ac utilizza 52 sotto-portanti per i dati, 4 per i pilot e 8 come sotto-portanti nulle.
 
-Il blocco OFDM è composto da \( N = 64 \) campioni e \( N_{CP} = 16 \) campioni di prefisso ciclico (CP). La durata di ogni campione è:
+Il blocco OFDM è composto da \( N = 64 \) campioni e \( N_{CP} = 16 \) campioni di prefisso ciclico (CP). Il periodo di campionamento è:
 \[
-T = \frac{1}{B} = \frac{1}{20 \times 10^6} = 50 \text{ ns}
+T = \frac{1}{B} = \frac{1}{20 \times 10^6} = 50 \si{ns}
 \]
-Pertanto, la durata di un blocco OFDM è:
+Pertanto, il symbol time è:
 \[
-    T_{OFDM} = (64 + 16) \times 50 \text{ ns} = 4 \si{\mu s}
+    T_{OFDM} = (64 + 16) \times 50 \si{ns} = 4 \si{\mu s}
 \]
-In generale, il delay spread di un canale interno è \( \sigma_\tau < 500 \text{ ns} \), il che significa che il canale può essere considerato flat fading, cioè:
+In generale, il delay spread di un canale interno è \( \sigma_\tau < 500 \si{ns} \), il che significa che il canale può essere considerato flat fading, cioè:
 \[
     \sigma_\tau \ll T_{OFDM}
 \]
-Assumendo che la mobilità massima interna sia \( v = 3 \text{ m/s} \), per una WiFi a 5 GHz, la massima deviazione Doppler è:
+Assumendo che la mobilità massima interna sia \( v = 3 \si{m/s} \), per una WiFi a 5 GHz, la massima deviazione Doppler è:
 \[
-f_d = \frac{5 \times 10^9 \times 3}{3 \times 10^8} = 50 \text{ Hz}
+f_d = \frac{5 \times 10^9 \times 3}{3 \times 10^8} = 50 \si{Hz}
 \]
 da cui segue che:
 \[
-T_c = \frac{1}{2f_d} = \frac{1}{2\cdot 50\si{Hz}} = 0.01 \text{ s}
+T_c = \frac{1}{2f_d} = \frac{1}{2\cdot 50\si{Hz}} = 0.01 \si{s}
 \]
 Il canale è quindi considerato slow fading:
 \[
@@ -665,7 +665,6 @@ Vi è inoltre una perdita aggiuntiva di efficienza spettrale dovuta alle sotto-p
 \[
 \eta_{GS} = \frac{16}{64} = 25\%
 \]
-
 Per cui alla fine la banda utilizzabile è 
 \[
     20 \si{MHz} \times 0.8 \times 0.75 = 12 \si{MHz}

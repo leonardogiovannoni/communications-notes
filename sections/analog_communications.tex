@@ -273,7 +273,7 @@ Sia \( m(t) \) una sinusoide data da \( m(t) = V_m \cos(2\pi f_m t) \). Il segna
     s_{FM}(t) = A_c \cos \left( 2\pi f_c t + 2\pi k_f \int_{-\infty}^{t} V_m \cos(2\pi f_m \tau) d\tau \right)
 \]
 che si semplifica\footnote{
-    La soluzione di questo integrale non esiste, tuttavia possiamo provare ad assegnargli un valore sfruttando la teoria delle distribuzioni (funzioni generalizzate). Possiamo notare che:
+    La soluzione di questo integrale non esiste secondo la definizione classica di integrale, tuttavia possiamo provare ad assegnargli un valore sfruttando la teoria delle distribuzioni (funzioni generalizzate). Possiamo notare che:
     \[
         x(t) = \int_{-\infty}^{t} \cos(2\pi f_m \tau) d\tau = \cos(2\pi f_m t) \ast u(t)
     \]
@@ -305,7 +305,7 @@ L'inviluppo complesso sarà:
     \hat{s}_{FM}(t) = A_c e^{j m_f \sin(2\pi f_m t)}
 \]
 
-Proviamo a trovare i coefficienti di Fourier \( c_n \) \footnote{
+Proviamo a trovare i coefficienti di Fourier \( c_n \)\footnote{
     \[ c_n = \frac{1}{T_0} \int_{-\frac{T_0}{2}}^{\frac{T_0}{2}} x(t) e^{-j 2\pi f_0 n t} dt \]
 } del segnale \( \hat{s}_{FM}(t) \) su un periodo \( T_0 = \frac{1}{f_m} \) \footnote{Per la modulazione FM, dove \( f_0 = f_m \) (la frequenza di modulazione) e quindi \( T_0 = \frac{1}{f_m} \), i coefficienti per l'inviluppo complesso \( \hat{s}_{FM}(t) \) diventano:
 \[ c_n = \frac{1}{T_m} \int_{-\frac{T_m}{2}}^{\frac{T_m}{2}} A_c e^{j m_f \sin(2\pi f_m t)} e^{-j 2\pi f_m n t} dt \]
@@ -313,8 +313,8 @@ Proviamo a trovare i coefficienti di Fourier \( c_n \) \footnote{
 Dall'espansione di Jacobi-Anger, sappiamo che:
 \[ e^{j z \sin \theta} = \sum_{k=-\infty}^\infty J_k(z) e^{j k \theta} \]
 Quindi moltiplicando per $A_c$, con \( z = m_f \) e \( \theta = 2\pi f_m t \), otteniamo:
-\[ A_c e^{j m_f \sin(2\pi f_m t)} = \sum_{k=-\infty}^\infty A_c J_k(m_f) e^{j k 2\pi f_m t} \]
-Che per definizione è la serie di Fourier del segnale \( A_c e^{j m_f \sin(2\pi f_m t)} \), quindi:
+\[ A_c e^{j m_f \sin(2\pi f_m t)} = \sum_{k=-\infty}^\infty A_c J_k(m_f) e^{j 2\pi k f_m t} \]
+che per definizione è la serie di Fourier del segnale \( A_c e^{j m_f \sin(2\pi f_m t)} \), quindi:
 \[ c_n = A_c J_n(m_f) \]
 Il segnale FM può essere rappresentato come:
 \[

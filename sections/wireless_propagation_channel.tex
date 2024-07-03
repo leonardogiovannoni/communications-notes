@@ -24,12 +24,12 @@ Dalla frequenza delle onde, da cui dipende la modalità di propagazione attraver
 \begin{itemize}
     \item \textbf{Ground wave} (fino a 2 MHz): le onde si propagano seguendo la curvatura terrestre riuscendo a raggiungere un ricevitore oltre l'orizzonte, in certi casi anche a centinaia di chilometri di distanza, ma i problemi che si pongono sono legati all'utilizzo di una frequenza inferiore a 2 MHz e alla necessità di utilizzare antenne di dimensioni molto grandi. Per esempio sono utilizzate nella sincronizzazione di orologi atomici. Possono essere sfruttate per scopi militari.
     \item \textbf{Sky wave} (3-30 MHz): le onde sono riflesse dalla ionosfera e si propagano rimbalzando tra di essa e la superficie terrestre, riuscendo a coprire distanze nell'ordine dei migliaia di chilometri. Non sono un meccanismo affidabile per la trasmissione dei dati, perché questa caratteristica di riflessione della ionosfera dipende dallo strato di ionizzazione presente, che è tempo variante, quindi lo potremmo avere principalmente la notte rispetto al giorno, e potremmo avere certe frequenze che non rimbalzano affatto.
-    \item \textbf{Space wave} (da 30 MHz): le onde richiedono una linea di vista per poter essere ricevute correttamente, e in questo caso si parla di pochi chilometri, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso, che per esempio non sono presenti nelle sky wave, come edifici, alberi, ecc.
+    \item \textbf{Space wave} (da 30 MHz): le onde richiedono una linea di vista tra trasmettitore e ricevitore per poter essere ricevute correttamente, e in questo caso si parla di pochi chilometri, inoltre bisogna tenere in considerazione che maggiore è la frequenza maggiore sarà l'attenuazione. Il ricevitore oltre alla componente diretta riceve anche componenti aggiuntive, date dalla riflessione delle onde su ostacoli lungo il percorso, che per esempio non sono presenti nelle sky wave, come edifici, alberi, ecc.
 \end{itemize}
 
 
 
-Le space wave rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione vi fa affidamento. 
+Le onde spaziali rappresentano il meccanismo più importante dato che la maggior parte dei sistemi di comunicazione vi fa affidamento. 
 Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il segnale può comunque essere ricevuto a causa di una serie di fenomeni di propagazione:
 \begin{itemize}
     \item \textbf{Riflessione}: quando il segnale impatta con un oggetto liscio molto grande rispetto alla lunghezza d'onda può essere riflesso, ovvero rimbalza e prosegue con angolo differente, oppure passa attraverso.
@@ -90,7 +90,8 @@ Anche se non c'è una linea di vista diretta tra trasmettitore e ricevitore, il 
 Gli effetti generati da questi fenomeni possono essere riassunti in due diversi tipi di attenuazione del segnale:
 \begin{itemize}
     \item \textbf{Small-scale fading}: modella fluttuazioni rapide della potenza del segnale su lunghezze paragonabili a quella dell'onda.
-    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze. Contribuisce al valore medio della potenza del segnale per una distanza di circa 1 m, e quindi verrà considerata come costante per distanze di circa 1 m.
+    \item \textbf{Large-scale fading}: modella la variazione della potenza del segnale su lunghe distanze.
+    Contribuisce al valore medio della potenza del segnale per una distanza di circa $1\si{m}$, e quindi verrà considerata come costante per distanze di circa $1\si{m}$.
 \end{itemize}
 
 
@@ -126,7 +127,7 @@ Gli effetti generati da questi fenomeni possono essere riassunti in due diversi 
 \end{center}
 
 \subsection*{Large-scale fading}
-Il LSF modella la variazione della potenza del segnale in base alla distanza fra trasmettitore e ricevitore, tipicamente variando per distanze nell'ordine del metro. Gli effetti sono modellati attraverso la combinazione di \textbf{path loss} e \textbf{shadowing}:
+Gli effetti del LSF sono modellati attraverso la combinazione di \textbf{path loss} e \textbf{shadowing}:
 
 \paragraph*{Path Loss}
 Il path loss è un valore deterministico che modella la media dell'attenuazione della potenza ricevuta, rappresenta un'approssimazione delle equazioni di Maxwell.
@@ -157,9 +158,10 @@ dove \( \Gamma(f_0, d_0) \approx \left( \frac{\lambda_0}{4 \pi d_0} \right)^2 \)
     \caption{Esponenti del path loss per vari ambienti}
 \end{table}
 
-Se abbiamo un'antenna, possiamo assumere che esista un'area di raggio $d_0$ centrata nell'antenna, che non è ostruita, mentre $d$ rappresenta la distanza tra l'area di raggio $d_0$ e il ricevitore, lungo cui ci invece sono ostacoli. In questa area si calcola l'attenuazione utilizzando la regola come se si fosse nello spazio vuoto.
+Se abbiamo un'antenna, possiamo assumere che esista un'area di raggio $d_0$ centrata nell'antenna, che non è ostruita, mentre $d$ rappresenta la distanza tra l'area di raggio $d_0$ e il ricevitore, lungo cui invece ci sono ostacoli. 
+In questa area si calcola l'attenuazione utilizzando la regola come se si fosse nello spazio vuoto.
 Il valore di \( d_0 \) è scelto in modo da poter misurare o stimare con precisione il path loss in condizioni controllate, in modo da poter avere un punto di riferimento da cui calcolare le perdite aggiuntive a distanze maggiori.
-In reti cellulari che coprono aree estese si utilizza una distanza di riferimento di 1 km, mentre in reti progettate per aree più piccole e densamente popolate si utilizzano distanze di riferimento di 100 metri o anche 1 metro.
+In reti cellulari che coprono aree estese si utilizza una distanza di riferimento di $1\si{km}$, mentre in reti progettate per aree più piccole e densamente popolate si utilizzano distanze di riferimento di 100 metri o anche 1 metro.
 
 \begin{center}
     \resizebox{0.5\textwidth}{!}{
@@ -198,7 +200,6 @@ In reti cellulari che coprono aree estese si utilizza una distanza di riferiment
         \end{tikzpicture}
     }
 \end{center}
-
 La formula, deterministica, che fornisce il valore di attenuazione data dal path loss è:
 \[
     A_{PL} = \frac{P_{RX}}{P_{TX}} = \Gamma(f_0, d_0) \cdot \left( \frac{d_0}{d} \right)^n
@@ -209,8 +210,6 @@ La formula, deterministica, che fornisce il valore di attenuazione data dal path
 \[
     A_{PL}^{dB} = 10 \cdot \log_{10}(A_{PL}) = \Gamma(f_0, d_0)_{dB} + n \cdot 10 \cdot \log_{10}(d_0) - n \cdot 10 \cdot \log_{10}(d)
 \]
-
-
 Nel vuoto l'attenuazione del segnale in base alla distanza è data dalla relazione
 \[
     P_{RX} = P_{TX} \cdot \frac{A}{4\pi d^2}
@@ -276,7 +275,7 @@ Per quanto riguarda i parametri delle varie repliche:
 
           \begin{itemize}
               \item La distribuzione per l'ampiezza del canale \(\alpha\) è \textit{Rayleigh}\footnote{
-                        Siano \(X\) e \(Y\) variabili casuali normali indipendenti con media 0 e varianza \(\sigma^2\). La pdf congiunta di \(X\) e \(Y\) è data da:
+                        Siano \(X\) e \(Y\) variabili casuali normali indipendenti con media 0 e varianza \(\sigma^2\). La PDF congiunta di \(X\) e \(Y\) è data da:
                         \[
                             f_{X,Y}(x,y) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right).
                         \]
@@ -340,7 +339,7 @@ Per quanto riguarda i parametri delle varie repliche:
 
 La ricezione di più repliche, soprattutto se notevolmente distanziate tra loro, genera ISI.
 \[
-    x(t) = \sum_{i} c_i g(t - iT) \quad \text{uscita filtro in ricezione (senza rumore)}
+    x(t) = \sum_{k=-\infty}^{+\infty} c_k g(t - kT) \quad \text{uscita filtro in ricezione (senza rumore)}
 \]
 \[
     g(t) = g_T(t) \ast h(t) \ast g_R(t) = g_N(t) \ast h(t) = \sum_{\ell=0}^{N_c-1} \alpha_{\ell} e^{j\phi_{\ell}} g_N(t - \tau_{\ell})
@@ -518,7 +517,7 @@ Tuttavia nella maggior parte dei casi pratici l'assunzione LTI risulta valida.
     h(t) = A_{LS} \sum_{\ell=0}^{N_c-1} \alpha_{\ell}(t) e^{j\phi_{\ell}(t)} \delta(t - \tau_{\ell})
 \]
 % TODO: mediato?
-Dove abbiamo aggiunto la dipendenza dal tempo alle ampiezze e alle fasi delle repliche. Dato che il large scale fading è mediato su una distanza nell'ordine del metro, lo possiamo considerare costante (avendo un rate con cui varia molto più lento).
+Dato che il large scale fading è mediato su una distanza nell'ordine del metro, lo possiamo considerare costante (avendo un rate con cui varia molto più lento).
 Anche per il ritardo non si aggiunge dipendenza dal tempo in quanto varia anch'esso molto più lentamente rispetto a guadagni e fasi, dato che le repliche viaggiano alla velocità della luce e quindi muoversi di pochi metri non ha un impatto significativo.
 
 
@@ -585,9 +584,8 @@ L'assunzione non è del tutto realistica, ma più che la forma dello spread è i
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.875\textwidth]{imgs/jakes.jpg}
-    \captionsetup{width=.5\textwidth}
-    \caption*{Spettro Doppler di Jakes}
-      
+    %\captionsetup{width=.5\textwidth}
+    %\caption*{Spettro Doppler di Jakes}
 \end{figure}
 
 
@@ -616,7 +614,7 @@ Lo studio della funzione di autocorrelazione del canale wireless nel caso del mo
 \]
 
 dove $J_0$ è la funzione di Bessel di prima specie di ordine 0.  Se la funzione si annulla il canale può essere considerato non correlato, ovvero il canale nei due istanti assume valori indipendenti e dunque varia.
-Per $x=\frac{1}{2}$ si ha che $J_0(2\pi x) = 0$, quindi il canale può considerarsi incorrelato per $\tau = T_c = \frac{1}{2f_d}$.
+È noto che $J_0(\pi)$, quindi il canale può considerarsi incorrelato per $\tau = T_c = \frac{1}{2f_d}$.
 
 \[
     f_d T_c = \frac{1}{2} \quad \Rightarrow \quad  T_c = \frac{1}{2 f_d} = \frac{1}{2} \frac{c}{f_c v} \quad \text{coherence time}
