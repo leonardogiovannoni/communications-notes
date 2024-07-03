@@ -458,7 +458,7 @@ Per portare il segnale in banda base, nel ricevitore supereterodina si utilizza 
 Prima di portare il segnale alla banda base, è necessario amplificarlo. Tuttavia, amplificare direttamente alla frequenza della portante richiederebbe un amplificatore con una banda molto ampia, il che è costoso. Per questo motivo, si preferisce prima convertire il segnale alla frequenza intermedia \(f_{IF}\), dove un amplificatore può essere progettato specificamente per quella frequenza.
 
 Il processo di eterodinazione è cruciale per convertire le frequenze radio più alte in frequenze più basse, che sono più facili da amplificare e processare.
-La conversione analogico-digitale avviene con un campionamento a 28.8 MS/s, rispettando il teorema di Nyquist (\(f_s > 2 (f + B)\)) per una banda di 14.4 MHz, poiché \(28.8 \si{MHz} > 2 \cdot (3.57 \si{MHz} + 2.8 \si{MHz})\).
+La conversione analogico-digitale avviene con un campionamento a 28.8 MS/s, rispettando il teorema di Nyquist (\(f_s > 2 (f_{IF} + B)\)) per una banda di 14.4 MHz, poiché \(28.8 \si{MHz} > 2 \cdot (3.57 \si{MHz} + 2.8 \si{MHz})\).
 
 I parametri del segnale ricevuto sono:
 
