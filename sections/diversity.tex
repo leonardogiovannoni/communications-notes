@@ -1,4 +1,4 @@
-\section*{Diversity Techniques in Wireless Communications}
+\section*{Tecniche di diversità per canali wireless}
 
 
 
@@ -99,7 +99,7 @@ L'operazione è rappresentabile come operazione di moltiplicazione fra un vettor
     \end{cases}
 \]
 
-In generale le prime $k$ colonne della matrice $G$ equiavalgono a $I_k$ (matrice identità $k \times k$) e le restanti $n-k$ colonne sono i bit di ridondanza.
+In generale le prime $k$ colonne della matrice $G$ equivalgono a $I_k$ (matrice identità $k \times k$) e le restanti $n-k$ colonne sono i bit di ridondanza.
 In totale si possono ottenere $2^k$ parole di codice differenti (uscita del codificatore).
 Si parla di \textit{coding sistematico} quando i bit di informazione sono semplicemente copiati.
 
@@ -253,7 +253,7 @@ Trattandosi di sistemi con memoria, il codificatore può essere rappresentato co
 L'output del codificatore dipende dal bit in input e dalla stato corrente.
 L'evoluzione temporale del codificatore può essere catturata dal diagramma a traliccio (\textit{trellis diagram}), in cui si ha l'evoluzione degli stati in funzione del tempo.
 Ogni sequenza, con la corrispondente parola codificata, può essere rappresentata come un cammino nel diagramma a traliccio.
-Una trasmissione di $N$ parole di codice implica la trasmissione di $n \cdot N$ bits, ottenuti dalla codifica di $k \cdot N$ input word.
+Una trasmissione di $N$ parole di codice implica la trasmissione di $n \cdot N$ bit, ottenuti dalla codifica di $k \cdot N$ bit in input.
 Poiché ogni parola  di codice è funzione anche di $L-1$ parole in input precedenti, la sequenza può essere codificata considerandola solo nella sua interezza. 
 Il decodificatore dovrà scegliere la sequenza più "vicina" rispetto a quella ricevuta tra tutte le possibili sequenza, ovvero $2^{k \cdot N}$
 \[
@@ -320,7 +320,7 @@ def next_state(input_bit: bool, state: Tuple[bool, bool]):
     return (input_bit, state[0]), (d[0], d[1])
 \end{minted}
 
-La funzione \texttt{next\_state} prende in input il bit da codificare e lo stato corrente del codificatore, restituendo lo stato successivo, ottenuto con una sorta di shift, e i bit di output.
+La funzione \texttt{next\_state} prende in input il bit da codificare e lo stato corrente del codificatore, restituendo lo stato successivo, ottenuto con una sorta di shift register per quanto riguarda gli elementi di memoria, e i bit di output.
 
 \paragraph*{Algoritmo di Viterbi}
 L'obiettivo è trovare la sequenza con distanza minima rispetto a quella ricevuta:
@@ -366,6 +366,7 @@ def state_machine(state: int, input_bit: bool) -> Tuple[int, int]:
             raise ValueError("Invalid state")
 
 \end{minted}
+Dove vengono ritornati nella tupla rispettivamente l'output e il prossimo stato.
 Per quanto riguarda invece l'algoritmo di Viterbi, esso può essere definito per sommi capi come:
 
 \begin{minted}{python3}
@@ -377,7 +378,9 @@ def viterbi_algorithm(sequence: List[bool]) -> List[bool]:
     return get_decoded_sequence(matrix, final_state)
 \end{minted}
 
-La funzione \texttt{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di output. Con il termine output indicheremo l'output del codificatore che abbiamo ricevuto e quindi che dovremo, sfruttano anche lo stato del sistema, trasformare nel bit di input originario, ovvero l'$i$-esimo bit della sequenza che effettivamente si voleva trasmettere. Il numero di riga corrisponde al possibile stato.
+La funzione \texttt{populate\_matrix} riempie una matrice con celle di Viterbi aggiornando distanze globali e stati successivi per ogni colonna di output. 
+Con il termine output indicheremo l'output del codificatore che abbiamo ricevuto e quindi che dovremo, sfruttando anche lo stato del sistema, trasformare nel bit di input originario, ovvero l'$i$-esimo bit della sequenza che effettivamente si voleva trasmettere. 
+Il numero di riga corrisponde al possibile stato.
 \begin{minted}{python3}
 def populate_matrix(outputs: List[int]) -> List[List[Optional[ViterbiCell]]]:
     matrix: List[List[Optional[ViterbiCell]]] = empty_matrix(rows=4, cols=len(outputs) + 1)
@@ -622,8 +625,8 @@ Per quanto rigurda la ricezione, il processo è il seguente:
 \begin{enumerate}
     \item Al segnale (campionato) viene associata una lista di interi (e.g. $[7, -5, 5, 2, -4; \ 6, 5, 7 -2, \textcolor{red}{-2}; \ 3, 8, 1, -5, -3]$, dove $\hat{p}_1$, $\hat{u}$ e $\hat{p}_2$ sono stati separati da un punto e virgola, mentre il rosso è indicata una predizione sbagliata), 
     i cui elementi indicano quanto è probabile che un bit sia 0 o 1. 
-    Ad esempio, -7 significa che il bit è quasi certamente uno 0, mentre +7 significa che è quasi certamente un 1. 
-    Notare che un errore è avvenuto nel quinto bit del blocco: originariamente un 1, ora ha un valore negativo, che suggerisce uno 0 logico.
+    Ad esempio, -7 significa che il bit è quasi certamente uno 0, mentre +7 significa che è quasi certamente un 1
+    (si noti come un errore sia avvenuto nel quinto bit del blocco: originariamente un 1, ora ha un valore negativo, che suggerisce uno 0 logico).
     \item Ogni decodificatore prende la lista contenente l'informazione con rumore e la rispettiva lista di parità e calcola quanto è sicuro di ciascun bit decodificato (\textit{reliability values}).
     La lista di affidabilità in uscita dal primo decodificatore è sfruttata dall'interleaver. I due decodificatori si scambiano queste informazioni di affidabilità ripetutamente e dopo un certo numero di iterazioni, tipicamente da quattro a dieci, iniziano ad essere d'accordo su tutti i bit decodificati. 
     Nella prima iterazione il primo decodificatore usa i bit sistematici, dalla seconda userà i bit di affidabilità.
@@ -760,7 +763,6 @@ L'operazione effettuata dal trasmettitore è detta \textbf{pre-codifica spaziale
 \]
 Dove l'elemento $i$-esimo del vettore $\mathbf{x}[m]$ è il simbolo trasmesso dalla $i$-esima antenna del trasmettitore.
 L'energia spesa dipende anche dal coefficiente $b_i$, l'obiettivo è comunque utilizzare la solita energia usata nel caso di singola antenna.
-
 Il rapporto segnale/rumore (SNR) è massimizzato scegliendo $\mathbf{b} = \frac{1}{\| \mathbf{h} \|} \mathbf{h}^*$.
 
 %\[
@@ -784,7 +786,7 @@ Considerando i guadagni del canale come variabili aleatorie con distribuzione di
 \[
     f_{\| \mathbf{h} \|^2} (x) = \frac{1}{D-1} x^{D-1} e^{-x}
 \]
-Il risultato dipende dal numero di antenne $D$, tuttavia in generale si ottiene un \textbf{guadagno di array}, ovvero uno spostamente del valore medio dei guadagni verso destra (più potenza).
+Il risultato dipende dal numero di antenne $D$, tuttavia in generale si ottiene un \textbf{guadagno di array}, ovvero uno spostamento del valore medio dei guadagni verso destra (più potenza).
 Inoltre il \textbf{guadagno di diversità} si manifesta riducendo notevolmente la probabilità di ottenere guadagni molto bassi.
 Ciò è visibile confrontando gli integrali delle due PDF.
 
@@ -862,7 +864,7 @@ La formula di Shannon fornisce il massimo rate sostenibile su un dato canale di 
     C = B \log_2 \left( 1 + \text{SNR} \right), \quad \text{SNR} = \frac{\left| H \right|^2 P}{\sigma^2}
 \]
 Dove $H$ è il guadagno del canale.
-In sistemi reali ci si può solo avvicinare al limite teorico e vi è una forte dipendenza, per quanto riguarda l'efficienza spettrale, del coding rate e modulation order, data dalla dimensione della costellazione di simboli per cui esiste un trade-off tra capacità di trasmissione ed energia richiesta.
+In sistemi reali ci si può solo avvicinare al limite teorico e vi è una forte dipendenza, per quanto riguarda l'efficienza spettrale, dal coding rate e modulation order, data dalla dimensione della costellazione di simboli per cui esiste un trade-off tra capacità di trasmissione ed energia richiesta.
 In particolare $\log_2 \left( 1 + \text{SNR} \right)$ è l'efficienza spettrale.
 Il rate di trasmissione reale può essere approssimato:
 \[
