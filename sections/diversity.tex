@@ -399,7 +399,6 @@ def populate_matrix(outputs: List[int]) -> List[List[Optional[ViterbiCell]]]:
                     )
     return matrix
 \end{minted}
-
 La funzione \texttt{get\_last\_state} trova lo stato finale con la distanza globale minima nell'ultima colonna della matrice.
 \begin{minted}{python3}
 def get_last_state(matrix: List[List[Optional[ViterbiCell]]]) -> int:

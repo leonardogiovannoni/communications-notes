@@ -236,7 +236,7 @@ L'indice di modulazione \( m_f \) è definito come il rapporto tra la deviazione
 \end{equation}
 
 %Δ𝑓 = max |𝑓7 (𝑡)| = 𝑘) max 𝑚(𝑡)
-Dove $\Delta f = \max |f(t)| = k_f \max m(t)$.
+Dove $\Delta f = k_f \max | m(t) |$.
 La rappresentazione complessa del segnale FM può essere ottenuta utilizzando la formula di Eulero:
 \begin{equation}
     s_{FM}(t) = \Re \left\{ A_c e^{j\phi(t)} \right\} = \Re \left\{ A_c e^{j2\pi f_c t} e^{j2\pi k_f \int_{-\infty}^{t} m(\tau) d\tau} \right\} = \Re \left\{ \tilde{s}_{FM} (t) e^{j2\pi f_c t} \right\}
@@ -277,7 +277,14 @@ che si semplifica\footnote{
     \[
         x(t) = \int_{-\infty}^{t} \cos(2\pi f_m \tau) d\tau = \cos(2\pi f_m t) \ast u(t)
     \]
-    Quindi la sua TCF (generalizzata) è:
+    Dove $u(t)$ è il gradino. Entrambe le funzioni hanno TCF (generalizzata) nota, ovvero:
+    \[
+        \mathcal{F}\{ \cos(2\pi f_m t) \} = \frac{\delta(f - f_m) + \delta(f + f_m)}{2}
+    \]
+    \[
+        \mathcal{F}\{ u(t) \} = \frac{1}{j2\pi f} + \frac{1}{2} \delta(f)
+    \]
+    Quindi la TCF (generalizzata) di $x(t)$ è:
     \[
         X(f) = \frac{ \delta(f - f_m) + \delta(f + f_m) }{2}  \cdot \left( \frac{1}{j2\pi f} + \frac{1}{2} \delta(f) \right)
     \]
